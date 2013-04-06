@@ -1,0 +1,20 @@
+body {
+	padding: 2em 0;
+	overflow-y: scroll;
+}
+
+.footer {
+	margin: 2em 0 0;
+}
+
+.job-item {
+	border-bottom: 1px #eee solid;
+	margin-bottom: 25px;
+	padding-bottom: 15px;
+}
+
+.job-item:last-child {
+	border: none;
+	padding: 0;
+	margin: 0;
+}

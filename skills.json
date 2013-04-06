@@ -1,0 +1,18 @@
+[
+	{"title": "PHP", "percent": 90},
+	{"title": "MySQL", "percent": 80},
+	{"title": "MongoDB", "percent": 60},
+	{"title": "Yii", "percent": 80},
+	{"title": "Fat-free", "percent": 90},
+	{"title": "HTML", "percent": 90},
+	{"title": "CSS", "percent": 90},
+	{"title": "JavaScript", "percent": 70},
+	{"title": "jQuery", "percent": 80},
+	{"title": "AngularJs", "percent": 70},
+	{"title": "Python", "percent": 50},
+	{"title": "Ruby", "percent": 50},
+	{"title": "Ruby On Rails", "percent": 80},
+	{"title": "Git", "percent": 90},
+	{"title": "SVN", "percent": 70},
+	{"title": "Github", "percent": 90}
+]
