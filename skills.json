@@ -7,6 +7,7 @@
 	{"title": "HTML", "percent": 90},
 	{"title": "CSS", "percent": 90},
 	{"title": "JavaScript", "percent": 70},
+	{"title": "CoffeeScript", "percent": 70},
 	{"title": "jQuery", "percent": 80},
 	{"title": "AngularJs", "percent": 70},
 	{"title": "Python", "percent": 50},
