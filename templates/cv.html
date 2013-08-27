@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="span8">
+  <div class="col-xs-8">
     <h1>Скуридин Евгений</h1>
     <p class="lead">Backend-разработчик (PHP)</p>
     <dl class="dl-horizontal">
@@ -9,16 +9,16 @@
       <dd><a href="skype:{{skype}}">{{skype}}</a></dd>
     </dl>
   </div>
-  <div class="span4">
+  <div class="col-xs-4">
     <img src="img/iam.jpg" alt="Yevgeny Skuridin" class="img-rounded pull-right">
   </div>
 </div>
 <hr>
 <div class="row">
-  <div class="span3">
+  <div class="col-xs-3">
     <h3>О себе</h3>
   </div>
-  <div class="span9">
+  <div class="col-xs-9">
     <p>
       Родился в Узбекистане. Работаю в сфере интернет разработок с 2009 года. Весной 2012 года переехал в Москву, чтобы трудиться над стартапом flatora.ru. Есть желание изучить Ruby, Node.js и MongoDB. Люблю точность, новые технологии, упрощать и автоматизировать.
     </p>
@@ -26,16 +26,16 @@
 </div>
 <hr>
 <div class="row">
-  <div class="span3">
+  <div class="col-xs-3">
     <h3>Навыки</h3>
   </div>
-  <div class="span4">
+  <div class="col-xs-4">
     <p class="lead">Разработка</p>
     <p>
       Разработка сайтов с помощью PHP, MYSQL. Оптимизация, автоматизация, подготовка к нагрузкам, интеграция со сторонними сервисами.
     </p>
   </div>
-  <div class="span4 offset1">
+  <div class="col-xs-4 col-xs-offset-1">
     <p class="lead">Управление разработкой</p>
     <p>
       Грамотное составление задач, стараюсь не придумывать ничего лишнего и сосредоточиться только на главном. Лучше сделать мало, но качественно.
@@ -44,16 +44,16 @@
 </div>
 <hr>
 <div class="row">
-  <div class="span3">
+  <div class="col-xs-3">
     <h3>Чем владею</h3>
   </div>
-  <div class="span9">
+  <div class="col-xs-9">
     <dl class="dl-horizontal">
       <div data-ng-repeat="skill in skills">
         <dt>{{skill.title}}</dt>
         <dd>
           <div class="progress progress-striped">
-            <div style="width:{{skill.percent}}%" class="bar"></div>
+            <div style="width:{{skill.percent}}%" class="progress-bar"></div>
           </div>
         </dd>
       </div>
@@ -62,25 +62,25 @@
 </div>
 <hr>
 <div class="row">
-  <div class="span3">
+  <div class="col-xs-3">
     <h3>Опыт работы</h3>
   </div>
-  <div class="span9">
+  <div class="col-xs-9">
     <div class="job-item" data-ng-repeat="job in experience">
       <div class="row">
-        <div class="span7">
+        <div class="col-xs-7">
           <blockquote>
             <p>{{job.title}}</p><small>{{job.position}}</small>
           </blockquote>
         </div>
-        <div class="span2">
+        <div class="col-xs-2">
           <p class="pull-right">
             {{job.start}}&mdash;{{job.finish}}
           </p>
         </div>
       </div>
       <div class="row">
-        <div class="span9">
+        <div class="col-xs-9">
           <p>
             {{job.description}}
           </p>
