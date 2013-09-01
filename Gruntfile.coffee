@@ -12,6 +12,15 @@ module.exports = (grunt) ->
           dest: 'css',
           ext: '.min.css'
         ]
+    htmlmin:
+      dist:
+        options:
+          removeComments: true
+          collapseWhitespace: true
+          collapseBooleanAttributes: true
+          removeEmptyAttributes: true
+        files:
+          'index.html': 'index.src.html'
     connect:
       test:
         options:
@@ -28,7 +37,8 @@ module.exports = (grunt) ->
         files: 'css/*.scss',
         tasks: ['sass']
       html:
-        files: 'index.html'
+        files: 'index.src.html'
+        tasks: ['htmlmin']
       options:
         livereload: true
   )
@@ -36,6 +46,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-sass')
   grunt.loadNpmTasks('grunt-contrib-connect')
   grunt.loadNpmTasks('grunt-contrib-watch')
+  grunt.loadNpmTasks('grunt-contrib-htmlmin')
 
   grunt.registerTask('default', ['connect', 'watch'])
 
