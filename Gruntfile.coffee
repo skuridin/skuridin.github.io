@@ -64,6 +64,9 @@ module.exports = (grunt) ->
       js:
         files: 'src/js/*.coffee'
         tasks: ['coffee', 'uglify']
+      img:
+        files: 'src/img/*.{jpg, jpeg, png}'
+        tasks: ['imagemin']
       options:
         livereload: true
   )
@@ -76,5 +79,5 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-contrib-uglify')
 
-  grunt.registerTask('default', ['imagemin', 'connect', 'watch'])
+  grunt.registerTask('default', ['sass', 'coffee', 'uglify', 'htmlmin', 'imagemin', 'connect', 'watch'])
 
