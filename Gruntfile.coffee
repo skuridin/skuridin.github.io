@@ -6,11 +6,10 @@ module.exports = (grunt) ->
         options:
           style: 'compressed'
         files: [
-          expand: true,
-          cwd: 'css',
-          src: ['*.scss'],
-          dest: 'css',
-          ext: '.min.css'
+          expand: true
+          cwd: 'src/'
+          src: ['css/*.scss']
+          ext: '.css'
         ]
     htmlmin:
       dist:
@@ -20,7 +19,14 @@ module.exports = (grunt) ->
           collapseBooleanAttributes: true
           removeEmptyAttributes: true
         files:
-          'index.html': 'index.src.html'
+          'index.html': 'src/index.html'
+    imagemin:
+      dist:
+        files: [
+          expand: true
+          cwd: 'src/'
+          src: ['img/*.{jpg, jpeg, png}']
+        ]
     connect:
       test:
         options:
@@ -29,15 +35,15 @@ module.exports = (grunt) ->
           base: '.'
           middleware: (connect, options) ->
             return [
-              require('connect-livereload')(),
+              require('connect-livereload')()
               connect.static(options.base)
             ];
     watch:
       css:
-        files: 'css/*.scss',
+        files: 'src/css/*.scss'
         tasks: ['sass']
       html:
-        files: 'index.src.html'
+        files: 'src/index.html'
         tasks: ['htmlmin']
       options:
         livereload: true
@@ -47,6 +53,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-connect')
   grunt.loadNpmTasks('grunt-contrib-watch')
   grunt.loadNpmTasks('grunt-contrib-htmlmin')
+  grunt.loadNpmTasks('grunt-contrib-imagemin')
 
-  grunt.registerTask('default', ['connect', 'watch'])
+  grunt.registerTask('default', ['imagemin', 'connect', 'watch'])
 
