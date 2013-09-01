@@ -7,4 +7,15 @@
     document.write(yandex, google);
   }
 
+  $(function() {
+    var scrollToAnchor;
+    scrollToAnchor = function(e) {
+      $('html,body').animate({
+        scrollTop: $($(this).attr('href')).offset().top
+      }, 'slow');
+      return e.preventDefault();
+    };
+    return $('.navbar-nav a').click(scrollToAnchor);
+  });
+
 }).call(this);
