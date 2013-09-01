@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
     <title>Евгений Скуридин</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
@@ -149,28 +150,23 @@
             <p>&nbsp;</p>
             <form>
               <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                   <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Имя">
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Email">
+                    <input type="text" class="form-control" id="email-name" placeholder="Имя">
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-xs-12">
                   <div class="form-group">
-                    <textarea class="form-control" rows="5" placeholder="Сообщение"></textarea>
+                    <textarea class="form-control" rows="5" id="email-content" placeholder="Сообщение"></textarea>
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-xs-12">
                   <div class="form-group">
-                    <button type="button" class="btn btn-primary col-xs-12">Отправить</button>
+                    <button type="button" class="btn btn-primary col-xs-12" id="send-email">Отправить</button>
                   </div>
                 </div>
               </div>
