@@ -1,0 +1,68 @@
+$default: #888;
+$primary: #428bca;
+
+body {
+  padding: 0 0 2em 0;
+}
+
+.open-sans {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  color: $default;
+}
+
+.section {
+  padding: 5em 0 0 0;
+}
+
+.theme-redfield {
+  @extend .open-sans;
+  h2 {
+    font-family: inherit;
+    font-weight: inherit;
+    margin: 0 0 1em 0;
+    color: $default;
+  }
+  h3 {
+    font-family: inherit;
+    font-weight: inherit;
+    color: black;
+  }
+}
+
+.bio {
+  font-size: 1.2em;
+  strong {
+    font-weight: inherit;
+    color: black;
+  }
+}
+
+.skills {
+  line-height: 1.75em;
+}
+
+.social {
+  letter-spacing: .3em;
+  a {
+    color: $default;
+    &:hover {
+      text-decoration: none;
+      .icon-skype {
+        color: $primary;
+      }
+      .icon-envelope {
+        color: #d14836;
+      }
+      .icon-linkedin-sign {
+        color: $primary;
+      }
+      .icon-github {
+        color: #333;
+      }
+      .icon-trello {
+        color: $primary;
+      }
+    }
+  }
+}
