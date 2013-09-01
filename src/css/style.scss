@@ -1,5 +1,9 @@
 $fontGray: #888;
 
+body {
+  padding: 0 0 2em 0;
+}
+
 .open-sans {
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
@@ -31,4 +35,8 @@ $fontGray: #888;
     font-weight: inherit;
     color: black;
   }
+}
+
+.skills {
+  line-height: 1.75em;
 }
