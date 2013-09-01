@@ -11,6 +11,22 @@ module.exports = (grunt) ->
           src: ['css/*.scss']
           ext: '.css'
         ]
+    coffee:
+      dist:
+        files: [
+          expand: true
+          cwd: 'src/'
+          src: ['js/*.coffee']
+          dest: 'src/'
+          ext: '.js'
+        ]
+    uglify:
+      dist:
+        files: [
+          expand: true
+          cwd: 'src/'
+          src: ['js/*.js']
+        ]
     htmlmin:
       dist:
         options:
@@ -45,6 +61,9 @@ module.exports = (grunt) ->
       html:
         files: 'src/index.html'
         tasks: ['htmlmin']
+      js:
+        files: 'src/js/*.coffee'
+        tasks: ['coffee', 'uglify']
       options:
         livereload: true
   )
@@ -54,6 +73,8 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-watch')
   grunt.loadNpmTasks('grunt-contrib-htmlmin')
   grunt.loadNpmTasks('grunt-contrib-imagemin')
+  grunt.loadNpmTasks('grunt-contrib-coffee')
+  grunt.loadNpmTasks('grunt-contrib-uglify')
 
   grunt.registerTask('default', ['imagemin', 'connect', 'watch'])
 
