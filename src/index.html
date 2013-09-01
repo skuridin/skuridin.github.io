@@ -7,51 +7,81 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
   </head>
-  <body>
+  <body data-spy="scroll" data-target=".navbar-collapse">
     <!-- Header -->
-    <div class="navbar navbar-default navbar-static-top">
+    <div class="navbar navbar-default navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Переключить меню</span>
+            <span class="sr-only">Отображение меню</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a href="#" class="navbar-brand">Евгений Скуридин</a>
+          <a href="#" class="navbar-brand" title="Евгений Скуридин">Евгений Скуридин</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="#">Обо мне</a></li>
-            <li><a href="#">Опыт работы</a></li>
-            <li><a href="#">Навыки</a></li>
-            <li><a href="#">Контакты</a></li>
+            <li><a href="#about-me" title="Обо мне">Обо мне</a></li>
+            <li><a href="#work" title="Опыт работы">Опыт работы</a></li>
+            <li><a href="#" title="Навыки">Навыки</a></li>
+            <li><a href="#" title="Контакты">Контакты</a></li>
           </ul>
         </div>
       </div>
     </div>
     <!-- /Header -->
 
-    <div class="container">
+    <div class="container theme-redfield">
       <!-- About me -->
-      <div class="row">
-        <div class="col-md-12 about-me">
-          <h2>Привет, мир!</h2>
+      <div class="section" id="about-me">
+        <h2 class="text-center">Привет, мир!</h2>
+        <div class="row">
+          <div class="col-md-2 visible-lg visible-md">
+            <img class="img-thumbnail" src="img/i.jpg" alt="Суровый">
+          </div>
+          <div class="col-md-10 bio">
+            <p>Меня зовут Женя, мне 23 года и я backend-программист, хотя и frontend люблю. Разрабатываю проекты с помощью <strong>PHP</strong>, <strong>MYSQL</strong>, <strong>Yii</strong> и т.д. и т.п. Еще мне очень сильно нравятся Ruby, NODE.JS и MongoDB. В дальнейшем хотел бы перейти на них в качестве основных инструментов разработки.</p>
+            <p>Родился в Узбекистане. Работаю в сфере интернет разработок с 2009 года. Весной 2012 года переехал в Москву, чтобы трудиться над стартапом flatora.ru. Есть желание изучить Ruby, Node.js и MongoDB. Люблю точность, новые технологии, упрощать и автоматизировать.</p>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-md-2 visible-lg visible-md">
-          <img class="img-thumbnail" src="img/i.jpg" alt="Суровый">
-        </div>
-        <div class="col-md-10 about-me">
-          <p>Меня зовут Женя, мне 23 года и я backend-программист, хотя и frontend люблю. Разрабатываю проекты с помощью <strong>PHP</strong>, <strong>MYSQL</strong>, <strong>Yii</strong> и т.д. и т.п. Еще мне очень сильно нравятся Ruby, NODE.JS и MongoDB. В дальнейшем хотел бы перейти на них в качестве основных инструментов разработки.</p>
-          <p>Родился в Узбекистане. Работаю в сфере интернет разработок с 2009 года. Весной 2012 года переехал в Москву, чтобы трудиться над стартапом flatora.ru. Есть желание изучить Ruby, Node.js и MongoDB. Люблю точность, новые технологии, упрощать и автоматизировать.</p>
-        </div>
+        <hr>
       </div>
       <!-- /About me -->
+
+      <!-- Work -->
+      <div class="section" id="work">
+          <h2 class="text-center">Опыт работы</h2>
+          <div class="row">
+            <div class="col-md-4 col-sm-6">
+              <h3>Vault Couture <small>2013...</small></h3>
+              <p>Пока еще ничего не могу сказать, так как начал работать совсем недавно.</p>
+            </div>
+            <div class="col-md-4 col-sm-6">
+              <h3>Flatora <small>2011-2013</small></h3>
+              <p>Здесь у меня появился первый опыт интеграции со сторонними проектами. Сначала подключал карты от Yandex, даже ходил на конференции, чтобы успеть задать пару вопросов их разработчикам. Речь идет об использовании данных с карт для организации контента и помощи при его создании. Подключал два сервиса SMS рассылки с совершенно разными API. Плотно познакомился с Git, и должен признаться, мне очень нравится эта система контроля версий. Участвовал не только в разработке, но и в вопросах оптимизации, генерации идей, постановке задач.</p>
+            </div>
+            <div class="clearfix visible-sm"></div>
+            <div class="col-md-4 col-sm-6">
+              <h3>Купиотпуск <small>2011-2012</small></h3>
+              <p>Первый опыт работы в большой команде. Дела с самого начала пошли очень хорошо. Познакомился с SVN, Redmine. Работал с платежными системами, сервисами email рассылок и в целом поддерживал сайт.</p>
+            </div>
+            <div class="clearfix visible-md visible-lg"></div>
+            <div class="col-md-4 col-sm-6">
+              <h3>Brandbox Creative <small>2010-2011</small></h3>
+              <p>Работа была похожа на конвейер. Сайты-визитки, корпоративные порталы и т.п. Не только программировал, иногда и дизайн рисовал. Больше всего мне понравилось на этом месте работы то, что я общался непосредственно с клиентами, заказчиками, изучал этот бизнес.</p>
+            </div>
+            <div class="clearfix visible-sm"></div>
+            <div class="col-md-4 col-sm-6">
+              <h3>Comnet ISP <small>2009-2010</small></h3>
+              <p>Мой первый опыт разработки за деньги. В основном делал небольшие корпоративные сайты. Провайдеру необходимо было создать музыкальный портал. Я придумал этот проект, описал то, каким он должен быть. В дальнейшем помогал в его разработке и наполнял контентом.</p>
+            </div>
+          </div>
+      </div>
+      <!-- /Work -->
     </div>
 
-    <script src="//code.jquery.com/jquery.js"></script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script src="js/app.js"></script>
   </body>

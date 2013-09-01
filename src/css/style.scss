@@ -1,22 +1,38 @@
-@mixin open-sans {
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 300;
+$fontGray: #888;
+
+body {
+  padding: 2em 0 2em 0;
 }
 
-$font-gray: #888;
+.open-sans {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  color: $fontGray;
+}
 
-.about-me {
-  @include open-sans;
-  color: $font-gray;
-  font-size: 1.2em;
-  strong {
-    font: inherit;
-    color: black;
-  }
+.section {
+  padding: 5em 0 0 0;
+}
+
+.theme-redfield {
+  @extend .open-sans;
   h2 {
     font-family: inherit;
     font-weight: inherit;
     margin: 0 0 1em 0;
-    text-align: center;
+    color: $fontGray;
+  }
+  h3 {
+    font-family: inherit;
+    font-weight: inherit;
+    color: black;
+  }
+}
+
+.bio {
+  font-size: 1.2em;
+  strong {
+    font-weight: inherit;
+    color: black;
   }
 }
