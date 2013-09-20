@@ -23,6 +23,8 @@ module.exports = (grunt) ->
         cwd: 'src/'
         src: ['*.jade']
         ext: '.html'
+        options:
+          data: require('./params')
     coffee:
       default:
         files: [
