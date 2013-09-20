@@ -38,12 +38,14 @@ body {
   }
 }
 
-.skills {
-  line-height: 1.75em;
+.skills span {
+  display: inline-block;
+  margin: 0.5em 0.5em 0 0;
+  padding: .5em;
 }
 
 .social {
-  letter-spacing: .3em;
+  letter-spacing: 1em;
   a {
     color: $default;
     &:hover {

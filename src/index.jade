@@ -1,0 +1,165 @@
+doctype 5
+html(lang="ru")
+
+  head
+    meta(charset="UTF-8")
+    title #{appTitle} | Web-разработчик
+    meta(name="description",
+      content="Web-разработчик. Использую PHP, MYSQL, Yii. Работал во Flatora, КупиОтпуск, Vault Couture")
+    meta(name="keywords",
+      content="разработка, web, php, mysql, yii, laravel, gruntjs, angularjs, flatora, купиотпуск, vault couture")
+    meta(name="author", content=appTitle)
+    meta(name="robots", content="index,follow")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet", href="http://fonts.googleapis.com/css?family=Open+Sans:300&subset=latin,cyrillic")
+    link(rel="stylesheet", href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.no-icons.min.css")
+    link(rel="stylesheet", href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css")
+    //if lt IE 9
+      script(src="https://raw.github.com/aFarkas/html5shiv/master/dist/html5shiv.js")
+      script(src="https://raw.github.com/scottjehl/Respond/master/respond.min.js")
+    link(rel="stylesheet", href="css/style.css")
+    script.
+      if(location.hostname === 'skurid.in') {
+
+        // Google analytics
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-18951281-4', 'skurid.in');
+        ga('send', 'pageview');
+
+        // Yandex metrika
+        (function (d, w, c) { (w[c] = w[c] || []).push(function() { try {
+          w.yaCounter19444894 = new Ya.Metrika({id:19444894, webvisor:true, clickmap:true, accurateTrackBounce:true,
+            trackHash:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript"; s.async = true;
+        s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+        if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); }
+        else { f(); } })(document, window, "yandex_metrika_callbacks");
+      }
+
+  body(data-spy="scroll", data-target=".navbar-collapse")
+
+    .navbar.navbar-default.navbar-fixed-top
+      .container
+        .navbar-header
+          button(type="button", data-toggle="collapse", data-target=".navbar-collapse").navbar-toggle
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a(href="/", title=appTitle).navbar-brand=appTitle
+        .navbar-collapse.collapse
+          ul.nav.navbar-nav
+            each val, index in pages
+              li: a(href="#"+index, title=val)=val
+
+    .container.theme-redfield
+      #about-me.section
+        h2.text-center Привет, мир!
+        .row
+          .col-md-2.visible-lg.visible-md
+            img(src="img/i.jpg", alt="Суровый").img-thumbnail
+          .col-md-10.bio
+            p.
+              Меня зовут Женя, мне 23 года и я <strong>web-разработчик</strong>. Пишу на <strong>PHP</strong>,
+              использую <strong>MYSQL</strong>, <strong>Yii</strong>, <strong>Laravel</strong>,
+              <strong>GruntJs</strong> и т.д. и т.п. Еще мне очень сильно нравятся Ruby, NODE.JS и MongoDB.
+              В дальнейшем хотел бы перейти на них в качестве основных инструментов разработки.
+            p.
+              Родился в Узбекистане. Пишу код с 2009 года. Весной 2012 года переехал в Москву, чтобы трудиться
+              над стартапом flatora.ru, позже перебрался в Екатеринбург. Люблю точность, новые технологии,
+              упрощать и автоматизировать.
+
+      #experience.section
+        h2.text-center Опыт работы
+        .row
+          .col-md-4.col-sm-6
+            h3 Vault Couture <small>2013...</small>
+            p Расскажу, если поменяю место работы.
+          .col-md-4.col-sm-6
+            h3 Flatora <small>2011-2013</small>
+            p.
+              Здесь у меня появился первый опыт интеграции со сторонними проектами. Сначала подключал карты от Yandex,
+              даже ходил на конференции, чтобы успеть задать пару вопросов их разработчикам. Речь идет об использовании
+              данных с карт для организации контента и помощи при его создании. Подключал два сервиса SMS рассылки с
+              совершенно разными API. Плотно познакомился с Git, и должен признаться, мне очень нравится эта система
+              контроля версий. Участвовал не только в разработке, но и в вопросах оптимизации, генерации идей,
+              постановке задач.
+          .clearfix.visible-sm
+          .col-md-4.col-sm-6
+            h3 Купиотпуск <small>2011-2012</small>
+            p.
+              Первый опыт работы в большой команде. Дела с самого начала пошли очень хорошо. Познакомился с SVN,
+              Redmine. Работал с платежными системами, сервисами email рассылок и в целом поддерживал сайт.
+          .clearfix.visible-md.visible-lg
+          .col-md-4.col-sm-6
+            h3 Brandbox Creative <small>2010-2011</small>
+            p.
+              Работа была похожа на конвейер. Сайты-визитки, корпоративные порталы и т.п. Не только программировал,
+              иногда и дизайн рисовал. Больше всего мне понравилось на этом месте работы то, что я общался
+              непосредственно с клиентами, заказчиками, изучал этот бизнес.
+          .clearfix.visible-sm
+          .col-md-4.col-sm-6
+            h3 Comnet ISP <small>2009-2010</small>
+            p.
+              Мой первый опыт разработки за деньги. В основном делал небольшие корпоративные сайты.
+              Провайдеру необходимо было создать музыкальный портал. Я придумал этот проект, описал то,
+              каким он должен быть. В дальнейшем помогал в его разработке и наполнял контентом.
+
+      #skills.section
+        h2.text-center Навыки
+        .row
+          .col-md-4
+            h3 Разработка
+            p.
+              Разработка сайтов с помощью PHP, MYSQL. Оптимизация, автоматизация, подготовка к нагрузкам, интеграция
+              со сторонними сервисами.
+          .col-md-4
+            h3 Управление
+            p.
+              Грамотное составление задач, стараюсь не придумывать ничего лишнего и сосредоточиться только на главном.
+              Лучше сделать немного меньше, но качественно.
+          .col-md-4
+            h3 Чем владею
+            p.skills
+              each val in skills
+                - var label = labels[Math.floor(Math.random() * labels.length)]
+                span(class="label label-"+label)=val
+
+      #contacts.section
+        h2.text-center Контакты
+        .row
+          .col-md-6
+            p &nbsp;
+            p © Yevgeny Skuridin, 2013
+            p.
+              Нашли ошибку? Пожалуйста сообщите об этом в
+              <a href="https://github.com/skuridin/skuridin.github.io/issues">GitHub</a>
+            .social
+              a(href="skype:redfield1990"): span.icon-skype.icon-3x
+              a(href="mailto:i@skurid.in"): span.icon-envelope.icon-3x
+              a(href="http://www.linkedin.com/in/redfield1990"): span.icon-linkedin-sign.icon-3x
+              a(href="https://github.com/skuridin"): span.icon-github.icon-3x
+              a(href="https://trello.com/redfield_ru"): span.icon-trello.icon-3x
+          .col-md-6
+            p &nbsp;
+            form
+              .row
+                .col-xs-12
+                  .form-group
+                    input(type="text", placeholder="Имя")#email-name.form-control
+              .row
+                .col-xs-12
+                  .form-group
+                    textarea(rows="5", placeholder="Сообщение")#email-content.form-control
+              .row
+                .col-xs-12
+                  .form-group
+                    button(type="button")#send-email.btn.btn-primary.col-xs-12 Отправить
+
+    script(src="//code.jquery.com/jquery.min.js")
+    script(src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js")
+    script(src="js/app.js")
