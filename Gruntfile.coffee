@@ -1,8 +1,14 @@
 module.exports = (grunt) ->
-  grunt.initConfig(
+  grunt.initConfig
     pkg: grunt.file.readJSON('package.json')
+
+    connect:
+      server:
+        options:
+          hostname: '*'
+          livereload: true
     sass:
-      dist:
+      default:
         options:
           style: 'compressed'
         files: [
@@ -11,8 +17,14 @@ module.exports = (grunt) ->
           src: ['css/*.scss']
           ext: '.css'
         ]
+    jade:
+      default:
+        expand: true
+        cwd: 'src/'
+        src: ['*.jade']
+        ext: '.html'
     coffee:
-      dist:
+      default:
         files: [
           expand: true
           cwd: 'src/'
@@ -21,63 +33,42 @@ module.exports = (grunt) ->
           ext: '.js'
         ]
     uglify:
-      dist:
+      default:
         files: [
           expand: true
           cwd: 'src/'
           src: ['js/*.js']
         ]
-    htmlmin:
-      dist:
-        options:
-          removeComments: true
-          collapseWhitespace: true
-          collapseBooleanAttributes: true
-          removeEmptyAttributes: true
-        files:
-          'index.html': 'src/index.html'
     imagemin:
-      dist:
+      default:
         files: [
           expand: true
           cwd: 'src/'
-          src: ['img/*.{jpg, jpeg, png}']
+          src: ['img/*.{jpg,jpeg,png,gif}']
         ]
-    connect:
-      test:
-        options:
-          hostname: '*'
-          port: 8000
-          base: '.'
-          middleware: (connect, options) ->
-            return [
-              require('connect-livereload')()
-              connect.static(options.base)
-            ];
     watch:
+      options:
+        livereload: true
       css:
         files: 'src/css/*.scss'
         tasks: ['sass']
-      html:
-        files: 'src/index.html'
-        tasks: ['htmlmin']
+      jade:
+        files: 'src/*.jade'
+        tasks: ['jade']
       js:
         files: 'src/js/*.coffee'
         tasks: ['coffee', 'uglify']
       img:
         files: 'src/img/*.{jpg, jpeg, png}'
         tasks: ['imagemin']
-      options:
-        livereload: true
-  )
 
-  grunt.loadNpmTasks('grunt-contrib-sass')
   grunt.loadNpmTasks('grunt-contrib-connect')
-  grunt.loadNpmTasks('grunt-contrib-watch')
-  grunt.loadNpmTasks('grunt-contrib-htmlmin')
+  grunt.loadNpmTasks('grunt-contrib-sass')
+  grunt.loadNpmTasks('grunt-contrib-jade')
   grunt.loadNpmTasks('grunt-contrib-imagemin')
   grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-contrib-uglify')
+  grunt.loadNpmTasks('grunt-contrib-watch')
 
-  grunt.registerTask('default', ['sass', 'coffee', 'uglify', 'htmlmin', 'imagemin', 'connect', 'watch'])
+  grunt.registerTask('default', ['connect', 'coffee', 'uglify', 'jade', 'imagemin', 'sass', 'watch'])
 
