@@ -1,0 +1,14 @@
+{
+  "appTitle": "Евгений Скуридин",
+  "pages": {
+    "about-me": "Обо мне",
+    "experience": "Опыт работы",
+    "skills": "Навыки",
+    "contacts": "Контакты"
+  },
+  "skills": [
+    "PHP", "MYSQL", "CSS", "Yii", "Laravel", "Fat-Free", "JavaScript", "Composer", "Git", "SVN", "Python",
+    "GruntJs", "Jade", "AngularJs", "SASS/SCSS", "Coffee-script", "NodeJs", "Ruby", "Ruby On Rails", "MongoDb"
+  ],
+  "labels": ["default", "primary", "success", "info", "warning"]
+}
