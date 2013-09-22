@@ -4,14 +4,11 @@ html(lang="ru")
   head
     meta(charset="UTF-8")
     title #{appTitle} | Web-разработчик
-    meta(name="description",
-      content="Web-разработчик. Использую PHP, MYSQL, Yii. Работал во Flatora, КупиОтпуск, Vault Couture")
-    meta(name="keywords",
-      content="разработка, web, php, mysql, yii, laravel, gruntjs, angularjs, flatora, купиотпуск, vault couture")
+    meta(name="description", content=description)
+    meta(name="keywords", content=keywords)
     meta(name="author", content=appTitle)
     meta(name="robots", content="index,follow")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    link(rel="stylesheet", href="http://fonts.googleapis.com/css?family=Open+Sans:300&subset=latin,cyrillic")
     link(rel="stylesheet", href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.no-icons.min.css")
     link(rel="stylesheet", href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css")
     //if lt IE 9
@@ -57,7 +54,7 @@ html(lang="ru")
               li: a(href="#"+index, title=val)=val
 
     .container.theme-redfield
-      #about-me.section
+      section#about-me
         h2.text-center Привет, мир!
         .row
           .col-md-2.visible-lg.visible-md
@@ -66,14 +63,15 @@ html(lang="ru")
             p.
               Меня зовут Женя, мне 23 года и я <strong>web-разработчик</strong>. Пишу на <strong>PHP</strong>,
               использую <strong>MYSQL</strong>, <strong>Yii</strong>, <strong>Laravel</strong>,
-              <strong>GruntJs</strong> и т.д. и т.п. Еще мне очень сильно нравятся Ruby, NODE.JS и MongoDB.
+              <strong>GruntJs</strong> и т.д. и т.п. Еще мне очень сильно нравятся
+              <strong>Ruby</strong>, <strong>NODE.JS</strong> и <strong>MongoDB</strong>.
               В дальнейшем хотел бы перейти на них в качестве основных инструментов разработки.
             p.
               Родился в Узбекистане. Пишу код с 2009 года. Весной 2012 года переехал в Москву, чтобы трудиться
-              над стартапом flatora.ru, позже перебрался в Екатеринбург. Люблю точность, новые технологии,
+              над стартапом <strong>flatora</strong>.ru, позже перебрался в Екатеринбург. Люблю точность, новые технологии,
               упрощать и автоматизировать.
 
-      #experience.section
+      section#experience
         h2.text-center Опыт работы
         .row
           .col-md-4.col-sm-6
@@ -109,7 +107,7 @@ html(lang="ru")
               Провайдеру необходимо было создать музыкальный портал. Я придумал этот проект, описал то,
               каким он должен быть. В дальнейшем помогал в его разработке и наполнял контентом.
 
-      #skills.section
+      section#skills
         h2.text-center Навыки
         .row
           .col-md-4
@@ -129,7 +127,7 @@ html(lang="ru")
                 - var label = labels[Math.floor(Math.random() * labels.length)]
                 span(class="label label-"+label)=val
 
-      #contacts.section
+      section#contacts
         h2.text-center Контакты
         .row
           .col-md-6
