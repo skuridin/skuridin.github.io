@@ -1,5 +1,7 @@
 {
   "appTitle": "Евгений Скуридин",
+  "description": "Web-разработчик. Помогу сделать сайт, веб приложение. Использую PHP, MYSQL, Yii. Работал во Flatora, КупиОтпуск, Vault Couture",
+  "keywords": "разработка, web, php, mysql, yii, laravel, gruntjs, angularjs, flatora, купиотпуск, vault couture",
   "pages": {
     "about-me": "Обо мне",
     "experience": "Опыт работы",
