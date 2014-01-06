@@ -1,5 +1,5 @@
-doctype 5
-html(lang="ru")
+doctype html
+html
   head
     meta(charset="UTF-8")
     title #{appTitle} | Web-разработчик
@@ -15,28 +15,6 @@ html(lang="ru")
       script(src="https://raw.github.com/aFarkas/html5shiv/master/dist/html5shiv.js")
       script(src="https://raw.github.com/scottjehl/Respond/master/respond.min.js")
     link(rel="stylesheet", href="css/style.css")
-    script.
-      if(location.hostname === 'skurid.in') {
-
-        // Google analytics
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-        ga('create', 'UA-18951281-4', 'skurid.in');
-        ga('send', 'pageview');
-
-        // Yandex metrika
-        (function (d, w, c) { (w[c] = w[c] || []).push(function() { try {
-          w.yaCounter19444894 = new Ya.Metrika({id:19444894, webvisor:true, clickmap:true, accurateTrackBounce:true,
-            trackHash:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0],
-        s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); };
-        s.type = "text/javascript"; s.async = true;
-        s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
-        if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); }
-        else { f(); } })(document, window, "yandex_metrika_callbacks");
-      }
 
   body(data-spy="scroll", data-target=".navbar-collapse")
 
