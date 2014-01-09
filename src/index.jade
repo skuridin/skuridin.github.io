@@ -17,7 +17,7 @@ html(lang="ru")
       script(src="https://raw.github.com/scottjehl/Respond/master/respond.min.js")
     link(rel="stylesheet", href="css/style.css")
 
-  body(data-spy="scroll", data-target=".navbar-collapse")
+  body(data-spy="scroll", data-target=".navbar-collapse", itemscope, itemtype="http://schema.org/Person")
 
     .navbar.navbar-default.navbar-fixed-top
       .container
@@ -37,27 +37,28 @@ html(lang="ru")
         h2.text-center Привет, мир!
         .row
           .col-md-2.visible-lg.visible-md
-            img(src="img/i.jpg", alt="Суровый").img-thumbnail
+            img(src="img/i.jpg", alt="Суровый", itemprop="image").img-thumbnail
           .col-md-10.bio
             p.
-              Меня зовут Женя, мне 23 года и я <strong>web-разработчик</strong>. Пишу на <strong>PHP</strong>,
+              Меня зовут Женя, мне 23 года и я
+              <strong itemprop="jobTitle">web-разработчик</strong>. Пишу на <strong>PHP</strong>,
               использую <strong>MYSQL</strong>, <strong>Yii</strong>, <strong>Laravel</strong>,
               <strong>GruntJs</strong> и т.д. и т.п. Еще мне очень сильно нравятся
               <strong>Ruby</strong>, <strong>NODE.JS</strong> и <strong>MongoDB</strong>.
               В дальнейшем хотел бы перейти на них в качестве основных инструментов разработки.
             p.
               Родился в Узбекистане. Пишу код с 2009 года. Весной 2012 года переехал в Москву, чтобы трудиться
-              над стартапом <strong>flatora</strong>.ru, позже перебрался в Екатеринбург. Люблю точность, новые технологии,
-              упрощать и автоматизировать.
+              над стартапом <strong>flatora</strong>.ru, позже перебрался в Екатеринбург.
+              Люблю точность, новые технологии, упрощать и автоматизировать.
 
       section#experience
         h2.text-center Опыт работы
         .row
-          .col-md-4.col-sm-6
-            h3 Vault Couture <small>2013...</small>
+          .col-md-4.col-sm-6(itemprop="worksFor", itemscope, itemtype="http://schema.org/Organization")
+            h3 <span itemprop="name">Vault Couture</span> <small>2013...</small>
             p Расскажу, если поменяю место работы.
-          .col-md-4.col-sm-6
-            h3 Flatora <small>2011-2013</small>
+          .col-md-4.col-sm-6(itemprop="worksFor", itemscope, itemtype="http://schema.org/Organization")
+            h3 <span itemprop="name">Flatora</span> <small>2011-2013</small>
             p.
               Здесь у меня появился первый опыт интеграции со сторонними проектами. Сначала подключал карты от Yandex,
               даже ходил на конференции, чтобы успеть задать пару вопросов их разработчикам. Речь идет об использовании
@@ -66,21 +67,21 @@ html(lang="ru")
               контроля версий. Участвовал не только в разработке, но и в вопросах оптимизации, генерации идей,
               постановке задач.
           .clearfix.visible-sm
-          .col-md-4.col-sm-6
-            h3 Купиотпуск <small>2011-2012</small>
+          .col-md-4.col-sm-6(itemprop="worksFor", itemscope, itemtype="http://schema.org/Organization")
+            h3 <span itemprop="name">Купиотпуск</span> <small>2011-2012</small>
             p.
               Первый опыт работы в большой команде. Дела с самого начала пошли очень хорошо. Познакомился с SVN,
               Redmine. Работал с платежными системами, сервисами email рассылок и в целом поддерживал сайт.
           .clearfix.visible-md.visible-lg
-          .col-md-4.col-sm-6
-            h3 Brandbox Creative <small>2010-2011</small>
+          .col-md-4.col-sm-6(itemprop="worksFor", itemscope, itemtype="http://schema.org/Organization")
+            h3 <span itemprop="name">Brandbox Creative</span> <small>2010-2011</small>
             p.
               Работа была похожа на конвейер. Сайты-визитки, корпоративные порталы и т.п. Не только программировал,
               иногда и дизайн рисовал. Больше всего мне понравилось на этом месте работы то, что я общался
               непосредственно с клиентами, заказчиками, изучал этот бизнес.
           .clearfix.visible-sm
-          .col-md-4.col-sm-6
-            h3 Comnet ISP <small>2009-2010</small>
+          .col-md-4.col-sm-6(itemprop="worksFor", itemscope, itemtype="http://schema.org/Organization")
+            h3 <span itemprop="name">Comnet ISP</span> <small>2009-2010</small>
             p.
               Мой первый опыт разработки за деньги. В основном делал небольшие корпоративные сайты.
               Провайдеру необходимо было создать музыкальный портал. Я придумал этот проект, описал то,
@@ -111,7 +112,7 @@ html(lang="ru")
         .row
           .col-md-6
             p &nbsp;
-            p © Yevgeny Skuridin, 2013
+            p © <span itemprop="name">Yevgeny</span> <span itemprop="familyName">Skuridin</span>, 2013
             p.
               Нашли ошибку? Пожалуйста сообщите об этом в
               <a href="https://github.com/skuridin/skuridin.github.io/issues">GitHub</a>
