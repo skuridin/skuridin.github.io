@@ -7,6 +7,8 @@ module.exports = (grunt) ->
         options:
           hostname: '*'
           livereload: true
+    concurrent:
+      target1: ['jade', 'sass', 'coffee', 'imagemin']
     sass:
       default:
         options:
@@ -71,6 +73,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-contrib-uglify')
   grunt.loadNpmTasks('grunt-contrib-watch')
+  grunt.loadNpmTasks('grunt-concurrent')
 
-  grunt.registerTask('default', ['connect', 'coffee', 'uglify', 'jade', 'imagemin', 'sass', 'watch'])
+  grunt.registerTask('default', ['connect', 'concurrent:target1', 'uglify', 'watch'])
 

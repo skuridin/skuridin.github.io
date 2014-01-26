@@ -2,13 +2,14 @@
   "name": "skurid.in",
   "version": "2.1.0",
   "devDependencies": {
-    "grunt": "0.x",
-    "grunt-contrib-sass": "0.x",
-    "grunt-contrib-watch": "0.x",
-    "grunt-contrib-connect": "0.x",
-    "grunt-contrib-imagemin": "0.x",
-    "grunt-contrib-coffee": "~0.x",
-    "grunt-contrib-uglify": "0.x",
-    "grunt-contrib-jade": "0.x"
+    "grunt": "*",
+    "grunt-contrib-sass": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-contrib-connect": "*",
+    "grunt-contrib-imagemin": "*",
+    "grunt-contrib-coffee": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-concurrent": "*",
+    "grunt-contrib-jade": "*"
   }
 }
