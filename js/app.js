@@ -1,1 +1,1 @@
-(function(){$(function(){var a,b;return a=function(a){return $("html,body").animate({scrollTop:$($(this).attr("href")).offset().top},"slow"),a.preventDefault()},b=function(){var a,b,c,d;return d="i@skurid.in",c=encodeURIComponent("Skurid.in: "+$("#email-name").val()),a=encodeURIComponent($("#email-content").val()),b="mailto:"+d+"?subject="+c+"&body="+a,window.location.href=b},$(".navbar-nav a").click(a),$("#send-email").click(b)})}).call(this);
+(function(){}).call(this);

@@ -1,16 +1,17 @@
 $default: #888;
 $primary: #428bca;
 
-body, h1, h2, h3, h4, h5, h6 {
+body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   font-family: 'Open Sans', sans-serif;
 }
 
 body {
-  padding: 0 0 2em 0;
+  padding: 3em 0 0 0;
+  font-weight: 300;
 }
 
 section {
-  padding: 5em 0 0 0;
+  padding: 0 0 5em 0;
 }
 
 .theme-redfield {
@@ -46,22 +47,22 @@ section {
     color: $default;
     &:hover {
       text-decoration: none;
-      .icon-skype {
+      .fa-skype {
         color: $primary;
       }
-      .icon-envelope {
+      .fa-envelope {
         color: #d14836;
       }
-      .icon-linkedin-sign {
+      .fa-linkedin {
         color: $primary;
       }
-      .icon-github {
+      .fa-github {
         color: #333;
       }
-      .icon-trello {
+      .fa-trello {
         color: $primary;
       }
-      .icon-google-plus {
+      .fa-google-plus {
         color: #d14836;
       }
     }

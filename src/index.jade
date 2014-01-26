@@ -8,29 +8,15 @@ html(lang="ru")
     meta(name="robots", content="all")
     meta(name="google-site-verification", content="UjyqYrXn-j_1Ev5JhHL0jWq_7R7SvANjcAuwYZYKSso")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    link(rel="stylesheet", href="http://fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin,cyrillic")
-    link(rel="stylesheet", href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.no-icons.min.css")
-    link(rel="stylesheet", href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css")
+    link(rel="stylesheet", href="http://fonts.googleapis.com/css?family=Open+Sans:300,400&subset=latin,cyrillic")
+    link(href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css", rel="stylesheet")
+    link(href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css", rel="stylesheet")
     //if lt IE 9
       script(src="https://raw.github.com/aFarkas/html5shiv/master/dist/html5shiv.js")
       script(src="https://raw.github.com/scottjehl/Respond/master/respond.min.js")
     link(rel="stylesheet", href="css/style.css")
 
-  body(data-spy="scroll", data-target=".navbar-collapse", itemscope, itemtype="http://schema.org/Person")
-
-    .navbar.navbar-default.navbar-fixed-top
-      .container
-        .navbar-header
-          button(type="button", data-toggle="collapse", data-target=".navbar-collapse").navbar-toggle
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-          a(href="/", title=appTitle).navbar-brand=appTitle
-        .navbar-collapse.collapse
-          ul.nav.navbar-nav
-            each val, index in pages
-              li: a(href="#"+index, title=val)=val
-
+  body(itemscope, itemtype="http://schema.org/Person")
     .container.theme-redfield
       section#about-me
         h2.text-center Привет, мир!
@@ -116,28 +102,13 @@ html(lang="ru")
               Нашли ошибку? Пожалуйста сообщите об этом в
               <a href="https://github.com/skuridin/skuridin.github.io/issues">GitHub</a>
             .social
-              a(href="skype:redfield1990"): span.icon-skype.icon-3x
-              a(href="mailto:i@skurid.in"): span.icon-envelope.icon-3x
-              a(href="http://www.linkedin.com/in/redfield1990"): span.icon-linkedin-sign.icon-3x
-              a(href="https://github.com/skuridin"): span.icon-github.icon-3x
-              a(href="https://trello.com/redfield_ru"): span.icon-trello.icon-3x
-              a(href="https://plus.google.com/+YevgenySkuridin?rel=author"): span.icon-google-plus.icon-3x
-          .col-md-6
-            p &nbsp;
-            form
-              .row
-                .col-xs-12
-                  .form-group
-                    input(type="text", placeholder="Имя")#email-name.form-control
-              .row
-                .col-xs-12
-                  .form-group
-                    textarea(rows="5", placeholder="Сообщение")#email-content.form-control
-              .row
-                .col-xs-12
-                  .form-group
-                    button(type="button")#send-email.btn.btn-primary.col-xs-12 Отправить
+              a(href="skype:redfield1990"): i.fa.fa-skype.fa-3x
+              a(href="mailto:i@skurid.in"): i.fa.fa-envelope.fa-3x
+              a(href="http://www.linkedin.com/in/redfield1990"): i.fa.fa-linkedin.fa-3x
+              a(href="https://github.com/skuridin"): i.fa.fa-github.fa-3x
+              a(href="https://trello.com/redfield_ru"): i.fa.fa-trello.fa-3x
+              a(href="https://plus.google.com/+YevgenySkuridin?rel=author"): i.fa.fa-google-plus.fa-3x
 
-    script(src="//code.jquery.com/jquery.min.js")
-    script(src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js")
-    script(src="js/app.js")
+    //- script(src="//code.jquery.com/jquery.min.js")
+    //- script(src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js")
+    //- script(src="js/app.js")
