@@ -8,7 +8,7 @@ module.exports = (grunt) ->
           hostname: '*'
           livereload: true
     concurrent:
-      target1: ['jade', 'sass', 'coffee', 'imagemin']
+      target1: ['jade', 'sass', 'coffee']
     sass:
       default:
         options:
