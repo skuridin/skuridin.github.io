@@ -9,7 +9,8 @@
   },
   "skills": [
     "PHP", "MYSQL", "CSS", "Yii", "Laravel", "Fat-Free", "JavaScript", "Composer", "Git", "SVN", "Python",
-    "GruntJs", "Jade", "AngularJs", "SASS/SCSS", "Coffee-script", "NodeJs", "Ruby", "Ruby On Rails", "MongoDb"
+    "GruntJs", "Jade", "AngularJs", "SASS/SCSS", "Coffee-script", "NodeJs", "Ruby", "Ruby On Rails", "MongoDb",
+    "CloudFlare", "LESS"
   ],
   "labels": ["default", "primary", "success", "info", "warning"]
 }
