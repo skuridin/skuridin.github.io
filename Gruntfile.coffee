@@ -62,9 +62,6 @@ module.exports = (grunt) ->
       js:
         files: 'src/js/*.coffee'
         tasks: ['coffee', 'uglify']
-      img:
-        files: 'src/img/*.{jpg, jpeg, png}'
-        tasks: ['imagemin']
 
   grunt.loadNpmTasks('grunt-contrib-connect')
   grunt.loadNpmTasks('grunt-sass')
@@ -76,4 +73,5 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-concurrent')
 
   grunt.registerTask('default', ['connect', 'concurrent:target1', 'uglify', 'watch'])
+  grunt.registerTask('img', ['imagemin'])
 
