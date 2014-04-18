@@ -12,7 +12,7 @@ module.exports = (grunt) ->
     sass:
       default:
         options:
-          style: 'compressed'
+          outputStyle: 'compressed'
         files: [
           expand: true
           cwd: 'src/'
@@ -67,7 +67,7 @@ module.exports = (grunt) ->
         tasks: ['imagemin']
 
   grunt.loadNpmTasks('grunt-contrib-connect')
-  grunt.loadNpmTasks('grunt-contrib-sass')
+  grunt.loadNpmTasks('grunt-sass')
   grunt.loadNpmTasks('grunt-contrib-jade')
   grunt.loadNpmTasks('grunt-contrib-imagemin')
   grunt.loadNpmTasks('grunt-contrib-coffee')
