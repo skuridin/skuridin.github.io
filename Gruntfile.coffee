@@ -12,7 +12,7 @@ module.exports = (grunt) ->
     sass:
       default:
         options:
-          style: 'compressed'
+          outputStyle: 'compressed'
         files: [
           expand: true
           cwd: 'src/'
@@ -62,12 +62,9 @@ module.exports = (grunt) ->
       js:
         files: 'src/js/*.coffee'
         tasks: ['coffee', 'uglify']
-      img:
-        files: 'src/img/*.{jpg, jpeg, png}'
-        tasks: ['imagemin']
 
   grunt.loadNpmTasks('grunt-contrib-connect')
-  grunt.loadNpmTasks('grunt-contrib-sass')
+  grunt.loadNpmTasks('grunt-sass')
   grunt.loadNpmTasks('grunt-contrib-jade')
   grunt.loadNpmTasks('grunt-contrib-imagemin')
   grunt.loadNpmTasks('grunt-contrib-coffee')
@@ -76,4 +73,5 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-concurrent')
 
   grunt.registerTask('default', ['connect', 'concurrent:target1', 'uglify', 'watch'])
+  grunt.registerTask('img', ['imagemin'])
 
