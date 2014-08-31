@@ -1,11 +1,14 @@
 var gulp        = require('gulp'),
     sass        = require('gulp-sass'),
     changed     = require('gulp-changed'),
+    htmlmin     = require('gulp-htmlmin'),
+    cssshrink   = require('gulp-cssshrink'),
     connect     = require('gulp-connect');
 
 gulp.task('html', function() {
     gulp.src('src/*.html')
         .pipe(changed('.'))
+        .pipe(htmlmin({ collapseWhitespace: true }))
         .pipe(gulp.dest('.'))
         .pipe(connect.reload());
 });
@@ -21,6 +24,7 @@ gulp.task('styles', function() {
     gulp.src('./src/css/*.scss')
         .pipe(changed('./css'))
         .pipe(sass())
+        .pipe(cssshrink())
         .pipe(gulp.dest('./css'))
         .pipe(connect.reload());
 });
