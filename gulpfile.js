@@ -42,3 +42,4 @@ gulp.task('watch', function() {
 });
 
 gulp.task('default', ['connect', 'watch', 'html', 'styles']);
+gulp.task('build', ['html', 'styles']);
