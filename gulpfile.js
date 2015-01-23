@@ -32,7 +32,8 @@ gulp.task('styles', function() {
 gulp.task('connect', function() {
     connect.server({
         livereload: true,
-        port: 8000
+        port: 8000,
+        host: "0.0.0.0"
     });
 });
 
