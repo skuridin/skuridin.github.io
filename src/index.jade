@@ -1,0 +1,23 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    title= appTitle
+    meta(name="google-site-verification", content="UjyqYrXn-j_1Ev5JhHL0jWq_7R7SvANjcAuwYZYKSso")
+    meta(name="author", content=appTitle)
+    link(rel="stylesheet", href="//fonts.googleapis.com/css?family=Exo+2:300")
+    link(rel="stylesheet", href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.2/normalize.min.css")
+    link(rel="stylesheet", href="css/main.css")
+  body
+    .container
+      img.logo(src="img/logo.svg", alt=appTitle)
+      .about: p
+        | Hello! My name is Yevgeny. <br>
+        | Developer. PHP and Ruby. <br>
+        | Uzbekistan, Tashkent. <br>
+        | Ready to move.
+      ul.links
+        each link in links
+          li: a(href=link.url)= link.title
