@@ -1,4 +1,5 @@
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin'),
+    ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
   context: __dirname + "/src",
@@ -15,6 +16,19 @@ module.exports = {
       minify: {
         collapseWhitespace: true
       }
-    })
-  ]
+    }),
+    new ExtractTextPlugin('style.css')
+  ],
+  module: {
+    loaders: [
+      {
+        test: /\.styl$/,
+        loader: ExtractTextPlugin.extract("css!autoprefixer!stylus")
+      },
+      {
+        test: /\.(png|svg|gif|jpe?g)$/,
+        loader: 'file?name=[name]-[hash].[ext]!img?-minimize',
+      }
+    ]
+  }
 };
