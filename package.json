@@ -4,8 +4,13 @@
     "build": "webpack -c -p --progress"
   },
   "devDependencies": {
+    "autoprefixer-loader": "^2.0.0",
+    "css-loader": "^0.15.1",
+    "extract-text-webpack-plugin": "^0.8.2",
     "html-webpack-plugin": "^1.5.2",
+    "img-loader": "^1.1.0",
     "node-libs-browser": "^0.5.2",
+    "stylus-loader": "^1.2.1",
     "webpack": "^1.10.0",
     "webpack-dev-server": "^1.10.1"
   }
