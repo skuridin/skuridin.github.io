@@ -22,6 +22,10 @@ module.exports = {
   module: {
     loaders: [
       {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract("css!autoprefixer")
+      },
+      {
         test: /\.styl$/,
         loader: ExtractTextPlugin.extract("css!autoprefixer!stylus")
       },
