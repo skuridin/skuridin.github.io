@@ -1,34 +1,33 @@
 body
-  font-family "Dosis"
+  font-family "Open Sans"
   font-weight 300
-  font-size 14px
-.pull-left
-  float left
-.pull-right
-  float right
-.text-muted
-  color #999
-
-.container
-  width 90%
-  margin 1em auto
-.header
-  margin-bottom 2em
-.main-info
-  text-align right
-  h1
-    margin 0
-    font-size 24px
-    font-weight 300
-  p
-    margin 0
-  a
-    text-decoration none
-    color #b000b5
-.photo
-  size = 100px
+.wrapper-table
+  display table
+  position absolute
+  height 100%
+  width 100%
+  margin-top -3em
+.wrapper-cell
+  display: table-cell
+  vertical-align: middle
+.logo
+  size = 64px
   width size
   height size
-  background-image url('./img/iam.jpg')
+  background-image url('./img/logo.svg')
   background-size size
   border-radius 50%
+  margin 1em auto
+.info
+  margin 0 auto
+  text-align center
+  font-size 24px
+.links
+  font-size 14px
+  margin 0 auto
+  text-align center
+  a
+    color #c55
+    text-decoration none
+    &:hover
+      text-decoration underline
