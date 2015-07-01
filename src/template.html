@@ -31,8 +31,5 @@
         </div>
       </div>
     </div>
-    {% for (var chunk in o.htmlWebpackPlugin.files.chunks) { %}
-    <script src="{%=o.htmlWebpackPlugin.files.chunks[chunk].entry %}"></script>
-    {% } %}
   </body>
 </html>
