@@ -12,6 +12,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/template.html',
       title: 'Evgeniy Skuridin',
+      favicon: 'favicon.ico',
       hash: true,
       minify: {
         collapseWhitespace: true
@@ -31,7 +32,10 @@ module.exports = {
       },
       {
         test: /\.(png|svg|gif|jpe?g)$/,
-        loader: 'file?name=[name]-[hash].[ext]!img?-minimize',
+        loaders: [
+          'file?&name=img/[name].[ext]',
+          'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+        ]
       }
     ]
   }
