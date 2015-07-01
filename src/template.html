@@ -5,11 +5,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{%=o.htmlWebpackPlugin.options.title%}</title>
+    {% if (o.htmlWebpackPlugin.files.favicon) { %}
+    <link rel="shortcut icon" href="{%=o.htmlWebpackPlugin.files.favicon%}">
+    {% } %}
     {% for (var css in o.htmlWebpackPlugin.files.css) { %}
     <link href="{%=o.htmlWebpackPlugin.files.css[css] %}" rel="stylesheet">
     {% } %}
   </head>
   <body>
+    <div class="container">
+      <div class="header">
+        <div class="photo pull-left"></div>
+        <div class="main-info pull-right">
+          <h1>Evgeniy Skuridin</h1>
+          <p>Frontend developer</p>
+          <p class="text-muted">Tashkent, Uzbekistan (UTC+5)</p>
+          <p><a href="mailto:i@skurid.in">i@skurid.in</a></p>
+        </div>
+      </div>
+    </div>
     {% for (var chunk in o.htmlWebpackPlugin.files.chunks) { %}
     <script src="{%=o.htmlWebpackPlugin.files.chunks[chunk].entry %}"></script>
     {% } %}
