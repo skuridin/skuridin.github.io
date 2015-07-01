@@ -1,2 +1,0 @@
-skuridin.github.io
-==================
