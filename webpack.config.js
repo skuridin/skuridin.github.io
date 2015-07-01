@@ -29,13 +29,6 @@ module.exports = {
       {
         test: /\.styl$/,
         loader: ExtractTextPlugin.extract("css!autoprefixer!stylus")
-      },
-      {
-        test: /\.(png|svg|gif|jpe?g)$/,
-        loaders: [
-          'file?&name=img/[name].[ext]',
-          'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
-        ]
       }
     ]
   }
