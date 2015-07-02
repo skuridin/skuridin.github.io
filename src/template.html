@@ -8,6 +8,7 @@
     {% if (o.htmlWebpackPlugin.files.favicon) { %}
     <link rel="shortcut icon" href="{%=o.htmlWebpackPlugin.files.favicon%}">
     {% } %}
+    <link href="http://fonts.googleapis.com/css?family=Exo+2:300" rel="stylesheet">
     {% for (var css in o.htmlWebpackPlugin.files.css) { %}
     <link href="{%=o.htmlWebpackPlugin.files.css[css] %}" rel="stylesheet">
     {% } %}
