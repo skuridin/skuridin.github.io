@@ -15,7 +15,7 @@ var renderToString = function() {
   var result;
   Router.run(routes, '/', function(Handler) {
     result = React.renderToString(<Handler />);
-  })
+  });
   return result;
 };
 
