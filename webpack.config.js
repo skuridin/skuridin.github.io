@@ -3,7 +3,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin'),
 
 module.exports = {
   context: __dirname + '/src',
-  entry: './main.js',
+  entry: './main.jsx',
   output: {
     path: __dirname,
     filename: 'assets/bundle.js'
