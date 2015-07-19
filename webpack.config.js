@@ -7,7 +7,8 @@ module.exports = {
   entry: './main.jsx',
   output: {
     path: __dirname,
-    filename: 'assets/bundle.js'
+    filename: 'assets/bundle.js',
+    libraryTarget: 'umd'
   },
   resolve: {
     extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx']
