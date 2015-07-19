@@ -1,5 +1,6 @@
-var HtmlWebpackPlugin = require('html-webpack-plugin'),
-    ExtractTextPlugin = require('extract-text-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var Clean = require('clean-webpack-plugin');
 
 module.exports = {
   context: __dirname + '/src',
@@ -12,6 +13,7 @@ module.exports = {
     extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx']
   },
   plugins: [
+    new Clean('assets'),
     new HtmlWebpackPlugin({
       template: './src/template.html',
       title: 'Evgeniy Skuridin',
