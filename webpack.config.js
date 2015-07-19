@@ -1,12 +1,15 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin'),
-    ExtractTextPlugin = require("extract-text-webpack-plugin");
+    ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-  context: __dirname + "/src",
-  entry: "./main.js",
+  context: __dirname + '/src',
+  entry: './main.js',
   output: {
     path: __dirname,
-    filename: "assets/bundle.js"
+    filename: 'assets/bundle.js'
+  },
+  resolve: {
+    extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx']
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -25,11 +28,11 @@ module.exports = {
       { test: /\.jsx$/, loader: 'babel' },
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract("css!autoprefixer")
+        loader: ExtractTextPlugin.extract('css!autoprefixer')
       },
       {
         test: /\.styl$/,
-        loader: ExtractTextPlugin.extract("css!autoprefixer!stylus")
+        loader: ExtractTextPlugin.extract('css!autoprefixer!stylus')
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
