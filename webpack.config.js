@@ -1,17 +1,20 @@
-var HtmlWebpackPlugin = require('html-webpack-plugin'),
-    ExtractTextPlugin = require('extract-text-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var Clean = require('clean-webpack-plugin');
 
 module.exports = {
   context: __dirname + '/src',
   entry: './main.jsx',
   output: {
     path: __dirname,
-    filename: 'assets/bundle.js'
+    filename: 'assets/bundle.js',
+    libraryTarget: 'umd'
   },
   resolve: {
     extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx']
   },
   plugins: [
+    new Clean('assets'),
     new HtmlWebpackPlugin({
       template: './src/template.html',
       title: 'Evgeniy Skuridin',

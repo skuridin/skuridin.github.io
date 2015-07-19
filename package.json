@@ -1,7 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "build": "webpack -c -p --optimize-dedupe --optimize-occurence-order --progress",
+    "build_step": "webpack -c -p --optimize-dedupe --optimize-occurence-order --progress",
+    "make_static": "node static.js",
+    "build": "npm run build_step && npm run make_static",
     "dev": "webpack-dev-server -d --progress --host 0.0.0.0"
   },
   "devDependencies": {
@@ -9,6 +11,7 @@
     "babel-core": "^5.7.4",
     "babel-loader": "^5.3.2",
     "bootstrap": "^3.3.5",
+    "clean-webpack-plugin": "^0.1.3",
     "css-loader": "^0.15.1",
     "extract-text-webpack-plugin": "^0.8.2",
     "file-loader": "^0.8.4",
