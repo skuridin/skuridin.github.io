@@ -1,4 +1,5 @@
 var React = require('react');
+var Skills = require('../SkillsComponent');
 
 var CVPageComponent = React.createClass({
   render: function() {
@@ -40,25 +41,7 @@ var CVPageComponent = React.createClass({
         <div className="row">
           <div className="col-xs-12">
             <h3>My skills</h3>
-            <p>
-              <span className="label label-primary">HTML</span>
-              <span className="label label-primary">CSS</span>
-              <span className="label label-primary">JavaScript</span>
-              <span className="label label-warning">GIT</span>
-              <span className="label label-warning">Grunt</span>
-              <span className="label label-warning">Gulp</span>
-              <span className="label label-info">PHP</span>
-              <span className="label label-info">Ruby</span>
-              <span className="label label-success">React</span>
-              <span className="label label-success">Flux</span>
-              <span className="label label-default">MySQL</span>
-              <span className="label label-default">Yii</span>
-              <span className="label label-default">Ruby On Rails</span>
-              <span className="label label-default">Laravel</span>
-              <span className="label label-default">Jade</span>
-              <span className="label label-default">Node</span>
-              <span className="label label-default">Express</span>
-            </p>
+            <Skills />
           </div>
         </div>
       </div>
