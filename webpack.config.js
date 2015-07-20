@@ -49,5 +49,8 @@ module.exports = {
         loader: 'file?name=assets/[name].[ext]'
       },
     ]
+  },
+  devServer: {
+    historyApiFallback: true
   }
 };
