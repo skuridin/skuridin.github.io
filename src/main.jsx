@@ -6,17 +6,15 @@ var Router = require('react-router');
 var routes = require('./routes.jsx');
 
 if(typeof(window) !== 'undefined') {
-  Router.run(routes, Router.HashLocation, function(Handler) {
+  Router.run(routes, Router.HistoryLocation, function(Handler) {
     React.render(<Handler />, document.getElementById('app'));
   });
 }
 
-var renderToString = function() {
+module.exports = function(path) {
   var result;
-  Router.run(routes, '/', function(Handler) {
+  Router.run(routes, path, function(Handler) {
     result = React.renderToString(<Handler />);
   });
   return result;
 };
-
-module.exports = renderToString;
