@@ -4,8 +4,8 @@ var Route = Router.Route;
 var DefaultRoute = Router.DefaultRoute;
 var NotFoundRoute = Router.NotFoundRoute;
 var App = require('./components/AppComponent');
-var Home = require('./components/HomeComponent');
-var E404 = require('./components/E404Component');
+var Home = require('./components/pages/HomePageComponent');
+var E404 = require('./components/pages/E404PageComponent');
 
 var routes = (
   <Route handler={App}>

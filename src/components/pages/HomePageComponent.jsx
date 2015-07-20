@@ -7,7 +7,7 @@ var HomeComponent = React.createClass({
         <div className="wrapper-cell">
           <div className="wrapper">
             <div className="home-page">
-              <img className="home-page-logo" src={require('../images/logo.svg')} alt="Evgeniy Skuridin" />
+              <img className="home-page-logo" src={require('../../images/logo.svg')} alt="Evgeniy Skuridin" />
               <div className="home-page-info">
                 Hi! My name is Evgeniy. <br />
                 Frontend developer. <br />
