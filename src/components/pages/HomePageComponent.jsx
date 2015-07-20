@@ -1,4 +1,5 @@
 var React = require('react');
+var Link = require('react-router').Link;
 
 var HomeComponent = React.createClass({
   render: function() {
@@ -15,6 +16,7 @@ var HomeComponent = React.createClass({
                 Ready to relocate.
               </div>
               <div className="home-page-links">
+                <Link to="cv">CV</Link>
                 <a href="https://github.com/skuridin">Github</a>
                 <a href="mailto:i@skurid.in">Email</a>
                 <a href="skype:redfield1990?chat">Skype</a>
