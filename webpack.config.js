@@ -17,6 +17,7 @@ module.exports = {
     new Clean('assets'),
     new HtmlWebpackPlugin({
       template: './src/template.html',
+      filename: 'template.html',
       title: 'Evgeniy Skuridin',
       favicon: 'favicon.ico',
       hash: true,
