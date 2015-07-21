@@ -32,7 +32,7 @@ var CVPageComponent = React.createClass({
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <h3>Short about me</h3>
+            <h2>Short about me</h2>
             <p>
               Hi, guys! My name is Evgeniy and I'd like to work with you. I am goal-oriented person and automatization is my passion. I am working as full-stack developer for 5 years now, but in future I want to concentrato in frontend developing.
             </p>
@@ -40,8 +40,18 @@ var CVPageComponent = React.createClass({
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <h3>My skills</h3>
+            <h2>My skills</h2>
             <Skills />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-xs-12">
+            <h2>Career History</h2>
+            <div className="cv-career-item">
+              <h4>Comnet ISP</h4>
+              <h5>Full Stack Developer <small>Jan. 2009 — Jun. 2010</small></h5>
+              <p>Hi, guys! My name is Evgeniy and I'd like to work with you. I am goal-oriented person and automatization is my passion. I am working as full-stack developer for 5 years now, but in future I want to concentrato in frontend developing.</p>
+            </div>
           </div>
         </div>
       </div>
