@@ -2,6 +2,27 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var Clean = require('clean-webpack-plugin');
 
+var plugins = [new ExtractTextPlugin('assets/style.css')];
+var htmlpath = 'index.html';
+
+if(process.env.NODE_ENV === 'production') {
+  htmlpath = 'template.html';
+  plugins.push(new Clean('assets'));
+}
+
+plugins.push(
+  new HtmlWebpackPlugin({
+    template: './src/template.html',
+    filename: htmlpath,
+    title: 'Evgeniy Skuridin',
+    favicon: 'favicon.ico',
+    hash: true,
+    minify: {
+      collapseWhitespace: true
+    }
+  })
+);
+
 module.exports = {
   context: __dirname + '/src',
   entry: './main.jsx',
@@ -13,20 +34,7 @@ module.exports = {
   resolve: {
     extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx']
   },
-  plugins: [
-    new Clean('assets'),
-    new HtmlWebpackPlugin({
-      template: './src/template.html',
-      filename: 'template.html',
-      title: 'Evgeniy Skuridin',
-      favicon: 'favicon.ico',
-      hash: true,
-      minify: {
-        collapseWhitespace: true
-      }
-    }),
-    new ExtractTextPlugin('assets/style.css')
-  ],
+  plugins: plugins,
   module: {
     loaders: [
       { test: /\.jsx$/, loader: 'babel' },
