@@ -1,5 +1,6 @@
 var React = require('react');
 var Skills = require('../SkillsComponent');
+var Career = require('../CareerComponent');
 
 var CVPageComponent = React.createClass({
   render: function() {
@@ -47,11 +48,7 @@ var CVPageComponent = React.createClass({
         <div className="row">
           <div className="col-xs-12">
             <h2>Career History</h2>
-            <div className="cv-career-item">
-              <h4>Comnet ISP</h4>
-              <h5>Full Stack Developer <small>Jan. 2009 — Jun. 2010</small></h5>
-              <p>Hi, guys! My name is Evgeniy and I'd like to work with you. I am goal-oriented person and automatization is my passion. I am working as full-stack developer for 5 years now, but in future I want to concentrato in frontend developing.</p>
-            </div>
+            <Career />
           </div>
         </div>
       </div>
