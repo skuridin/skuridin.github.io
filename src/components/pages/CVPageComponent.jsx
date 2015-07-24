@@ -8,7 +8,7 @@ var CVPageComponent = React.createClass({
     return (
       <div className="container cv-page">
         <div className="row cv-back-to-home">
-          <div className="col-xs-2">
+          <div className="col-xs-12">
             <Link to="home" className="small text-muted">&lsaquo; Back to home</Link>
           </div>
         </div>
