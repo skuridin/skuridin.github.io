@@ -1,4 +1,5 @@
 var React = require('react');
+var Link = require('react-router').Link;
 var Skills = require('../SkillsComponent');
 var Career = require('../CareerComponent');
 
@@ -6,6 +7,11 @@ var CVPageComponent = React.createClass({
   render: function() {
     return (
       <div className="container cv-page">
+        <div className="row cv-back-to-home">
+          <div className="col-xs-2">
+            <Link to="home" className="small text-muted">&lsaquo; Back to home</Link>
+          </div>
+        </div>
         <div className="row">
           <div className="col-xs-5 col-md-2 col-sm-3">
             <img
@@ -27,13 +33,13 @@ var CVPageComponent = React.createClass({
             <strong>Skype:</strong> <a href="skype:redfield1990?chat">redfield1990</a> <br />
           </div>
           <div className="col-xs-12 col-md-4 col-sm-6">
-            <h2>Short about me</h2>
+            <h2>Short info</h2>
             <p>
               Hi, guys! My name is Evgeniy and I'd like to work with you. I am goal-oriented person and automatization is my passion. I am working as full-stack developer for 5 years now, but in future I want to concentrato in frontend developing.
             </p>
           </div>
           <div className="col-xs-12 col-md-4">
-            <h2>My skills</h2>
+            <h2>Skills</h2>
             <Skills />
           </div>
         </div>
