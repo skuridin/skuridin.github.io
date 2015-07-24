@@ -14,14 +14,14 @@ var CVPageComponent = React.createClass({
               className="img-responsive img-circle cv-page-photo" />
           </div>
           <div className="col-xs-7 col-md-9 col-lg-8 text-center text-muted">
-            <h1>Evgeniy Skuridin</h1>
+            <h1 className="cv-my-name">Evgeniy Skuridin</h1>
           </div>
         </div>
         <div className="row">
           <div className="col-xs-12 col-md-4 col-sm-6">
             <h2>Fontend developer</h2>
-            25 years old. Tashkent, Uzbekistan (UTC+5). <br />
-            <strong>Languages:</strong> Russian (native), English. <br />
+            25 years old. Tashkent, Uzbekistan <span className="text-muted">(UTC+5)</span> <br />
+            <strong>Languages:</strong> Russian (native), English <br />
             <strong>Phone:</strong> +998 90 806-79-72 <br />
             <strong>Email:</strong> i@skurid.in <br />
             <strong>Skype:</strong> redfield1990 <br />
