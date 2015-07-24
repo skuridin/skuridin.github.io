@@ -22,9 +22,9 @@ var CVPageComponent = React.createClass({
             <h2>Fontend developer</h2>
             25 years old. Tashkent, Uzbekistan <span className="text-muted">(UTC+5)</span> <br />
             <strong>Languages:</strong> Russian (native), English <br />
-            <strong>Phone:</strong> +998 90 806-79-72 <br />
-            <strong>Email:</strong> i@skurid.in <br />
-            <strong>Skype:</strong> redfield1990 <br />
+            <strong>Phone:</strong> <a href="tel:+998908067972">+998 90 806-79-72</a> <br />
+            <strong>Email:</strong> <a href="mailtu:i@skurid.in">i@skurid.in</a> <br />
+            <strong>Skype:</strong> <a href="skype:redfield1990?chat">redfield1990</a> <br />
           </div>
           <div className="col-xs-12 col-md-4 col-sm-6">
             <h2>Short about me</h2>
