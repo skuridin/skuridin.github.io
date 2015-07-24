@@ -4,9 +4,11 @@ require('./style.styl');
 var React = require('react');
 var Router = require('react-router');
 var routes = require('./routes.jsx');
+var Location = Router.HashLocation;
 
 if(typeof(window) !== 'undefined') {
-  Router.run(routes, Router.HistoryLocation, function(Handler) {
+  if(NODE_ENV === 'production') Location = Router.HistoryLocation;
+  Router.run(routes, Location, function(Handler) {
     React.render(<Handler />, document.getElementById('app'));
   });
 }

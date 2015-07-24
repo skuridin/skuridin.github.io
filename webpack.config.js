@@ -1,25 +1,10 @@
+var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var Clean = require('clean-webpack-plugin');
+var htmlFileName = 'index.html';
 
-var plugins = [new ExtractTextPlugin('assets/style.css')];
-
-if(process.env.NODE_ENV === 'production') {
-  plugins.push(new Clean('assets'));
-}
-
-plugins.push(
-  new HtmlWebpackPlugin({
-    template: './src/template.html',
-    filename: 'template.html',
-    title: 'Evgeniy Skuridin',
-    favicon: 'favicon.ico',
-    hash: true,
-    minify: {
-      collapseWhitespace: true
-    }
-  })
-);
+if(process.env.NODE_ENV === 'production') htmlFileName = 'template.html';
 
 module.exports = {
   context: __dirname + '/src',
@@ -33,7 +18,23 @@ module.exports = {
   resolve: {
     extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx']
   },
-  plugins: plugins,
+  plugins: [
+    new Clean(['assets', './*.html']),
+    new ExtractTextPlugin('assets/style.css'),
+    new webpack.DefinePlugin({
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/template.html',
+      filename: htmlFileName,
+      title: 'Evgeniy Skuridin',
+      favicon: 'favicon.ico',
+      hash: true,
+      minify: {
+        collapseWhitespace: true
+      }
+    })
+  ],
   module: {
     loaders: [
       { test: /\.jsx$/, loader: 'babel' },
@@ -57,8 +58,5 @@ module.exports = {
         loader: 'file?name=assets/[name].[ext]'
       },
     ]
-  },
-  devServer: {
-    historyApiFallback: true
   }
 };
