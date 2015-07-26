@@ -6,7 +6,9 @@ var CareerComponent = React.createClass({
     return (
       <div className="row">
         {data.map(function(career, idx) {
-          return (
+          var clearfix = '';
+          if(idx % 2 === 1) clearfix = <div className="clearfix visible-md visible-lg" />;
+          return [
             <div className="cv-career-item col-md-6" key={idx}>
               <h4>{career.title}</h4>
               <h5>{career.position} <small>{career.period}</small></h5>
@@ -15,8 +17,9 @@ var CareerComponent = React.createClass({
                   return <li key={idx}>{item}</li>;
                 })}
               </ul>
-            </div>
-          );
+            </div>,
+            clearfix
+          ];
         })}
       </div>
     );
