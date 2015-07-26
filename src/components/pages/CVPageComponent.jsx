@@ -27,7 +27,7 @@ var CVPageComponent = React.createClass({
         </div>
         <div className="row">
           <div className="col-xs-12 col-md-4 col-sm-6">
-            <h2>Fontend developer</h2>
+            <h2>Frontend developer</h2>
             25 years old. Tashkent, Uzbekistan <span className="text-muted">(UTC+5)</span> <br />
             <strong>Languages:</strong> Russian (native), English <br />
             <strong>Phone:</strong> <a href="tel:+998908067972">+998 90 806-79-72</a> <br />
