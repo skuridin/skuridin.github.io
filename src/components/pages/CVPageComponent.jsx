@@ -35,7 +35,7 @@ var CVPageComponent = React.createClass({
           <div className="col-xs-12 col-md-4 col-sm-6">
             <h2>Short info</h2>
             <p>
-              Hi, guys! My name is Evgeniy and I'd like to work with you. I am goal-oriented person and automatization is my passion. I am working as full-stack developer for 5 years now, but in future I want to concentrato in frontend developing.
+              Disciplined developer with over 5 years experience in frontend and backend development. Pragmatic with a keen eye for detail and eagerness to provide great usability. Maintains a motivated and focused approach to developing new skills and knowledge.
             </p>
           </div>
           <div className="col-xs-12 col-md-4">
