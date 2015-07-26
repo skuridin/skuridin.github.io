@@ -31,6 +31,7 @@ var CVPageComponent = React.createClass({
             <strong>Phone:</strong> <a href="tel:+998908067972">+998 90 806-79-72</a> <br />
             <strong>Email:</strong> <a href="mailtu:i@skurid.in">i@skurid.in</a> <br />
             <strong>Skype:</strong> <a href="skype:redfield1990?chat">redfield1990</a> <br />
+            <strong>Github:</strong> <a href="https://github.com/skuridin">skuridin</a> <br />
           </div>
           <div className="col-xs-12 col-md-4 col-sm-6">
             <h2>Short info</h2>
