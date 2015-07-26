@@ -1,8 +1,7 @@
 var React = require('react');
 var data = [
-  'HTML', 'CSS', 'JavaScript', 'GIT', 'Grunt', 'Gulp', 'PHP', 'Ruby',
-  'jQuery', 'React', 'Flux', 'SCSS', 'Stylus', 'Less', 'MySQL', 'Yii',
-  'Ruby on Rails', 'Laravel', 'Node', 'Express'
+  'HTML', 'CSS', 'JavaScript', 'PHP', 'Ruby', 'Git', 'Webpack', 'Gulp', 'Grunt',
+  'React', 'Flux',  'jQuery', 'Stylus', 'Less', 'SCSS', 'Yii'
 ];
 
 var SkillsComponent = React.createClass({
