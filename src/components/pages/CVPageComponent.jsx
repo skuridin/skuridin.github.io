@@ -8,8 +8,10 @@ var CVPageComponent = React.createClass({
     return (
       <div className="container cv-page">
         <div className="row cv-back-to-home">
-          <div className="col-xs-12">
-            <Link to="home" className="small text-muted">&lsaquo; Back to home</Link>
+          <div className="col-xs-12 small">
+            <Link to="home" className="text-muted">&lsaquo; Back to home</Link>
+            &nbsp;\&nbsp;
+            <a href="/Evgeniy.Skuridin.Frontend.pdf" className="text-muted" title="PDF">PDF</a>
           </div>
         </div>
         <div className="row">
