@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build_step": "webpack -c -p --optimize-dedupe --optimize-occurence-order --progress",
+    "build_step": "NODE_ENV=production webpack -c -p --optimize-dedupe --optimize-occurence-order --progress",
     "make_static": "node static.js",
     "build": "npm run build_step && npm run make_static",
     "dev": "webpack-dev-server -d --progress --host 0.0.0.0"
