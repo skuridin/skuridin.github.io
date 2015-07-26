@@ -20,5 +20,40 @@ module.exports = [
       'Frontend with jQuery',
       'Vagrant, Git, Gulp'
     ]
+  },
+  {
+    title: 'Flatora',
+    position: 'Full stack web developer',
+    period: 'Jan. 2012 — Apr. 2013',
+    content: [
+      'Backend with PHP, Yii & MySQL',
+      'Frontend with jQuery',
+      'Payment system, Maps, SMS integration',
+      'Git, Redmine'
+    ]
+  },
+  {
+    title: 'KupiOtpusk',
+    position: 'Full stack web developer',
+    period: 'Jun. 2011 — Jan. 2012',
+    content: [
+      'Backend with PHP, Yii & MySQL',
+      'Frontend with jQuery',
+      'SVN, Redmine'
+    ]
+  },
+  {
+    title: 'Brandbox Branding',
+    position: 'Full stack web developer',
+    period: ' Jun. 2010 — Jun. 2011',
+    content: [
+      'Wordpress, jQuery'
+    ]
+  },
+  {
+    title: 'Comnet ISP',
+    position: 'Full stack web developer',
+    period: 'Nov. 2009 — Jun. 2010',
+    content: []
   }
 ];
