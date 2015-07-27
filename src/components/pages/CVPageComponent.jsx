@@ -38,7 +38,7 @@ var CVPageComponent = React.createClass({
           <div className="col-xs-12 col-md-4 col-sm-6">
             <h2>Short info</h2>
             <p>
-              Disciplined developer with over 5 years experience in frontend and backend development. Pragmatic with a keen eye for detail and eagerness to provide great usability. Maintains a motivated and focused approach to developing new skills and knowledge.
+              Disciplined developer with over 5 years experience in frontend and backend development. Pragmatic with a keen eye for detail and eagerness to provide great user experience. Maintains a motivated and focused approach to developing new skills and knowledge.
             </p>
           </div>
           <div className="col-xs-12 col-md-4">

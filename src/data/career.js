@@ -16,7 +16,7 @@ module.exports = [
     position: 'Full stack web developer',
     period: 'Jan. 2013 — Apr. 2014',
     content: [
-      'Backend with PHP, Yii, MySQL',
+      'Backend in LAMP stack using Yii Framework',
       'Frontend with jQuery',
       'Vagrant, Git, Gulp'
     ]
@@ -26,7 +26,7 @@ module.exports = [
     position: 'Full stack web developer',
     period: 'Jan. 2012 — Apr. 2013',
     content: [
-      'Backend with PHP, Yii & MySQL',
+      'Backend in LAMP stack using Yii Framework',
       'Frontend with jQuery',
       'Payment system, Maps, SMS integration',
       'Git, Redmine'
@@ -37,7 +37,7 @@ module.exports = [
     position: 'Full stack web developer',
     period: 'Jun. 2011 — Jan. 2012',
     content: [
-      'Backend with PHP, Yii & MySQL',
+      'Backend in LAMP stack using Yii Framework',
       'Frontend with jQuery',
       'SVN, Redmine'
     ]
