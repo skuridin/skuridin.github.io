@@ -2,7 +2,7 @@ module.exports = [
   {
     title: 'Car.uz',
     position: 'Full stack web developer',
-    period: 'Apr. 2014 — Present',
+    period: 'Apr. 2014 — Aug. 2015',
     content: [
       'Backend & API with Ruby on Rails, MonogoDB',
       'Frontend with jQuery, Bootstrap, SCSS, Coffee script',
@@ -14,7 +14,7 @@ module.exports = [
   {
     title: 'Vault Couture',
     position: 'Full stack web developer',
-    period: 'Jan. 2013 — Apr. 2014',
+    period: 'Jan. 2013 — Aug. 2015',
     content: [
       'Backend in LAMP stack using Yii Framework',
       'Frontend with jQuery',
