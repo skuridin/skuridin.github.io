@@ -14,7 +14,7 @@
     <link href='//fonts.googleapis.com/css?family=Exo+2:300,500' rel='stylesheet' type='text/css'>
   </head>
   <body>
-    <div id="app">{react}</div>
+    <div id="app"></div>
     {% for (var chunk in o.htmlWebpackPlugin.files.chunks) { %}
     <script src="{%=o.htmlWebpackPlugin.files.chunks[chunk].entry %}"></script>
     {% } %}
