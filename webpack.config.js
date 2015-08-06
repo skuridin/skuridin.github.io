@@ -7,7 +7,8 @@ module.exports = {
   entry: './app.js',
   output: {
     path: __dirname,
-    filename: 'assets/bundle.js'
+    filename: 'assets/bundle.js',
+    libraryTarget: 'umd'
   },
   plugins: [
     new Clean(['assets', './*.html']),

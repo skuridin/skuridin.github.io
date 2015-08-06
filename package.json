@@ -12,6 +12,7 @@
     "file-loader": "^0.8.4",
     "handlebars": "^3.0.3",
     "handlebars-loader": "^1.1.0",
+    "html-minifier": "^0.7.2",
     "html-webpack-plugin": "^1.5.2",
     "image-webpack-loader": "^1.6.1",
     "imagemin": "^3.2.0",

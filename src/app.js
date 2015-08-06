@@ -14,4 +14,10 @@ var page = {
   ]
 };
 
-document.getElementById('app').innerHTML = homeTemplate(page);
+var result = homeTemplate(page);
+
+if(typeof window !== 'undefined') {
+  document.getElementById('app').innerHTML = result;
+}
+
+module.exports = result;
