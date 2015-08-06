@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build": "webpack -c -p --progress --optimize-dedupe --optimize-occurence-order",
+    "build": "webpack -c -p --progress --optimize-dedupe --optimize-occurence-order && node static",
     "dev": "webpack-dev-server -d --progress --optimize-dedupe --optimize-occurence-order --host 0.0.0.0"
   },
   "devDependencies": {
