@@ -4,8 +4,12 @@ var homeTemplate = require('./home.hbs');
 var page = {
   title: 'Evgeniy Skuridin — Front End Developer',
   image: require('./images/logo.png'),
-  info: 'Hi! My name is Evgeniy. Frontend developer. Tashkent, Uzbekistan. ' +
-    'Ready to relocate.',
+  info: [
+    'Hi! My name is Evgeniy',
+    'Frontend developer',
+    'Tashkent, Uzbekistan',
+    'Ready to relocate'
+  ],
   links: [
     { title: 'CV', url: 'Evgeniy.Skuridin.Frontend.pdf' },
     { title: 'Github', url: 'https://github.com/skuridin' },

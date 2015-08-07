@@ -3,7 +3,11 @@
     <div class="wrapper__content">
       <div class="home-page">
         <img src="{{image}}" alt="{{title}}" class="home-page__logo">
-        <div class="home-page__info">{{info}}</div>
+        <div class="home-page__info">
+          {{#info}}
+            {{this}}.<br>
+          {{/info}}
+        </div>
         <div class="links">
           {{#links}}
             <a href="{{url}}" title="{{title}}" class="links__item">{{title}}</a>
