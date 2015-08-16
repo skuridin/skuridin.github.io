@@ -23,6 +23,14 @@ module.exports = {
   plugins: [
     new Clean(['dist']),
     new Extract('dist/style.css'),
-    new Html()
-  ]
+    new Html({
+      template: './src/template.html',
+      hash: true,
+      minify: { collapseWhitespace: true }
+    })
+  ],
+  devServer: {
+    host: '0.0.0.0',
+    historyApiFallback: true
+  }
 };

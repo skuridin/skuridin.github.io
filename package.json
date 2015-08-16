@@ -1,7 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "dev": "webpack-dev-server"
   },
   "devDependencies": {
     "autoprefixer-loader": "^2.0.0",
@@ -16,7 +17,7 @@
     "imagemin": "^3.2.0",
     "normalize.css": "^3.0.3",
     "react": "^0.13.3",
-    "react-hot-loader": "^1.2.8",
+    "react-document-title": "^1.0.3",
     "react-router": "^0.13.3",
     "stylus-loader": "^1.2.1",
     "webpack": "^1.11.0",
