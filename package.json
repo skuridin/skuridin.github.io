@@ -16,7 +16,6 @@
     "image-webpack-loader": "^1.6.1",
     "imagemin": "^3.2.0",
     "normalize.css": "^3.0.3",
-    "null-loader": "^0.1.1",
     "react": "^0.13.3",
     "react-document-title": "^1.0.3",
     "react-router": "^0.13.3",
