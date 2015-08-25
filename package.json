@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build": "webpack",
+    "build": "NODE_ENV=production webpack -c -p --progress --optimize-occurence-order --optimize-dedupe",
     "dev": "webpack-dev-server"
   },
   "devDependencies": {
