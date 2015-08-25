@@ -2,6 +2,19 @@ var Extract = require('extract-text-webpack-plugin');
 var Clean = require('clean-webpack-plugin');
 var Html = require('html-webpack-plugin');
 
+var plugins = [
+  new Extract('dist/style.css'),
+  new Html({
+    template: './src/template.html',
+    hash: true,
+    minify: { collapseWhitespace: true }
+  })
+];
+
+if(process.env.NODE_ENV === 'production') {
+  plugins.unshift(new Clean(['dist']));
+}
+
 module.exports = {
   context: __dirname + '/src',
   entry: './js/app.jsx',
@@ -31,15 +44,7 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new Clean(['dist']),
-    new Extract('dist/style.css'),
-    new Html({
-      template: './src/template.html',
-      hash: true,
-      minify: { collapseWhitespace: true }
-    })
-  ],
+  plugins: plugins,
   devServer: {
     host: '0.0.0.0',
     historyApiFallback: true
