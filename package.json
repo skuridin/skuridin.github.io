@@ -1,8 +1,10 @@
 {
   "private": true,
   "scripts": {
-    "build": "NODE_ENV=production webpack -c -p --progress --optimize-occurence-order --optimize-dedupe",
-    "dev": "webpack-dev-server"
+    "build_for_client": "NODE_ENV=production webpack -c -p --progress --optimize-occurence-order --optimize-dedupe",
+    "build_for_server": "NODE_ENV=production webpack --config ./webpack.server.config.js -c -p --progress --optimize-occurence-order --optimize-dedupe",
+    "build": "npm run build_for_client && npm run build_for_server",
+    "dev": "webpack-dev-server -d --progress --optimize-occurence-order --optimize-dedupe"
   },
   "devDependencies": {
     "autoprefixer-loader": "^2.0.0",
@@ -16,6 +18,7 @@
     "image-webpack-loader": "^1.6.1",
     "imagemin": "^3.2.0",
     "normalize.css": "^3.0.3",
+    "null-loader": "^0.1.1",
     "react": "^0.13.3",
     "react-document-title": "^1.0.3",
     "react-router": "^0.13.3",
