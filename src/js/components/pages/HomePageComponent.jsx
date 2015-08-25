@@ -11,6 +11,7 @@ var HomePageComponent = React.createClass({
           <div className="wrapper-cell">
             <div className="wrapper-content">
               <div className="home-page">
+                <img className="logo" src={require('../../../img/logo.png')} alt="ES" />
                 <AboutMe />
                 <Links />
               </div>

@@ -5,7 +5,11 @@ var Html = require('html-webpack-plugin');
 module.exports = {
   context: __dirname + '/src',
   entry: './js/app.jsx',
-  output: { path: __dirname, filename: 'dist/bundle.js' },
+  output: {
+    path: __dirname,
+    filename: 'dist/bundle.js',
+    publicPath: '/'
+  },
   resolve: { extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx'] },
   module: {
     loaders: [
@@ -17,6 +21,13 @@ module.exports = {
       {
         test: /\.(styl|css)?$/,
         loader: Extract.extract('css!autoprefixer!stylus')
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        loaders: [
+          'file?name=dist/[name].[ext]',
+          'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+        ]
       }
     ]
   },
