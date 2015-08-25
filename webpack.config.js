@@ -21,7 +21,8 @@ module.exports = {
   output: {
     path: __dirname,
     filename: 'dist/bundle.js',
-    publicPath: '/'
+    publicPath: '/',
+    libraryTarget: 'umd',
   },
   resolve: { extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx'] },
   module: {

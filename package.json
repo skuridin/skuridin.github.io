@@ -1,9 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build_for_client": "NODE_ENV=production webpack -c -p --progress --optimize-occurence-order --optimize-dedupe",
-    "build_for_server": "NODE_ENV=production webpack --config ./webpack.server.config.js -c -p --progress --optimize-occurence-order --optimize-dedupe",
-    "build": "npm run build_for_client && npm run build_for_server",
+    "build": "NODE_ENV=production webpack -c -p --progress --optimize-occurence-order --optimize-dedupe",
     "dev": "webpack-dev-server -d --progress --optimize-occurence-order --optimize-dedupe"
   },
   "devDependencies": {
