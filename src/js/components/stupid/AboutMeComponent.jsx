@@ -1,10 +1,10 @@
 var React = require('react');
 
 var lines = [
-  'Hi! My name is Evgeniy.',
-  'Front End developer.',
-  'Tashkent, Uzbekistan.',
-  'Ready to relocate.'
+  'Hi! My name is Evgeniy',
+  'Front End developer',
+  'Tashkent, Uzbekistan',
+  'Ready to relocate'
 ];
 
 var AboutMeComponent = React.createClass({
