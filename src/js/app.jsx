@@ -14,6 +14,6 @@ if(canUseDOM) {
 
 module.exports = function(path, cb) {
   Router.run(routes, path, function(Handler) {
-    cb(React.renderToString(<Handler/>));
+    cb(React.renderToStaticMarkup(<Handler/>));
   });
 };

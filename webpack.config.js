@@ -5,6 +5,7 @@ var Html = require('html-webpack-plugin');
 var plugins = [
   new Extract('dist/style.css'),
   new Html({
+    filename: 'template.html',
     template: './src/template.html',
     hash: true,
     minify: { collapseWhitespace: true }
