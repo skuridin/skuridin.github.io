@@ -4,6 +4,7 @@ require('../css/app.styl');
 var React = require('react');
 var canUseDOM =  require('react/lib/ExecutionEnvironment').canUseDOM;
 var Router = require('react-router');
+var DocumentTitle = require('react-document-title');
 var routes = require('./routes');
 
 if(canUseDOM) {
@@ -14,6 +15,6 @@ if(canUseDOM) {
 
 module.exports = function(path, cb) {
   Router.run(routes, path, function(Handler) {
-    cb(React.renderToStaticMarkup(<Handler/>));
+    cb(React.renderToString(<Handler/>), DocumentTitle.rewind());
   });
 };
