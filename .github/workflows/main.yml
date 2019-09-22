@@ -13,5 +13,5 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: "Getting status"
-        run: git status
+        run: ls -alh
         
