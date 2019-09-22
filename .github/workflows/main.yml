@@ -12,6 +12,10 @@ jobs:
     name: "Deploying"
     runs-on: "ubuntu-latest"
     steps:
-      - name: "Getting status"
-        run: ls -alh
+      - name: "Checking out"
+        uses: "actions/checkout@v1"
+      - name: "Listing the directory"
+        run: "ls -alh"
+      - name: "Getting git status"
+        run "git status"
         
