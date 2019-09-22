@@ -17,5 +17,5 @@ jobs:
       - name: "Listing the directory"
         run: "ls -alh"
       - name: "Getting git status"
-        run "git status"
+        run: "git status"
         
