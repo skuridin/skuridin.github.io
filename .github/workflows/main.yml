@@ -19,6 +19,6 @@ jobs:
       - name: "Pushing to the test branch"
         run: |
           git checkout -b test-branch
-          git push -f
+          git push -f --set-upstream origin test-branch
       
         
