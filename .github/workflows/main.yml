@@ -17,6 +17,8 @@ jobs:
       - name: "Listing the directory"
         run: "ls -alh"
       - name: "Pushing to the test branch"
-        run: "git push --force origin test-branch"
+        run: |
+          git checkout -b test-branch
+          git push -f
       
         
