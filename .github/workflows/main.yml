@@ -9,9 +9,9 @@ on: "push:
 
 jobs:
   deploy:
+    name: "Deploying"
     runs-on: "ubuntu-latest"
     steps:
-      - name: "Upload"
-        run: |
-          git status
+      - name: "Getting status"
+        run: git status
         
