@@ -16,6 +16,7 @@ jobs:
         uses: "actions/checkout@v1"
       - name: "Listing the directory"
         run: "ls -alh"
-      - name: "Getting git status"
-        run: "git status"
+      - name: "Pushing to the test branch"
+        run: "git push --force origin test-branch"
+      
         
