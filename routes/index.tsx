@@ -22,11 +22,15 @@ export default function Home() {
 
 			<div class={tw`h-screen flex justify-center items-center p-4 pb-24`}>
 				<div>
-					<h1 class={tw`text-3xl`}>
+					<h1 class={tw`text-3xl relative bg-white overflow-hidden`}>
 						Hi, <br />
 						I'm Evgeniy, <br />
-						Frontend Developer, <br />
+						Frontend Developer <br />
 						located in the Netherlands.
+						<span
+							class={tw
+								`inline-flex absolute inset-0 bg-gradient-to-r from-red-600 to-blue-600 pointer-events-none mix-blend-lighten`}
+						/>
 					</h1>
 					<ul class={tw`flex items-center gap-x-4 mt-4 pt-4 border-t-1`}>
 						{SKILLS.map((skill) => (
