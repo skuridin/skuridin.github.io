@@ -1,4 +1,4 @@
-# fresh project
+# My personal [website](https://skurid.in) 
 
 ### Usage
 
