@@ -11,10 +11,10 @@ export default function PageMeta({ skills }: Props) {
 
 	return (
 		<Head>
-			<title>Evgeniy Skuridin — Frontend Developer</title>
+			<title>Eugene Skuridin — Frontend Developer</title>
 			<meta
 				name="description"
-				content={`Evgeniy Skuridin — Frontend developer located in the Netherlands.${skillsString}`}
+				content={`Eugene Skuridin — Frontend developer located in the Netherlands.${skillsString}`}
 			/>
 		</Head>
 	);
