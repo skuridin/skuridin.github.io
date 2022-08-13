@@ -6,7 +6,7 @@ export default function About() {
 	return (
 		<h1 class={tw`text-3xl relative bg-white overflow-hidden`}>
 			Hi, <br />
-			I'm Evgeniy, <br />
+			I'm Eugene, <br />
 			Frontend Developer <br />
 			based in the Netherlands.
 			<span
