@@ -1,11 +1,15 @@
 {
-	"tasks": {
-		"start": "deno run -A --watch=static/,routes/ dev.ts"
-	},
-	"importMap": "./import_map.json",
-	"fmt": {
-		"options": {
-			"useTabs": true
-		}
-	}
+  "tasks": {
+    "start": "deno run -A --watch=static/,routes/ dev.ts"
+  },
+  "importMap": "./import_map.json",
+  "fmt": {
+    "options": {
+      "useTabs": true
+    }
+  },
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact"
+  }
 }
