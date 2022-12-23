@@ -1,0 +1,16 @@
+{
+  "name": "skuridin.github.io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "fmt": "prettier -w --plugin-search-dir=. ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "^2.8.1",
+    "prettier-plugin-astro": "^0.7.0"
+  }
+}
