@@ -14,6 +14,7 @@ export default function PageMeta({ skills }: Props) {
 				name="description"
 				content={`Eugene Skuridin — Frontend developer located in the Netherlands.${skillsString}`}
 			/>
+			<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		</Head>
 	);
 }
