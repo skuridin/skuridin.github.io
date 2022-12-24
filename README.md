@@ -1,4 +1,4 @@
-# My personal [website](https://skurid.in) 
+# My personal [website](https://skurid.in)
 
 ### Usage
 

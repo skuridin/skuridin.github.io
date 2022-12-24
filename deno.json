@@ -1,9 +1,15 @@
 {
   "tasks": {
-    "start": "deno run -A --watch=static/,routes/ dev.ts"
+    "start": "deno run -A --watch=static/,routes/,features/ dev.ts"
   },
   "importMap": "./import_map.json",
   "fmt": {
+    "files": {
+      "include": [
+        "routes",
+        "features"
+      ]
+    },
     "options": {
       "useTabs": true
     }
