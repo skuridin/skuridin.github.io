@@ -1,14 +1,10 @@
-type Props = {
-	skills: string[];
+type SkillsProps = {
+	skills: Readonly<string[]>;
 };
 
-export default function Skills({ skills }: Props) {
-	if (skills.length === 0) {
-		return null;
-	}
-
+export default function Skills({ skills }: SkillsProps) {
 	return (
-		<ul class="flex items-center gap-x-2 mt-4">
+		<ul class="flex items-center gap-x-2 mt-4" aria-label="My primary skills">
 			{skills.map((skill) => (
 				<li
 					key={skill}
