@@ -3,7 +3,7 @@ import About from "@features/intro/About/About.tsx";
 import Skills from "@features/intro/Skills/Skills.tsx";
 import LinkedInLink from "@features/intro/LinkedInLink/LinkedInLink.tsx";
 
-const SKILLS = ["GraphQL", "React", "TypeScript"];
+const SKILLS = ["GraphQL", "React", "TypeScript"] as const;
 
 export default function Home() {
 	return (

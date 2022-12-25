@@ -4,7 +4,7 @@ export default function About() {
 			Hi, <br />
 			I'm Eugene, <br />
 			Frontend Developer <br />
-			based in the Netherlands.
+			based in the Netherlands
 		</h1>
 	);
 }
