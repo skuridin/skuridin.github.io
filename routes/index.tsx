@@ -11,7 +11,7 @@ export default function Home() {
 			<PageMeta skills={SKILLS} />
 
 			<div class="h-screen flex justify-center items-center">
-				<main class="p-4 pb-32">
+				<main class="p-4 pb-32 flex flex-col gap-6 items-start">
 					<About />
 					<Skills skills={SKILLS} />
 					<LinkedInLink />
