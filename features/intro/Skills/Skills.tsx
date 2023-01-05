@@ -4,7 +4,7 @@ type SkillsProps = {
 
 export default function Skills({ skills }: SkillsProps) {
 	return (
-		<ul class="flex items-center gap-x-2 mt-4" aria-label="My primary skills">
+		<ul class="flex items-center gap-x-2" aria-label="My primary skills">
 			{skills.map((skill) => (
 				<li
 					key={skill}

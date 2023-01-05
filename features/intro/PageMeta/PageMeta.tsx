@@ -5,9 +5,10 @@ type PageMetaProps = {
 };
 
 export default function PageMeta({ skills }: PageMetaProps) {
+	const listFormat = new Intl.ListFormat("en-us", { type: "unit" });
 	const description =
 		`Eugene Skuridin — Frontend developer located in the Netherlands. ${
-			skills.join(", ")
+			listFormat.format(skills)
 		}`;
 
 	return (
