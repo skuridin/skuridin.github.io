@@ -9,6 +9,6 @@
     "@features/": "./features/",
     "@preact/signals": "https://esm.sh/*@preact/signals@1.1.2",
     "@preact/signals-core": "https://esm.sh/*@preact/signals-core@1.2.2",
-    "clsx": "npm:clsx@1.2.1"
+    "clsx": "npm:clsx@^1.2.1"
   }
 }
