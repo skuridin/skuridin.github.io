@@ -1,6 +1,19 @@
 {
   "items": [
     {
+      "id": "philips-avent-drinkbeker",
+      "title": "Philips Avent Drinkbeker",
+      "description": "BPA-vrije drinkbeker met zachte tuit en handvatten, ideaal voor jonge kinderen die leren drinken. Gemakkelijk schoon te maken en lekvrij ontwerp.",
+      "price": "€12",
+      "image": "https://media.s-bol.com/WB56GVXq6RVJ/rYwZKE/449x840.jpg",
+      "purchaseLinks": [
+        {
+          "store": "BOL",
+          "url": "https://www.bol.com/nl/nl/p/philips-avent-scf798-01-drinkbeker-met-rietje-12m-300-ml/9200000071394946/?s2a=&bltgh=hQYwZPadu9dkWNWbvFpMJg.4_57_58.59.FeatureOption#productTitle"
+        }
+      ]
+    },
+    {
       "id": "kitchen-roll-holder",
       "title": "Minismus Keukenrolhouder Zwart Staand",
       "description": "Simple kitchen roll holder that allows for easy one-handed tearing of paper towels. Sleek design fits any kitchen decor.",
