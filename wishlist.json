@@ -1,0 +1,128 @@
+{
+  "items": [
+    {
+      "id": "kitchen-roll-holder",
+      "title": "Joseph Joseph Push&Tear Keukenrolhouder",
+      "description": "Simple kitchen roll holder that allows for easy one-handed tearing of paper towels. Sleek design fits any kitchen decor.",
+      "price": "€17,49",
+      "image": "https://media.s-bol.com/qnG3W8BPk1VD/kR7wMVK/550x446.jpg",
+      "purchaseLinks": [
+        {
+          "store": "Amazon",
+          "url": "https://amzn.eu/d/18zal1p"
+        },
+        {
+          "store": "BOL",
+          "url": "https://www.bol.com/nl/nl/p/joseph-joseph-push-tear-keukerolhouder-polypropyleen-beige/9300000179837642/?s2a=&bltgh=k6Zt0845lfcSP4r7lnRGAg.4_59_60.61.FeatureOption#productTitle"
+        }
+      ]
+    },
+    {
+      "id": "dopper",
+      "title": "Dopper Steel Drinkfles - 1,1L",
+      "description": "Duurzame roestvrijstalen drinkfles met een inhoud van 1,1 liter. Houdt dranken lang koud of warm en is perfect voor onderweg.",
+      "price": "€30",
+      "image": "https://media.s-bol.com/gjP3O02qRgEY/qx0GNQy/550x788.jpg",
+      "purchaseLinks": [
+        {
+          "store": "BOL",
+          "url": "https://www.bol.com/nl/nl/p/dopper-steel-drinkfles-1-1l-roestvrij-staal/9300000110080946/?cid=1762948573931-1120640829752&bltgh=ocotdnuRlSmPOODmK-lIyg.4_88.90.ProductImage"
+        }
+    ]
+    },
+    {
+      "id": "zelda",
+      "title": "The Legend of Zelda: Tears of The Kingdom Nintendo Switch 2 Edition",
+      "description": "The latest installment in the beloved Legend of Zelda series, featuring an expansive open world, innovative gameplay mechanics, and a captivating storyline.",
+      "price": "€62",
+      "image": "https://img.gg.deals/a6/aa/444d4047acdc5d03d162cf00c215d3b21ddc_1232xr706_Q100",
+      "purchaseLinks": [
+        {
+          "store": "Coolblue",
+          "url": "https://www.coolblue.nl/product/963354/the-legend-of-zelda-tears-of-the-kingdom-nintendo-switch-2-edition.html"
+        },
+        {
+          "store": "BOL",
+          "url": "https://www.bol.com/nl/nl/p/the-legend-of-zelda-tears-of-the-kingdom-nintendo-switch-2-edition/9300000229136856/?cid=1762947870215-5077076679608&bltgh=71cd7ba0-4bcb-4383-b391-1e0cd98ffaeb.ProductList_Middle.2.ProductImage"
+        }
+    ]
+    },
+    {
+      "id": "wireless-charger",
+      "title": "Belkin BoostCharge 3-in-1 Qi2 Charger",
+      "description": "Wireless charging station for iPhone, Apple Watch, and AirPods. Sleek design with fast charging capabilities for multiple devices simultaneously.",
+      "price": "€90",
+      "image": "https://m.media-amazon.com/images/I/61DBSApcgsL._AC_SL1500_.jpg",
+      "purchaseLinks": [
+        {
+          "store": "Amazon",
+          "url": "https://amzn.eu/d/8zv3aqg"
+        },
+        {
+          "store": "Coolblue",
+          "url": "https://www.coolblue.nl/product/958262/belkin-boost-charge-pro-magsafe-en-qi2-3-in-1-draadloze-oplader-15w-met-standaard-wit.html"
+        }
+      ]
+    },
+    {
+      "id": "learning-tower",
+      "title": "Maxi-Cosi Toucan 3-in-1 Learning Tower",
+      "description": "Adjustable learning tower for children, providing a safe and sturdy platform for kids to participate in kitchen activities and learn new skills.",
+      "price": "€109.",
+      "image": "https://m.media-amazon.com/images/I/710QCZz5uNL._AC_SX679_.jpg",
+      "purchaseLinks": [
+        {
+          "store": "Amazon",
+          "url": "https://amzn.eu/d/7BdcDGr"
+        },
+        {
+          "store": "BOL",
+          "url": "https://www.bol.com/nl/nl/p/maxi-cosi-toucan-3-in-1-leertoren-vanaf-18-maanden-tot-99-jaar/9300000161870365/"
+        }
+      ]
+    },
+    {
+      "id": "ams-ht",
+      "title": "Bambu Lab AMS HT - Automatic Material System",
+      "description": "High-temperature filament management system for Bambu Lab 3D printers, designed for advanced materials requiring elevated printing temperatures.",
+      "price": "€119",
+      "image": "https://store.bblcdn.eu/s8/default/5cda9ca3724e4f41a1cd62b458408dd8/20250326-140740.jpg__op__resize,m_lfit,w_1920__op__format,f_auto__op__quality,q_80",
+      "purchaseLinks": [
+        {
+          "store": "Bambu Lab EU",
+          "url": "https://eu.store.bambulab.com/products/ams-ht?from=navigation"
+        }
+      ]
+    },
+    {
+      "id": "a1-mini-3d-printer",
+      "title": "Bambu Lab A1 mini 3D Printer",
+      "description": "Compact and efficient 3D printer with high-speed printing capabilities and advanced features for hobbyists and professionals.",
+      "price": "€190",
+      "image": "https://store.bblcdn.eu/s8/default/b26f0fd7cce640baa96b15b5d15604ab/Group48089.png__op__resize,m_lfit,w_1920__op__format,f_auto__op__quality,q_80",
+      "purchaseLinks": [
+        {
+          "store": "Bambu Lab EU",
+          "url": "https://eu.store.bambulab.com/products/a1-mini?from=navigation"
+        },
+        {
+          "store": "3DJake.nl",
+          "url": "https://www.3djake.nl/bambu-lab/a1-mini?sai=23015"
+        }
+      ]
+    },
+    {
+      "id": "ams-2-pro",
+      "title": "Bambu Lab AMS 2 Pro - Automatic Material System",
+      "description": "Advanced filament management system for Bambu Lab 3D printers, enabling multi-material printing with ease and efficiency.",
+      "price": "€259",
+      "image": "https://store.bblcdn.eu/s8/default/d6e65f1f403548ef9c4d6c654693fa7b/ams_b1225305-0e22-46eb-bbd3-fa56595c1526.jpg__op__resize,m_lfit,w_1920__op__format,f_auto__op__quality,q_80",
+      "purchaseLinks": [
+        {
+          "store": "Bambu Lab EU",
+          "url": "https://eu.store.bambulab.com/products/ams-2-pro?from=navigation"
+        }
+      ]
+    }
+  ]
+}
