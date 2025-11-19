@@ -100,6 +100,10 @@
         {
           "store": "Bambu Lab EU",
           "url": "https://eu.store.bambulab.com/products/ams-ht?from=navigation"
+        },
+        {
+          "store": "3DJake.nl",
+          "url": "https://www.3djake.com/bambu-lab/ams-ht?sai=34073"
         }
       ]
     },
@@ -116,7 +120,7 @@
         },
         {
           "store": "3DJake.nl",
-          "url": "https://www.3djake.nl/bambu-lab/a1-mini?sai=23015"
+          "url": "https://www.3djake.com/bambu-lab/a1-mini?sai=23015"
         }
       ]
     },
@@ -130,6 +134,10 @@
         {
           "store": "Bambu Lab EU",
           "url": "https://eu.store.bambulab.com/products/ams-2-pro?from=navigation"
+        },
+        {
+          "store": "3DJake.nl",
+          "url": "https://www.3djake.com/bambu-lab/ams-2-pro?sai=34070"
         }
       ]
     }
