@@ -3,389 +3,60 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <style>
-            button,
-            input,
-            optgroup,
-            select,
-            textarea {
-                font-family: inherit;
-                font-size: 100%;
-                margin: 0;
-                padding: 0;
-                line-height: inherit;
-                color: inherit;
-            }
-            sub,
-            sup {
-                font-size: 75%;
-                line-height: 0;
-                position: relative;
-                vertical-align: baseline;
-            }
-            html {
-                line-height: 1.5;
-                -webkit-text-size-adjust: 100%;
-                font-family:
-                    ui-sans-serif,
-                    system-ui,
-                    -apple-system,
-                    BlinkMacSystemFont,
-                    "Segoe UI",
-                    Roboto,
-                    "Helvetica Neue",
-                    Arial,
-                    "Noto Sans",
-                    sans-serif,
-                    "Apple Color Emoji",
-                    "Segoe UI Emoji",
-                    "Segoe UI Symbol",
-                    "Noto Color Emoji";
-            }
-            table {
-                text-indent: 0;
-                border-color: inherit;
-                border-collapse: collapse;
-            }
-            hr {
-                height: 0;
-                color: inherit;
-                border-top-width: 1px;
-            }
-            input::placeholder,
-            textarea::placeholder {
-                opacity: 1;
-                color: #9ca3af;
-            }
-            ::-webkit-file-upload-button {
-                -webkit-appearance: button;
-                font: inherit;
-            }
-            button {
-                background-color: transparent;
-                background-image: none;
-            }
-            body {
-                font-family: inherit;
-                line-height: inherit;
-            }
-            *,
-            ::before,
-            ::after {
-                box-sizing: border-box;
-                border: 0 solid #e5e7eb;
-            }
-            h1,
-            h2,
-            h3,
-            h4,
-            h5,
-            h6 {
-                font-size: inherit;
-                font-weight: inherit;
-            }
-            a {
-                color: inherit;
-                -webkit-text-decoration: inherit;
-                text-decoration: inherit;
-            }
-            ::-moz-focus-inner {
-                border-style: none;
-                padding: 0;
-            }
-            [type="search"] {
-                -webkit-appearance: textfield;
-                outline-offset: -2px;
-            }
-            pre,
-            code,
-            kbd,
-            samp {
-                font-family: ui-monospace, SFMono-Regular, Menlo, Monaco,
-                    Consolas, "Liberation Mono", "Courier New", monospace;
-                font-size: 1em;
-            }
-            img,
-            svg,
-            video,
-            canvas,
-            audio,
-            iframe,
-            embed,
-            object {
-                display: block;
-                vertical-align: middle;
-            }
-            img,
-            video {
-                max-width: 100%;
-                height: auto;
-            }
-            body,
-            blockquote,
-            dl,
-            dd,
-            h1,
-            h2,
-            h3,
-            h4,
-            h5,
-            h6,
-            hr,
-            figure,
-            p,
-            pre,
-            fieldset,
-            ol,
-            ul {
-                margin: 0;
-            }
-            button:focus {
-                outline: 1px dotted;
-                outline: 5px auto -webkit-focus-ring-color;
-            }
-            fieldset,
-            ol,
-            ul,
-            legend {
-                padding: 0;
-            }
-            textarea {
-                resize: vertical;
-            }
-            button,
-            [role="button"] {
-                cursor: pointer;
-            }
-            :-moz-focusring {
-                outline: 1px dotted ButtonText;
-            }
-            ::-webkit-inner-spin-button,
-            ::-webkit-outer-spin-button {
-                height: auto;
-            }
-            summary {
-                display: list-item;
-            }
-            :root {
-                -moz-tab-size: 4;
-                tab-size: 4;
-            }
-            ol,
-            ul {
-                list-style: none;
-            }
-            img {
-                border-style: solid;
-            }
-            button,
-            select {
-                text-transform: none;
-            }
-            :-moz-ui-invalid {
-                box-shadow: none;
-            }
-            progress {
-                vertical-align: baseline;
-            }
-            abbr[title] {
-                -webkit-text-decoration: underline dotted;
-                text-decoration: underline dotted;
-            }
-            b,
-            strong {
-                font-weight: bolder;
-            }
-            sub {
-                bottom: -0.25em;
-            }
-            sup {
-                top: -0.5em;
-            }
-            button,
-            [type="button"],
-            [type="reset"],
-            [type="submit"] {
-                -webkit-appearance: button;
-            }
-            ::-webkit-search-decoration {
-                -webkit-appearance: none;
-            }
-            .transition-all {
-                transition-property: all;
-                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-                transition-duration: 150ms;
-            }
-            .text-white {
-                --tw-text-opacity: 1;
-                color: #fff;
-                color: rgba(255, 255, 255, var(--tw-text-opacity));
-            }
-            .text-3xl {
-                font-size: 1.875rem;
-                line-height: 2.25rem;
-            }
-            .px-2 {
-                padding-left: 0.5rem;
-                padding-right: 0.5rem;
-            }
-            .text-xs {
-                font-size: 0.75rem;
-                line-height: 1rem;
-            }
-            .px-4 {
-                padding-left: 1rem;
-                padding-right: 1rem;
-            }
-            .bg-blue-700 {
-                --tw-bg-opacity: 1;
-                background-color: #1d4ed8;
-                background-color: rgba(29, 78, 216, var(--tw-bg-opacity));
-            }
-            .text-xl {
-                font-size: 1.25rem;
-                line-height: 1.75rem;
-            }
-            .from-red-600 {
-                --tw-gradient-from: #dc2626;
-                --tw-gradient-stops: var(--tw-gradient-from),
-                    var(--tw-gradient-to, rgba(220, 38, 38, 0));
-            }
-            .p-4 {
-                padding: 1rem;
-            }
-            .flex {
-                display: flex;
-            }
-            .gap-6 {
-                grid-gap: 1.5rem;
-                gap: 1.5rem;
-            }
-            .h-screen {
-                height: 100vh;
-            }
-            .text-transparent {
-                color: transparent;
-            }
-            .inline-flex {
-                display: inline-flex;
-            }
-            .h-6 {
-                height: 1.5rem;
-            }
-            .h-12 {
-                height: 3rem;
-            }
-            .pb-32 {
-                padding-bottom: 8rem;
-            }
-            .flex-col {
-                -webkit-flex-direction: column;
-                flex-direction: column;
-            }
-            .items-start {
-                align-items: flex-start;
-            }
-            .justify-center {
-                justify-content: center;
-            }
-            .items-center {
-                align-items: center;
-            }
-            .bg-clip-text {
-                -webkit-background-clip: text;
-                background-clip: text;
-            }
-            .bg-gradient-to-br {
-                background-image: linear-gradient(
-                    to bottom right,
-                    var(--tw-gradient-stops)
-                );
-            }
-            .bg-right {
-                background-position: right;
-            }
-            .duration-500 {
-                transition-duration: 500ms;
-            }
-            .border {
-                border-width: 1px;
-            }
-            .gap-x-2 {
-                grid-column-gap: 0.5rem;
-                -moz-column-gap: 0.5rem;
-                column-gap: 0.5rem;
-            }
-            .rounded-full {
-                border-radius: 9999px;
-            }
-            .rounded {
-                border-radius: 0.25rem;
-            }
-            .to-blue-600 {
-                --tw-gradient-to: #2563eb;
-            }
-            .hover\:bg-blue-800:hover {
-                --tw-bg-opacity: 1;
-                background-color: #1e40af;
-                background-color: rgba(30, 64, 175, var(--tw-bg-opacity));
-            }
-            .hover\:bg-left:hover {
-                background-position: left;
-            }
-            .active\:translate-y-1:active {
-                --tw-translate-y: 0.25rem;
-                transform: translateY(0.25rem);
-                transform: translateX(var(--tw-translate-x, 0))
-                    translateY(var(--tw-translate-y, 0))
-                    rotate(var(--tw-rotate, 0)) skewX(var(--tw-skew-x, 0))
-                    skewY(var(--tw-skew-y, 0)) scaleX(var(--tw-scale-x, 1))
-                    scaleY(var(--tw-scale-y, 1));
-            }
-        </style>
-        <title>Eugene Skuridin — Software Engineer</title>
+        <link rel="stylesheet" href="styles.css">
+        <title>Evgeniy Skuridin — Senior Software Engineer | React, TypeScript, AI/LLM | Netherlands</title>
         <meta
             name="description"
-            content="Eugene Skuridin — Software Engineer located in the Netherlands. React, TypeScript, GraphQL, AI, LLM"
+            content="Senior Software Engineer with 15+ years of full-stack development experience. Currently building scalable applications with React/TypeScript, experienced in AI/LLM integration, GraphQL APIs, and modern web architecture. Based in the Netherlands."
         />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     </head>
     <body>
-        <div class="h-screen flex justify-center items-center">
-            <main class="p-4 pb-32 flex flex-col gap-6 items-start">
-                <h1
-                    class="text-3xl bg-clip-text text-transparent bg-gradient-to-br from-red-600 to-blue-600 bg-right transition-all duration-500 hover:bg-left"
-                    style="background-size: 400%"
-                >
-                    Hi, <br />I'm Eugene, <br />Software Engineer <br />Based
-                    in the Netherlands
-                </h1>
-                <ul
-                    class="flex items-center gap-x-2"
-                    aria-label="My primary skills"
-                >
-                    <li
-                        class="inline-flex rounded-full px-2 h-6 border items-center text-xs"
-                    >
-                        React
-                    </li>
-                    <li
-                        class="inline-flex rounded-full px-2 h-6 border items-center text-xs"
-                    >
-                        TypeScript
-                    </li>
-                    <li
-                        class="inline-flex rounded-full px-2 h-6 border items-center text-xs"
-                    >
-                        GraphQL
-                    </li>
+        <div class="scanlines"></div>
+        <main role="main">
+            <header class="header-info" role="banner">
+                <span>User: Evgeniy_Skuridin</span>
+                <span>Location: Netherlands_NL</span>
+                <span>Status: Online</span>
+            </header>
+
+            <section id="identity">
+                <p class="prompt">whoami</p>
+                <h1>EVGENIY SKURIDIN</h1>
+            </section>
+            
+            <section id="about">
+                <p class="prompt">cat bio.txt</p>
+                <p class="description">
+                    SENIOR SOFTWARE ENGINEER WITH 15+ YEARS OF FULL-STACK DEVELOPMENT EXPERIENCE. CURRENTLY BUILDING SCALABLE APPLICATIONS WITH REACT/TYPESCRIPT, EXPERIENCED IN AI/LLM INTEGRATION, GRAPHQL APIS, AND MODERN WEB ARCHITECTURE. BASED IN THE NETHERLANDS.
+                </p>
+            </section>
+            
+            <section id="skills">
+                <p class="prompt">ls --skills</p>
+                <ul class="skills">
+                    <li>REACT.JS</li>
+                    <li>TYPESCRIPT</li>
+                    <li>GRAPHQL</li>
+                    <li>NODE.JS</li>
                 </ul>
-                <a
-                    href="https://www.linkedin.com/in/redfield1990/"
-                    class="inline-flex h-12 px-4 items-center rounded bg-blue-700 hover:bg-blue-800 text-white text-xl active:translate-y-1 transition-all"
-                    >My LinkedIn profile</a
-                >
-            </main>
-        </div>
+            </section>
+
+            <section id="contact">
+                <p class="prompt">./open_linkedin.sh</p>
+                <a href="https://www.linkedin.com/in/redfield1990/" class="cta">
+                    CONNECT_TO_LINKEDIN
+                </a>
+            </section>
+
+            <footer class="system-logs">
+                <p>&gt; SYSTEM READY...</p>
+                <p>&gt; ALL MODULES LOADED</p>
+                <p>&gt; STANDBY MODE</p>
+            </footer>
+        </main>
     </body>
 </html>
+
+
+
