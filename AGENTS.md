@@ -5,9 +5,8 @@
 - To serve locally: `python -m http.server 8000` or `npx serve .`
 
 ## Lint Commands
-- HTML: Install and run `npx htmlhint index.html`
-- CSS: Install and run `npx stylelint *.css` (if CSS files added)
-- No existing lint setup.
+- HTML: `npx htmlhint index.html`
+- No existing lint setup or configuration files.
 
 ## Test Commands
 - No tests present.
@@ -15,15 +14,21 @@
 - Suggest adding unit tests with Jest if expanding to JS.
 
 ## Code Style Guidelines
-- Use semantic HTML5 elements.
-- Inline CSS for simplicity; external if growing.
-- Naming: Kebab-case for classes/IDs, descriptive names.
-- Formatting: 2-space indent, consistent line breaks.
+- Use semantic HTML5 elements (main, header, section, footer).
+- External CSS linked in head; no inline styles.
+- Naming: Kebab-case for classes/IDs (e.g., header-info, prompt, terminal-section).
+- Formatting: 4-space indentation for HTML and CSS properties; selectors unindented in CSS.
+- Consistent line breaks and spacing.
 - No JS yet; if added, use ES6+, strict mode.
 - Error handling: N/A for static site.
-- Imports: N/A; avoid external deps unless necessary.
+- Imports: N/A; avoid external dependencies unless necessary.
 - Types: N/A.
-- Follow accessibility best practices (alt tags, ARIA).
+- Follow accessibility best practices (alt attributes for images, semantic structure; ARIA not yet needed).
+
+## Git Guidelines
+- Use conventional commits for commit messages.
+- PR titles must follow the same conventional commit standard.
+- Interact with GitHub using gh CLI for viewing, creating, and managing PRs, diffs, etc.
 
 ## Tools Integration
 - No Cursor/Copilot rules found.
