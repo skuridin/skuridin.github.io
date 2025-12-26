@@ -9,12 +9,52 @@
             name="description"
             content="Senior Software Engineer with 15+ years of full-stack development experience. Currently building scalable applications with React/TypeScript, experienced in AI/LLM integration, GraphQL APIs, and modern web architecture. Based in the Netherlands."
         />
+
+        <!-- Security Headers -->
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none';">
+        <meta name="referrer" content="strict-origin-when-cross-origin">
+        <meta name="permissions-policy" content="geolocation=(), microphone=(), camera=()">
+
+        <!-- SEO Meta Tags -->
+        <meta name="author" content="Evgeniy Skuridin">
+        <link rel="canonical" href="https://skurid.in/">
+
+        <!-- Open Graph -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://skurid.in/">
+        <meta property="og:title" content="Evgeniy Skuridin — Senior Software Engineer">
+        <meta property="og:description" content="Senior Software Engineer with 15+ years of full-stack development experience. React/TypeScript, AI/LLM, GraphQL APIs. Based in Netherlands.">
+        <meta property="og:image" content="https://skurid.in/og-image.jpg">
+
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:url" content="https://skurid.in/">
+        <meta name="twitter:title" content="Evgeniy Skuridin — Senior Software Engineer">
+        <meta name="twitter:description" content="Senior Software Engineer with 15+ years of full-stack development experience.">
+
+        <!-- Structured Data -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Person",
+          "name": "Evgeniy Skuridin",
+          "jobTitle": "Senior Software Engineer",
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "Netherlands"
+          },
+          "url": "https://skurid.in",
+          "sameAs": ["https://www.linkedin.com/in/redfield1990/"],
+          "knowsAbout": ["React", "TypeScript", "GraphQL", "Node.js", "AI/LLM"]
+        }
+        </script>
+
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     </head>
     <body>
-        <div class="scanlines"></div>
-        <main role="main">
-            <header class="header-info" role="banner">
+        <div class="scanlines" aria-hidden="true"></div>
+        <main>
+            <header class="header-info">
                 <span>User: Evgeniy_Skuridin</span>
                 <span>Location: Netherlands_NL</span>
                 <span>Status: Online</span>
@@ -44,7 +84,7 @@
 
             <section id="contact">
                 <p class="prompt">./open_linkedin.sh</p>
-                <a href="https://www.linkedin.com/in/redfield1990/" class="cta">
+                <a href="https://www.linkedin.com/in/redfield1990/" class="cta" rel="noopener noreferrer">
                     CONNECT_TO_LINKEDIN
                 </a>
             </section>

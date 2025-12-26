@@ -3,14 +3,6 @@
     --terminal-bg: #0a0a0a;
     --glow-color: rgba(51, 255, 51, 0.5);
     --scanline-color: rgba(18, 16, 16, 0.1);
-}
-
-/* Terminal Theme Variables (default) */
-[data-theme="terminal"] {
-    --terminal-green: #33ff33;
-    --terminal-bg: #0a0a0a;
-    --glow-color: rgba(51, 255, 51, 0.5);
-    --scanline-color: rgba(18, 16, 16, 0.1);
     --font-family: monospace;
 }
 
@@ -19,14 +11,6 @@
     margin: 0;
     padding: 0;
 }
-
-/* Utility Classes */
-.glow-effect {
-    text-shadow: 
-        0 0 5px var(--glow-color);
-}
-
-
 
 /* Terminal Theme (default) */
 body {
@@ -132,14 +116,11 @@ body {
 }
 
 main {
-        max-width: 800px;
-        width: 90%;
-        position: relative;
-        z-index: 1;
-    }
-
-main {
-    text-shadow: 
+    max-width: 800px;
+    width: 90%;
+    position: relative;
+    z-index: 1;
+    text-shadow:
         0 0 5px var(--glow-color),
         0 0 10px var(--glow-color),
         0 0 15px var(--glow-color);
@@ -166,7 +147,7 @@ h1 {
 
 .description {
     margin-bottom: 2rem;
-    line-height: 1.4;
+    line-height: 1.6;
 }
 
 .skills {
@@ -265,11 +246,6 @@ section {
     
     .skills {
         font-size: 1.1rem;
-    }
-    
-    .cursor {
-        width: 10px;
-        height: 20px;
     }
 }
 
