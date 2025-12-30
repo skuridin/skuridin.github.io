@@ -1,103 +1,127 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="theme-color" content="#0a0a0a">
-        <link rel="stylesheet" href="styles.css">
-        <title>Evgeniy Skuridin — Senior Software Engineer | React, TypeScript, AI/LLM | Netherlands</title>
-        <meta
-            name="description"
-            content="Senior Software Engineer with 15+ years of full-stack development experience. Currently building scalable applications with React/TypeScript, experienced in AI/LLM integration, GraphQL APIs, and modern web architecture. Based in the Netherlands."
-        />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="styles.css">
+    <title>Evgeniy Skuridin — Senior Software Engineer | React, TypeScript, AI/LLM | Netherlands</title>
+    <meta
+        name="description"
+        content="Senior Software Engineer with 15+ years of experience building products people actually use. React, TypeScript, LLM integrations, voice & audio processing. Based in the Netherlands."
+    />
 
-        <!-- Security Headers -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self';">
-        <meta name="referrer" content="strict-origin-when-cross-origin">
-        <meta name="permissions-policy" content="geolocation=(), microphone=(), camera=()">
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self';">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="permissions-policy" content="geolocation=(), microphone=(), camera=()">
 
-        <!-- SEO Meta Tags -->
-        <meta name="author" content="Evgeniy Skuridin">
-        <link rel="canonical" href="https://skurid.in/">
+    <!-- SEO Meta Tags -->
+    <meta name="author" content="Evgeniy Skuridin">
+    <link rel="canonical" href="https://skurid.in/">
 
-        <!-- Open Graph -->
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="https://skurid.in/">
-        <meta property="og:title" content="Evgeniy Skuridin — Senior Software Engineer">
-        <meta property="og:description" content="Senior Software Engineer with 15+ years of full-stack development experience. React/TypeScript, AI/LLM, GraphQL APIs. Based in Netherlands.">
-        <meta property="og:image" content="https://skurid.in/og-image.jpg">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://skurid.in/">
+    <meta property="og:title" content="Evgeniy Skuridin — Senior Software Engineer">
+    <meta property="og:description" content="Senior Software Engineer with 15+ years of experience building products people actually use. React, TypeScript, LLM integrations, voice & audio processing.">
+    <meta property="og:image" content="https://skurid.in/og-image.jpg">
 
-        <!-- Twitter Card -->
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:url" content="https://skurid.in/">
-        <meta name="twitter:title" content="Evgeniy Skuridin — Senior Software Engineer">
-        <meta name="twitter:description" content="Senior Software Engineer with 15+ years of full-stack development experience.">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://skurid.in/">
+    <meta name="twitter:title" content="Evgeniy Skuridin — Senior Software Engineer">
+    <meta name="twitter:description" content="Senior Software Engineer with 15+ years of experience building products people actually use. React, TypeScript, LLM integrations.">
 
-        <!-- Structured Data -->
-        <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@type": "Person",
-          "name": "Evgeniy Skuridin",
-          "jobTitle": "Senior Software Engineer",
-          "address": {
-            "@type": "PostalAddress",
-            "addressCountry": "Netherlands"
-          },
-          "url": "https://skurid.in",
-          "sameAs": ["https://www.linkedin.com/in/redfield1990/"],
-          "knowsAbout": ["React", "TypeScript", "GraphQL", "Node.js", "AI/LLM"]
-        }
-        </script>
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Evgeniy Skuridin",
+      "jobTitle": "Senior Software Engineer",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "Netherlands"
+      },
+      "url": "https://skurid.in",
+      "sameAs": ["https://www.linkedin.com/in/redfield1990/"],
+      "knowsAbout": ["React", "TypeScript", "LLM Integration", "Voice & Audio Processing", "Node.js"]
+    }
+    </script>
 
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    </head>
-    <body>
-        <div class="scanlines" aria-hidden="true"></div>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+</head>
+<body>
+    <div class="frame">
+        <header>
+            <nav>
+                <span class="logo">ES</span>
+                <div class="nav-links">
+                    <a href="https://github.com/skuridin" rel="noopener noreferrer">GitHub</a>
+                    <a href="https://www.linkedin.com/in/redfield1990/" rel="noopener noreferrer">LinkedIn →</a>
+                </div>
+            </nav>
+        </header>
+
         <main>
-            <header class="header-info">
-                <span>User: Evgeniy_Skuridin</span>
-                <span>Location: Netherlands_NL</span>
-                <span>Status: Online</span>
-            </header>
-
-            <section id="identity">
-                <p class="prompt">whoami</p>
-                <h1 data-text="Evgeniy Skuridin">Evgeniy Skuridin</h1>
+            <section class="hero">
+                <canvas id="dots-canvas" aria-hidden="true"></canvas>
+                <div class="label-group">
+                    <span class="label">Senior Software Engineer</span>
+                    <span class="divider"></span>
+                    <span class="label">Netherlands</span>
+                </div>
+                <h1>Evgeniy<br>Skuridin</h1>
+                <p class="tagline">Code that solves real problems</p>
             </section>
 
-            <section id="about">
-                <p class="prompt">cat bio.txt</p>
-                <p class="description">
-                    Senior Software Engineer with 15+ years of full-stack development experience. Currently building scalable applications with React/TypeScript, experienced in AI/LLM integration, GraphQL APIs, and modern web architecture. Based in the Netherlands.
-                </p>
+            <section class="info-grid">
+                <div class="info-block">
+                    <span class="number">01</span>
+                    <h2>About</h2>
+                    <p>I build things that work. 15+ years of turning ideas into production systems — healthcare, retail, automotive. Products people rely on daily.</p>
+                    <p>I optimize for clarity, not cleverness.</p>
+                </div>
+                <div class="info-block">
+                    <span class="number">02</span>
+                    <h2>Expertise</h2>
+                    <ul>
+                        <li>React</li>
+                        <li>TypeScript</li>
+                        <li>Next.js</li>
+                        <li>GraphQL</li>
+                        <li>TanStack</li>
+                        <li>Design Systems</li>
+                        <li>LLM Integration</li>
+                        <li>Voice & Audio</li>
+                    </ul>
+                </div>
+                <div class="info-block">
+                    <span class="number">03</span>
+                    <h2>Industries</h2>
+                    <ul>
+                        <li>Healthcare</li>
+                        <li>Retail</li>
+                        <li>Automotive</li>
+                        <li>HR Tech</li>
+                    </ul>
+                </div>
+                <div class="info-block">
+                    <span class="number">04</span>
+                    <h2>Currently</h2>
+                    <p>Building AI tools at <a href="https://www.ourmind.ai/" rel="noopener noreferrer">OurMind</a> — an assistant that handles clinical documentation for doctors, so they can focus on patients instead of paperwork.</p>
+                </div>
             </section>
-            
-            <section id="skills">
-                <p class="prompt">ls --skills</p>
-                <ul class="skills">
-                    <li>React.js</li>
-                    <li>TypeScript</li>
-                    <li>GraphQL</li>
-                    <li>Node.js</li>
-                </ul>
-            </section>
-
-            <section id="contact">
-                <p class="prompt">./open_linkedin.sh</p>
-                <a href="https://www.linkedin.com/in/redfield1990/" class="cta" rel="noopener noreferrer">
-                    Connect to LinkedIn
-                </a>
-            </section>
-
-            <footer class="system-logs">
-                <p>&gt; System ready...</p>
-                <p>&gt; All modules loaded</p>
-                <p>&gt; Standby mode</p>
-            </footer>
         </main>
-    </body>
+
+        <footer>
+            <span>Originally from Uzbekistan</span>
+            <span>Based in the Netherlands</span>
+        </footer>
+    </div>
+
+    <script src="dots.js"></script>
+</body>
 </html>
-
-
-

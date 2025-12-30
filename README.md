@@ -1,6 +1,6 @@
 # Personal Website
 
-[skurid.in](https://skurid.in) — A minimal terminal-themed site built with plain HTML + CSS. No JS, no build steps, just vibes.
+[skurid.in](https://skurid.in) — A minimal personal site built with plain HTML, CSS, and vanilla JS. No frameworks, no build steps.
 
 ## Running locally
 
