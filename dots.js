@@ -13,11 +13,19 @@ const DOT_RADIUS = 1;
 const INFLUENCE_RADIUS = 100;
 const RESIZE_DEBOUNCE_MS = 150;
 
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
     dotColor = getComputedStyle(document.documentElement).getPropertyValue('--dot').trim();
 });
 
 const isMobile = window.matchMedia('(hover: none)').matches;
+const TARGET_FPS = isMobile ? 30 : 60;
+const FRAME_INTERVAL = 1000 / TARGET_FPS;
+let lastFrameTime = 0;
+let lastMouseMove = Date.now();
+const IDLE_TIMEOUT_MS = 2000;
+let isIdle = false;
 
 function initDots() {
     dots = [];
@@ -41,9 +49,43 @@ function resize() {
     canvas.width = rect.width;
     canvas.height = rect.height;
     initDots();
+    if (prefersReducedMotion.matches || isIdle) {
+        drawStatic();
+    }
 }
 
-function draw() {
+function drawStatic() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    dots.forEach(dot => {
+        ctx.beginPath();
+        ctx.arc(dot.originX, dot.originY, DOT_RADIUS, 0, Math.PI * 2);
+        ctx.fillStyle = dotColor;
+        ctx.fill();
+    });
+}
+
+function draw(timestamp) {
+    if (timestamp - lastFrameTime < FRAME_INTERVAL) {
+        animationId = requestAnimationFrame(draw);
+        return;
+    }
+    lastFrameTime = timestamp;
+
+    // Check for idle on desktop (not mobile)
+    if (!isMobile && Date.now() - lastMouseMove > IDLE_TIMEOUT_MS) {
+        isIdle = true;
+        // Draw one final frame with dots settled
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        dots.forEach(dot => {
+            ctx.beginPath();
+            ctx.arc(dot.originX, dot.originY, DOT_RADIUS, 0, Math.PI * 2);
+            ctx.fillStyle = dotColor;
+            ctx.fill();
+        });
+        stopAnimation();
+        return;
+    }
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     time += 0.02;
 
@@ -101,7 +143,7 @@ function stopAnimation() {
 document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
         stopAnimation();
-    } else {
+    } else if (!prefersReducedMotion.matches) {
         startAnimation();
     }
 });
@@ -110,6 +152,13 @@ hero.addEventListener('mousemove', (e) => {
     const rect = hero.getBoundingClientRect();
     mouse.x = e.clientX - rect.left;
     mouse.y = e.clientY - rect.top;
+    lastMouseMove = Date.now();
+    
+    // Restart animation if was idle
+    if (isIdle && !prefersReducedMotion.matches) {
+        isIdle = false;
+        startAnimation();
+    }
 });
 
 hero.addEventListener('mouseleave', () => {
@@ -123,4 +172,18 @@ window.addEventListener('resize', () => {
 });
 
 resize();
-startAnimation();
+
+prefersReducedMotion.addEventListener('change', () => {
+    if (prefersReducedMotion.matches) {
+        stopAnimation();
+        drawStatic();
+    } else {
+        startAnimation();
+    }
+});
+
+if (prefersReducedMotion.matches) {
+    drawStatic();
+} else {
+    startAnimation();
+}

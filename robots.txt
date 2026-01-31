@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://skurid.in/sitemap.xml
