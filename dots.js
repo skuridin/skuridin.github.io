@@ -49,7 +49,7 @@ function resize() {
     canvas.width = rect.width;
     canvas.height = rect.height;
     initDots();
-    if (prefersReducedMotion.matches) {
+    if (prefersReducedMotion.matches || isIdle) {
         drawStatic();
     }
 }
