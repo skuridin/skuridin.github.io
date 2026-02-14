@@ -90,6 +90,12 @@ nav {
     color: var(--text);
 }
 
+.nav-links a:focus-visible {
+    color: var(--text);
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+}
+
 .nav-links a:last-child {
     color: var(--accent);
 }
@@ -215,6 +221,12 @@ h2 {
 
 .info-block a:hover {
     color: var(--link-hover);
+}
+
+.info-block a:focus-visible {
+    color: var(--link-hover);
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
 }
 
 .info-block ul {
