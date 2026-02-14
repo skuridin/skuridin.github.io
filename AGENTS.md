@@ -29,6 +29,15 @@
 - Use conventional commits for commit messages.
 - PR titles must follow the same conventional commit standard.
 - Interact with GitHub using gh CLI for viewing, creating, and managing PRs, diffs, etc.
+- **Workflow**: Always create feature branches for changes, never commit directly to master:
+  ```bash
+  git checkout -b <type>/<short-description>
+  # Make changes and commit
+  git push -u origin <branch-name>
+  gh pr create --title "type: description" --body "Details..."
+  ```
+- Branch naming: Use conventional commit prefixes (feat/, fix/, refactor/, docs/, etc.)
+- Never push directly to master - branch protection rules are enabled
 
 ## Tools Integration
 - No Cursor/Copilot rules found.
