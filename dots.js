@@ -15,7 +15,7 @@
         }
 
         let dotColor = getComputedStyle(document.documentElement).getPropertyValue('--dot').trim();
-        const prefersReducedMotion = window.matchMedia('(prefers-color-scheme: reduce)');
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
         const isMobile = window.matchMedia('(hover: none)').matches;
         const IDLE_TIMEOUT_MS = 2000;
         let lastMouseMove = Date.now();
@@ -45,10 +45,15 @@
                 console.warn('Worker initialization failed, falling back to main thread:', e);
                 // Transfer back if this was called
                 if (offscreen) {
-                    // Can't transfer back, need to reload or use fallback
-                    console.warn('Canvas already transferred to offscreen, reloading page');
-                    location.reload();
-                    return;
+                    // Can't transfer back, check if we already tried reloading
+                    if (!sessionStorage.getItem('dotsWorkerRetry')) {
+                        sessionStorage.setItem('dotsWorkerRetry', 'true');
+                        console.warn('Canvas already transferred to offscreen, reloading page once');
+                        location.reload();
+                        return;
+                    }
+                    console.warn('Worker failed after retry, using main thread fallback');
+                    sessionStorage.removeItem('dotsWorkerRetry');
                 }
                 initMainThread();
                 return;
@@ -63,7 +68,8 @@
                     width: rect.width,
                     height: rect.height,
                     dotColor: dotColor,
-                    isMobile: isMobile
+                    isMobile: isMobile,
+                    prefersReducedMotion: prefersReducedMotion.matches
                 }
             }, [offscreen]);
 
@@ -186,6 +192,7 @@
             let mouse = { x: -1000, y: -1000 };
             let time = 0;
             let animationId = null;
+            let lastFrameTime = 0;
 
             const SPACING = 24;
             const DOT_RADIUS = 1;
