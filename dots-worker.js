@@ -17,12 +17,7 @@ let TARGET_FPS = 60;
 let FRAME_INTERVAL = 1000 / 60;
 let lastFrameTime = 0;
 let isIdle = false;
-
-function getDotColor() {
-    // Simple color based on initial assumption
-    // In a real scenario, this would need to sync with CSS
-    // For now, we'll accept the initial color and update on message
-}
+let prefersReducedMotion = false;
 
 function initDots() {
     dots = [];
@@ -119,12 +114,18 @@ self.onmessage = function(e) {
             canvas.height = data.height;
             dotColor = data.dotColor || '#d4d4d4';
             isMobile = data.isMobile || false;
+            prefersReducedMotion = data.prefersReducedMotion || false;
             if (isMobile) {
                 TARGET_FPS = 30;
                 FRAME_INTERVAL = 1000 / 30;
             }
             initDots();
-            startAnimation();
+            if (prefersReducedMotion) {
+                isIdle = true;
+                drawStatic();
+            } else {
+                startAnimation();
+            }
             break;
 
         case 'resize':
