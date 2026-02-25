@@ -56,10 +56,13 @@ body {
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
+    display: flex;
+    justify-content: center;
 }
 
 .frame {
-    min-height: 100vh;
+    /* 100vh minus top+bottom margin (1.5rem × 2 = 3rem) to prevent scroll on large screens */
+    min-height: calc(100vh - 3rem);
     display: flex;
     flex-direction: column;
     border: 1px solid var(--border);
@@ -112,9 +115,10 @@ nav {
 }
 
 main {
-    flex: 1;
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
+    min-height: 0;
 }
 
 .hero {
@@ -253,15 +257,6 @@ h2 {
     font-weight: 300;
 }
 
-footer {
-    padding: 1.5rem 2rem;
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.6875rem;
-    color: var(--text-subtle);
-    letter-spacing: 0.05em;
-}
 
 @media (max-width: 800px) {
     .frame {
@@ -283,11 +278,6 @@ footer {
 
     .info-block:last-child {
         border-bottom: none;
-    }
-
-    footer {
-        flex-direction: column;
-        gap: 0.5rem;
     }
 }
     </style>
@@ -398,11 +388,6 @@ footer {
                 </div>
             </section>
         </main>
-
-        <footer>
-            <span>Originally from Uzbekistan</span>
-            <span>Based in the Netherlands</span>
-        </footer>
     </div>
 
     <script src="dots.js" defer></script>
