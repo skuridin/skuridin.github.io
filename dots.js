@@ -23,6 +23,22 @@
         let idleCheckInterval = null;
         let resizeTimeout = null;
 
+        function getMousePosition(e) {
+            const rect = hero.getBoundingClientRect();
+            return {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
+        }
+
+        function isWorkerRetryStale() {
+            const retry = sessionStorage.getItem('dotsWorkerRetry');
+            if (!retry) return true;
+            const timestamp = parseInt(retry, 10);
+            if (isNaN(timestamp)) return true;
+            return Date.now() - timestamp > 60000;
+        }
+
         // Check for OffscreenCanvas support
         const supportsOffscreenCanvas = 'OffscreenCanvas' in window;
 
@@ -43,11 +59,9 @@
                 worker = new Worker('./dots-worker.js', { type: 'module' });
             } catch (e) {
                 console.warn('Worker initialization failed, falling back to main thread:', e);
-                // Transfer back if this was called
                 if (offscreen) {
-                    // Can't transfer back, check if we already tried reloading
-                    if (!sessionStorage.getItem('dotsWorkerRetry')) {
-                        sessionStorage.setItem('dotsWorkerRetry', 'true');
+                    if (isWorkerRetryStale()) {
+                        sessionStorage.setItem('dotsWorkerRetry', Date.now().toString());
                         console.warn('Canvas already transferred to offscreen, reloading page once');
                         location.reload();
                         return;
@@ -75,12 +89,12 @@
 
             // Mouse events
             hero.addEventListener('mousemove', (e) => {
-                const rect = hero.getBoundingClientRect();
+                const pos = getMousePosition(e);
                 worker.postMessage({
                     type: 'mousemove',
                     data: {
-                        x: e.clientX - rect.left,
-                        y: e.clientY - rect.top,
+                        x: pos.x,
+                        y: pos.y,
                         prefersReducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches
                     }
                 });
@@ -264,7 +278,13 @@
                 }
                 lastFrameTime = timestamp;
 
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                try {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                } catch (e) {
+                    console.error('Canvas clearRect failed:', e);
+                    stopAnimation();
+                    return;
+                }
                 time += 0.02;
 
                 if (isMobile) {
@@ -276,28 +296,40 @@
                     mouse.y = centerY + Math.sin(time * 0.7) * radiusY;
                 }
 
-                dots.forEach(dot => {
-                    const dx = mouse.x - dot.originX;
-                    const dy = mouse.y - dot.originY;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
+                try {
+                    dots.forEach(dot => {
+                        const dx = mouse.x - dot.originX;
+                        const dy = mouse.y - dot.originY;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
 
-                    if (dist < INFLUENCE_RADIUS) {
-                        const force = (INFLUENCE_RADIUS - dist) / INFLUENCE_RADIUS;
-                        const angle = Math.atan2(dy, dx);
-                        const pushX = Math.cos(angle) * force * 20;
-                        const pushY = Math.sin(angle) * force * 20;
-                        dot.x = dot.originX - pushX;
-                        dot.y = dot.originY - pushY;
-                    } else {
-                        dot.x += (dot.originX - dot.x) * 0.1;
-                        dot.y += (dot.originY - dot.y) * 0.1;
-                    }
+                        if (dist < INFLUENCE_RADIUS) {
+                            const force = (INFLUENCE_RADIUS - dist) / INFLUENCE_RADIUS;
+                            const angle = Math.atan2(dy, dx);
+                            const pushX = Math.cos(angle) * force * 20;
+                            const pushY = Math.sin(angle) * force * 20;
+                            dot.x = dot.originX - pushX;
+                            dot.y = dot.originY - pushY;
+                        } else {
+                            dot.x += (dot.originX - dot.x) * 0.1;
+                            dot.y += (dot.originY - dot.y) * 0.1;
+                        }
 
-                    ctx.beginPath();
-                    ctx.arc(dot.x, dot.y, DOT_RADIUS, 0, Math.PI * 2);
-                    ctx.fillStyle = dotColor;
-                    ctx.fill();
-                });
+                        if (!Number.isFinite(dot.x) || !Number.isFinite(dot.y)) {
+                            dot.x = dot.originX;
+                            dot.y = dot.originY;
+                            return;
+                        }
+
+                        ctx.beginPath();
+                        ctx.arc(dot.x, dot.y, DOT_RADIUS, 0, Math.PI * 2);
+                        ctx.fillStyle = dotColor;
+                        ctx.fill();
+                    });
+                } catch (e) {
+                    console.error('Canvas drawing failed:', e);
+                    stopAnimation();
+                    return;
+                }
 
                 if (!document.hidden && !isIdle) {
                     animationId = requestAnimationFrame(draw);
@@ -339,9 +371,9 @@
             });
 
             hero.addEventListener('mousemove', (e) => {
-                const rect = hero.getBoundingClientRect();
-                mouse.x = e.clientX - rect.left;
-                mouse.y = e.clientY - rect.top;
+                const pos = getMousePosition(e);
+                mouse.x = pos.x;
+                mouse.y = pos.y;
                 lastMouseMove = Date.now();
                 
                 if (isIdle && !prefersReducedMotion.matches) {

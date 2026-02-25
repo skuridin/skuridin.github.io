@@ -56,7 +56,13 @@ function draw(timestamp) {
     }
     lastFrameTime = timestamp;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    try {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    } catch (e) {
+        console.error('Canvas clearRect failed:', e);
+        stopAnimation();
+        return;
+    }
     time += 0.02;
 
     if (isMobile) {
@@ -68,28 +74,40 @@ function draw(timestamp) {
         mouse.y = centerY + Math.sin(time * 0.7) * radiusY;
     }
 
-    dots.forEach(dot => {
-        const dx = mouse.x - dot.originX;
-        const dy = mouse.y - dot.originY;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+    try {
+        dots.forEach(dot => {
+            const dx = mouse.x - dot.originX;
+            const dy = mouse.y - dot.originY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
 
-        if (dist < INFLUENCE_RADIUS) {
-            const force = (INFLUENCE_RADIUS - dist) / INFLUENCE_RADIUS;
-            const angle = Math.atan2(dy, dx);
-            const pushX = Math.cos(angle) * force * 20;
-            const pushY = Math.sin(angle) * force * 20;
-            dot.x = dot.originX - pushX;
-            dot.y = dot.originY - pushY;
-        } else {
-            dot.x += (dot.originX - dot.x) * 0.1;
-            dot.y += (dot.originY - dot.y) * 0.1;
-        }
+            if (dist < INFLUENCE_RADIUS) {
+                const force = (INFLUENCE_RADIUS - dist) / INFLUENCE_RADIUS;
+                const angle = Math.atan2(dy, dx);
+                const pushX = Math.cos(angle) * force * 20;
+                const pushY = Math.sin(angle) * force * 20;
+                dot.x = dot.originX - pushX;
+                dot.y = dot.originY - pushY;
+            } else {
+                dot.x += (dot.originX - dot.x) * 0.1;
+                dot.y += (dot.originY - dot.y) * 0.1;
+            }
 
-        ctx.beginPath();
-        ctx.arc(dot.x, dot.y, DOT_RADIUS, 0, Math.PI * 2);
-        ctx.fillStyle = dotColor;
-        ctx.fill();
-    });
+            if (!Number.isFinite(dot.x) || !Number.isFinite(dot.y)) {
+                dot.x = dot.originX;
+                dot.y = dot.originY;
+                return;
+            }
+
+            ctx.beginPath();
+            ctx.arc(dot.x, dot.y, DOT_RADIUS, 0, Math.PI * 2);
+            ctx.fillStyle = dotColor;
+            ctx.fill();
+        });
+    } catch (e) {
+        console.error('Canvas drawing failed:', e);
+        stopAnimation();
+        return;
+    }
 
     if (!isIdle) {
         animationId = requestAnimationFrame(draw);
@@ -158,13 +176,6 @@ self.onmessage = function(e) {
             stopAnimation();
             if (ctx) {
                 drawStatic();
-            }
-            break;
-
-        case 'unsetIdle':
-            if (!data.prefersReducedMotion) {
-                isIdle = false;
-                startAnimation();
             }
             break;
 
