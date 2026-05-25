@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:;">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="permissions-policy" content="geolocation=(), microphone=(), camera=()">
+
     <link rel="preload" href="./fonts/space-grotesk-variable.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preconnect" href="https://github.com">
     <link rel="preconnect" href="https://www.linkedin.com">
@@ -358,11 +363,6 @@ h2 {
         content="Senior Software Engineer with 15+ years of experience building products people actually use. React, TypeScript, LLM integrations, voice & audio processing. Based in the Netherlands."
     />
 
-    <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'self'; font-src 'self'; img-src 'self' data:;">
-    <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta name="permissions-policy" content="geolocation=(), microphone=(), camera=()">
-
     <!-- SEO Meta Tags -->
     <meta name="author" content="Evgeniy Skuridin">
     <link rel="canonical" href="https://skurid.in/">
@@ -377,6 +377,8 @@ h2 {
     <meta name="twitter:url" content="https://skurid.in/">
     <meta name="twitter:title" content="Evgeniy Skuridin — Senior Software Engineer">
     <meta name="twitter:description" content="Senior Software Engineer who cares about craft — not just that it works, but how it feels. React, TypeScript, LLM integrations, design systems.">
+    <meta property="og:image" content="https://skurid.in/og-image.svg">
+    <meta property="twitter:image" content="https://skurid.in/og-image.svg">
 
     <!-- Structured Data -->
     <script type="application/ld+json">
