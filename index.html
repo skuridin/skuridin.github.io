@@ -32,6 +32,10 @@
     --link: #171717;
     --link-hover: #525252;
     --accent: #2563eb;
+    --field-dim-color: #d4d4d4;
+    /* ASCII glyph field tile (12x6 cells of 24px, 49 glyphs at 68 percent density).
+       Black fill: used as a CSS mask, layers paint the color. */
+    --field-tile: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27288%27%20height=%27144%27%3E%3Cg%20font-family=%27Menlo,Consolas,monospace%27%20font-size=%2710%27%20fill=%27%23000%27%3E%3Ctext%20x=%2712%27%20y=%2714.0%27%3E,%3C/text%3E%3Ctext%20x=%2736%27%20y=%2716.0%27%3E-%3C/text%3E%3Ctext%20x=%2760%27%20y=%2716.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%2784%27%20y=%2716.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27108%27%20y=%2714.0%27%3E,%3C/text%3E%3Ctext%20x=%27132%27%20y=%2715.0%27%3E.%3C/text%3E%3Ctext%20x=%27156%27%20y=%2715.5%27%3E+%3C/text%3E%3Ctext%20x=%27180%27%20y=%2716.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27228%27%20y=%2714.0%27%3E%27%3C/text%3E%3Ctext%20x=%27276%27%20y=%2714.0%27%3E%27%3C/text%3E%3Ctext%20x=%2712%27%20y=%2741.0%27%3E*%3C/text%3E%3Ctext%20x=%2736%27%20y=%2738.0%27%3E,%3C/text%3E%3Ctext%20x=%2760%27%20y=%2739.5%27%3E+%3C/text%3E%3Ctext%20x=%2784%27%20y=%2740.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27156%27%20y=%2739.0%27%3E.%3C/text%3E%3Ctext%20x=%27180%27%20y=%2740.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27204%27%20y=%2739.0%27%3E.%3C/text%3E%3Ctext%20x=%27228%27%20y=%2740.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27276%27%20y=%2738.0%27%3E%27%3C/text%3E%3Ctext%20x=%2736%27%20y=%2765.0%27%3E*%3C/text%3E%3Ctext%20x=%2784%27%20y=%2764.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27156%27%20y=%2762.0%27%3E%27%3C/text%3E%3Ctext%20x=%27204%27%20y=%2764.0%27%3E-%3C/text%3E%3Ctext%20x=%27252%27%20y=%2762.0%27%3E,%3C/text%3E%3Ctext%20x=%27276%27%20y=%2762.0%27%3E%27%3C/text%3E%3Ctext%20x=%2712%27%20y=%2786.5%27%3E:%3C/text%3E%3Ctext%20x=%2784%27%20y=%2786.5%27%3E:%3C/text%3E%3Ctext%20x=%27132%27%20y=%2788.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27180%27%20y=%2788.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27228%27%20y=%2786.0%27%3E,%3C/text%3E%3Ctext%20x=%27252%27%20y=%2788.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27276%27%20y=%2788.0%27%3E=%3C/text%3E%3Ctext%20x=%2760%27%20y=%27110.0%27%3E,%3C/text%3E%3Ctext%20x=%2784%27%20y=%27112.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27108%27%20y=%27112.0%27%3E~%3C/text%3E%3Ctext%20x=%27132%27%20y=%27112.0%27%3E-%3C/text%3E%3Ctext%20x=%27156%27%20y=%27110.5%27%3E:%3C/text%3E%3Ctext%20x=%27204%27%20y=%27111.0%27%3E.%3C/text%3E%3Ctext%20x=%27228%27%20y=%27112.0%27%3E-%3C/text%3E%3Ctext%20x=%27252%27%20y=%27111.5%27%3E+%3C/text%3E%3Ctext%20x=%27276%27%20y=%27112.0%27%3E-%3C/text%3E%3Ctext%20x=%2712%27%20y=%27136.0%27%3E-%3C/text%3E%3Ctext%20x=%2736%27%20y=%27136.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%2784%27%20y=%27134.0%27%3E,%3C/text%3E%3Ctext%20x=%27108%27%20y=%27134.0%27%3E,%3C/text%3E%3Ctext%20x=%27132%27%20y=%27134.5%27%3E:%3C/text%3E%3Ctext%20x=%27156%27%20y=%27136.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27252%27%20y=%27135.5%27%3E+%3C/text%3E%3Ctext%20x=%27276%27%20y=%27134.0%27%3E,%3C/text%3E%3C/g%3E%3C/svg%3E");
 }
 
 @media (prefers-color-scheme: dark) {
@@ -45,19 +49,7 @@
         --link: #fafafa;
         --link-hover: #a3a3a3;
         --accent: #60a5fa;
-    }
-}
-
-/* ASCII glyph field tiles (12x6 cells of 24px, ~60% density) */
-:root {
-    --field-dim: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27288%27%20height=%27144%27%3E%3Cg%20font-family=%27Menlo,Consolas,monospace%27%20font-size=%2710%27%20fill=%27%23d4d4d4%27%3E%3Ctext%20x=%2712%27%20y=%2714.0%27%3E,%3C/text%3E%3Ctext%20x=%2736%27%20y=%2716.0%27%3E-%3C/text%3E%3Ctext%20x=%2760%27%20y=%2716.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%2784%27%20y=%2716.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27108%27%20y=%2714.0%27%3E,%3C/text%3E%3Ctext%20x=%27132%27%20y=%2715.0%27%3E.%3C/text%3E%3Ctext%20x=%27156%27%20y=%2715.5%27%3E+%3C/text%3E%3Ctext%20x=%27180%27%20y=%2716.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27228%27%20y=%2714.0%27%3E%27%3C/text%3E%3Ctext%20x=%27276%27%20y=%2714.0%27%3E%27%3C/text%3E%3Ctext%20x=%2712%27%20y=%2741.0%27%3E*%3C/text%3E%3Ctext%20x=%2736%27%20y=%2738.0%27%3E,%3C/text%3E%3Ctext%20x=%2760%27%20y=%2739.5%27%3E+%3C/text%3E%3Ctext%20x=%2784%27%20y=%2740.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27156%27%20y=%2739.0%27%3E.%3C/text%3E%3Ctext%20x=%27180%27%20y=%2740.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27204%27%20y=%2739.0%27%3E.%3C/text%3E%3Ctext%20x=%27228%27%20y=%2740.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27276%27%20y=%2738.0%27%3E%27%3C/text%3E%3Ctext%20x=%2736%27%20y=%2765.0%27%3E*%3C/text%3E%3Ctext%20x=%2784%27%20y=%2764.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27156%27%20y=%2762.0%27%3E%27%3C/text%3E%3Ctext%20x=%27204%27%20y=%2764.0%27%3E-%3C/text%3E%3Ctext%20x=%27252%27%20y=%2762.0%27%3E,%3C/text%3E%3Ctext%20x=%27276%27%20y=%2762.0%27%3E%27%3C/text%3E%3Ctext%20x=%2712%27%20y=%2786.5%27%3E:%3C/text%3E%3Ctext%20x=%2784%27%20y=%2786.5%27%3E:%3C/text%3E%3Ctext%20x=%27132%27%20y=%2788.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27180%27%20y=%2788.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27228%27%20y=%2786.0%27%3E,%3C/text%3E%3Ctext%20x=%27252%27%20y=%2788.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27276%27%20y=%2788.0%27%3E=%3C/text%3E%3Ctext%20x=%2760%27%20y=%27110.0%27%3E,%3C/text%3E%3Ctext%20x=%2784%27%20y=%27112.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27108%27%20y=%27112.0%27%3E~%3C/text%3E%3Ctext%20x=%27132%27%20y=%27112.0%27%3E-%3C/text%3E%3Ctext%20x=%27156%27%20y=%27110.5%27%3E:%3C/text%3E%3Ctext%20x=%27204%27%20y=%27111.0%27%3E.%3C/text%3E%3Ctext%20x=%27228%27%20y=%27112.0%27%3E-%3C/text%3E%3Ctext%20x=%27252%27%20y=%27111.5%27%3E+%3C/text%3E%3Ctext%20x=%27276%27%20y=%27112.0%27%3E-%3C/text%3E%3Ctext%20x=%2712%27%20y=%27136.0%27%3E-%3C/text%3E%3Ctext%20x=%2736%27%20y=%27136.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%2784%27%20y=%27134.0%27%3E,%3C/text%3E%3Ctext%20x=%27108%27%20y=%27134.0%27%3E,%3C/text%3E%3Ctext%20x=%27132%27%20y=%27134.5%27%3E:%3C/text%3E%3Ctext%20x=%27156%27%20y=%27136.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27252%27%20y=%27135.5%27%3E+%3C/text%3E%3Ctext%20x=%27276%27%20y=%27134.0%27%3E,%3C/text%3E%3C/g%3E%3C/svg%3E");
-    --field-glow: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27288%27%20height=%27144%27%3E%3Cg%20font-family=%27Menlo,Consolas,monospace%27%20font-size=%2710%27%20fill=%27%232563eb%27%3E%3Ctext%20x=%2712%27%20y=%2714.0%27%3E,%3C/text%3E%3Ctext%20x=%2736%27%20y=%2716.0%27%3E-%3C/text%3E%3Ctext%20x=%2760%27%20y=%2716.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%2784%27%20y=%2716.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27108%27%20y=%2714.0%27%3E,%3C/text%3E%3Ctext%20x=%27132%27%20y=%2715.0%27%3E.%3C/text%3E%3Ctext%20x=%27156%27%20y=%2715.5%27%3E+%3C/text%3E%3Ctext%20x=%27180%27%20y=%2716.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27228%27%20y=%2714.0%27%3E%27%3C/text%3E%3Ctext%20x=%27276%27%20y=%2714.0%27%3E%27%3C/text%3E%3Ctext%20x=%2712%27%20y=%2741.0%27%3E*%3C/text%3E%3Ctext%20x=%2736%27%20y=%2738.0%27%3E,%3C/text%3E%3Ctext%20x=%2760%27%20y=%2739.5%27%3E+%3C/text%3E%3Ctext%20x=%2784%27%20y=%2740.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27156%27%20y=%2739.0%27%3E.%3C/text%3E%3Ctext%20x=%27180%27%20y=%2740.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27204%27%20y=%2739.0%27%3E.%3C/text%3E%3Ctext%20x=%27228%27%20y=%2740.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27276%27%20y=%2738.0%27%3E%27%3C/text%3E%3Ctext%20x=%2736%27%20y=%2765.0%27%3E*%3C/text%3E%3Ctext%20x=%2784%27%20y=%2764.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27156%27%20y=%2762.0%27%3E%27%3C/text%3E%3Ctext%20x=%27204%27%20y=%2764.0%27%3E-%3C/text%3E%3Ctext%20x=%27252%27%20y=%2762.0%27%3E,%3C/text%3E%3Ctext%20x=%27276%27%20y=%2762.0%27%3E%27%3C/text%3E%3Ctext%20x=%2712%27%20y=%2786.5%27%3E:%3C/text%3E%3Ctext%20x=%2784%27%20y=%2786.5%27%3E:%3C/text%3E%3Ctext%20x=%27132%27%20y=%2788.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27180%27%20y=%2788.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27228%27%20y=%2786.0%27%3E,%3C/text%3E%3Ctext%20x=%27252%27%20y=%2788.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27276%27%20y=%2788.0%27%3E=%3C/text%3E%3Ctext%20x=%2760%27%20y=%27110.0%27%3E,%3C/text%3E%3Ctext%20x=%2784%27%20y=%27112.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27108%27%20y=%27112.0%27%3E~%3C/text%3E%3Ctext%20x=%27132%27%20y=%27112.0%27%3E-%3C/text%3E%3Ctext%20x=%27156%27%20y=%27110.5%27%3E:%3C/text%3E%3Ctext%20x=%27204%27%20y=%27111.0%27%3E.%3C/text%3E%3Ctext%20x=%27228%27%20y=%27112.0%27%3E-%3C/text%3E%3Ctext%20x=%27252%27%20y=%27111.5%27%3E+%3C/text%3E%3Ctext%20x=%27276%27%20y=%27112.0%27%3E-%3C/text%3E%3Ctext%20x=%2712%27%20y=%27136.0%27%3E-%3C/text%3E%3Ctext%20x=%2736%27%20y=%27136.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%2784%27%20y=%27134.0%27%3E,%3C/text%3E%3Ctext%20x=%27108%27%20y=%27134.0%27%3E,%3C/text%3E%3Ctext%20x=%27132%27%20y=%27134.5%27%3E:%3C/text%3E%3Ctext%20x=%27156%27%20y=%27136.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27252%27%20y=%27135.5%27%3E+%3C/text%3E%3Ctext%20x=%27276%27%20y=%27134.0%27%3E,%3C/text%3E%3C/g%3E%3C/svg%3E");
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --field-dim: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27288%27%20height=%27144%27%3E%3Cg%20font-family=%27Menlo,Consolas,monospace%27%20font-size=%2710%27%20fill=%27%23404040%27%3E%3Ctext%20x=%2712%27%20y=%2714.0%27%3E,%3C/text%3E%3Ctext%20x=%2736%27%20y=%2716.0%27%3E-%3C/text%3E%3Ctext%20x=%2760%27%20y=%2716.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%2784%27%20y=%2716.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27108%27%20y=%2714.0%27%3E,%3C/text%3E%3Ctext%20x=%27132%27%20y=%2715.0%27%3E.%3C/text%3E%3Ctext%20x=%27156%27%20y=%2715.5%27%3E+%3C/text%3E%3Ctext%20x=%27180%27%20y=%2716.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27228%27%20y=%2714.0%27%3E%27%3C/text%3E%3Ctext%20x=%27276%27%20y=%2714.0%27%3E%27%3C/text%3E%3Ctext%20x=%2712%27%20y=%2741.0%27%3E*%3C/text%3E%3Ctext%20x=%2736%27%20y=%2738.0%27%3E,%3C/text%3E%3Ctext%20x=%2760%27%20y=%2739.5%27%3E+%3C/text%3E%3Ctext%20x=%2784%27%20y=%2740.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27156%27%20y=%2739.0%27%3E.%3C/text%3E%3Ctext%20x=%27180%27%20y=%2740.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27204%27%20y=%2739.0%27%3E.%3C/text%3E%3Ctext%20x=%27228%27%20y=%2740.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27276%27%20y=%2738.0%27%3E%27%3C/text%3E%3Ctext%20x=%2736%27%20y=%2765.0%27%3E*%3C/text%3E%3Ctext%20x=%2784%27%20y=%2764.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27156%27%20y=%2762.0%27%3E%27%3C/text%3E%3Ctext%20x=%27204%27%20y=%2764.0%27%3E-%3C/text%3E%3Ctext%20x=%27252%27%20y=%2762.0%27%3E,%3C/text%3E%3Ctext%20x=%27276%27%20y=%2762.0%27%3E%27%3C/text%3E%3Ctext%20x=%2712%27%20y=%2786.5%27%3E:%3C/text%3E%3Ctext%20x=%2784%27%20y=%2786.5%27%3E:%3C/text%3E%3Ctext%20x=%27132%27%20y=%2788.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27180%27%20y=%2788.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27228%27%20y=%2786.0%27%3E,%3C/text%3E%3Ctext%20x=%27252%27%20y=%2788.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27276%27%20y=%2788.0%27%3E=%3C/text%3E%3Ctext%20x=%2760%27%20y=%27110.0%27%3E,%3C/text%3E%3Ctext%20x=%2784%27%20y=%27112.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27108%27%20y=%27112.0%27%3E~%3C/text%3E%3Ctext%20x=%27132%27%20y=%27112.0%27%3E-%3C/text%3E%3Ctext%20x=%27156%27%20y=%27110.5%27%3E:%3C/text%3E%3Ctext%20x=%27204%27%20y=%27111.0%27%3E.%3C/text%3E%3Ctext%20x=%27228%27%20y=%27112.0%27%3E-%3C/text%3E%3Ctext%20x=%27252%27%20y=%27111.5%27%3E+%3C/text%3E%3Ctext%20x=%27276%27%20y=%27112.0%27%3E-%3C/text%3E%3Ctext%20x=%2712%27%20y=%27136.0%27%3E-%3C/text%3E%3Ctext%20x=%2736%27%20y=%27136.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%2784%27%20y=%27134.0%27%3E,%3C/text%3E%3Ctext%20x=%27108%27%20y=%27134.0%27%3E,%3C/text%3E%3Ctext%20x=%27132%27%20y=%27134.5%27%3E:%3C/text%3E%3Ctext%20x=%27156%27%20y=%27136.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27252%27%20y=%27135.5%27%3E+%3C/text%3E%3Ctext%20x=%27276%27%20y=%27134.0%27%3E,%3C/text%3E%3C/g%3E%3C/svg%3E");
-        --field-glow: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27288%27%20height=%27144%27%3E%3Cg%20font-family=%27Menlo,Consolas,monospace%27%20font-size=%2710%27%20fill=%27%2360a5fa%27%3E%3Ctext%20x=%2712%27%20y=%2714.0%27%3E,%3C/text%3E%3Ctext%20x=%2736%27%20y=%2716.0%27%3E-%3C/text%3E%3Ctext%20x=%2760%27%20y=%2716.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%2784%27%20y=%2716.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27108%27%20y=%2714.0%27%3E,%3C/text%3E%3Ctext%20x=%27132%27%20y=%2715.0%27%3E.%3C/text%3E%3Ctext%20x=%27156%27%20y=%2715.5%27%3E+%3C/text%3E%3Ctext%20x=%27180%27%20y=%2716.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27228%27%20y=%2714.0%27%3E%27%3C/text%3E%3Ctext%20x=%27276%27%20y=%2714.0%27%3E%27%3C/text%3E%3Ctext%20x=%2712%27%20y=%2741.0%27%3E*%3C/text%3E%3Ctext%20x=%2736%27%20y=%2738.0%27%3E,%3C/text%3E%3Ctext%20x=%2760%27%20y=%2739.5%27%3E+%3C/text%3E%3Ctext%20x=%2784%27%20y=%2740.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27156%27%20y=%2739.0%27%3E.%3C/text%3E%3Ctext%20x=%27180%27%20y=%2740.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27204%27%20y=%2739.0%27%3E.%3C/text%3E%3Ctext%20x=%27228%27%20y=%2740.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27276%27%20y=%2738.0%27%3E%27%3C/text%3E%3Ctext%20x=%2736%27%20y=%2765.0%27%3E*%3C/text%3E%3Ctext%20x=%2784%27%20y=%2764.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27156%27%20y=%2762.0%27%3E%27%3C/text%3E%3Ctext%20x=%27204%27%20y=%2764.0%27%3E-%3C/text%3E%3Ctext%20x=%27252%27%20y=%2762.0%27%3E,%3C/text%3E%3Ctext%20x=%27276%27%20y=%2762.0%27%3E%27%3C/text%3E%3Ctext%20x=%2712%27%20y=%2786.5%27%3E:%3C/text%3E%3Ctext%20x=%2784%27%20y=%2786.5%27%3E:%3C/text%3E%3Ctext%20x=%27132%27%20y=%2788.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27180%27%20y=%2788.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27228%27%20y=%2786.0%27%3E,%3C/text%3E%3Ctext%20x=%27252%27%20y=%2788.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27276%27%20y=%2788.0%27%3E=%3C/text%3E%3Ctext%20x=%2760%27%20y=%27110.0%27%3E,%3C/text%3E%3Ctext%20x=%2784%27%20y=%27112.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27108%27%20y=%27112.0%27%3E~%3C/text%3E%3Ctext%20x=%27132%27%20y=%27112.0%27%3E-%3C/text%3E%3Ctext%20x=%27156%27%20y=%27110.5%27%3E:%3C/text%3E%3Ctext%20x=%27204%27%20y=%27111.0%27%3E.%3C/text%3E%3Ctext%20x=%27228%27%20y=%27112.0%27%3E-%3C/text%3E%3Ctext%20x=%27252%27%20y=%27111.5%27%3E+%3C/text%3E%3Ctext%20x=%27276%27%20y=%27112.0%27%3E-%3C/text%3E%3Ctext%20x=%2712%27%20y=%27136.0%27%3E-%3C/text%3E%3Ctext%20x=%2736%27%20y=%27136.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%2784%27%20y=%27134.0%27%3E,%3C/text%3E%3Ctext%20x=%27108%27%20y=%27134.0%27%3E,%3C/text%3E%3Ctext%20x=%27132%27%20y=%27134.5%27%3E:%3C/text%3E%3Ctext%20x=%27156%27%20y=%27136.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27252%27%20y=%27135.5%27%3E+%3C/text%3E%3Ctext%20x=%27276%27%20y=%27134.0%27%3E,%3C/text%3E%3C/g%3E%3C/svg%3E");
+        --field-dim-color: #404040;
     }
 }
 
@@ -174,31 +166,30 @@ main {
     left: -25%;
     width: 150%;
     height: 150%;
-    background-size: 288px 144px;
+    -webkit-mask-image: var(--field-tile);
+    -webkit-mask-size: 288px 144px;
+    mask-image: var(--field-tile);
+    mask-size: 288px 144px;
     pointer-events: none;
-}
-
-.hero::before {
-    background-image: var(--field-dim);
     animation: fieldDrift 160s linear infinite;
 }
 
-/* Same field, accent-colored, revealed by a sweeping diagonal mask */
+/* Glyph tile (as mask) painted in dim gray; sweep layer paints the accent band */
+.hero::before {
+    background: var(--field-dim-color);
+}
+
 .hero::after {
-    background-image: var(--field-glow);
-    -webkit-mask-image: linear-gradient(75deg, transparent 0 44%, #000 49% 50%, transparent 50.5% 100%);
-    -webkit-mask-size: 250% 100%;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: 100% 0;
-    mask-image: linear-gradient(75deg, transparent 0 44%, #000 49% 50%, transparent 50.5% 100%);
-    mask-size: 250% 100%;
-    mask-repeat: no-repeat;
-    mask-position: 100% 0;
+    background-image: linear-gradient(75deg, transparent 0 44%, var(--accent) 49% 50%, transparent 50.5% 100%);
+    background-size: 250% 100%;
+    background-repeat: no-repeat;
+    background-position: 100% 0;
     animation: fieldDrift 160s linear infinite,
                scanSweep 12s linear 1.6s infinite;
 }
 
 @supports not ((mask-image: linear-gradient(#000, #000)) or (-webkit-mask-image: linear-gradient(#000, #000))) {
+    .hero::before,
     .hero::after {
         display: none;
     }
@@ -352,13 +343,13 @@ h2 {
 }
 
 @keyframes fieldDrift {
-    from { background-position: 0 0; }
-    to   { background-position: 288px 144px; }
+    from { -webkit-mask-position: 0 0; mask-position: 0 0; }
+    to   { -webkit-mask-position: 288px 144px; mask-position: 288px 144px; }
 }
 
 @keyframes scanSweep {
-    0%, 100% { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
-    35%      { -webkit-mask-position: 0 0; mask-position: 0 0; }
+    0%, 100% { background-position: 100% 0; }
+    35%      { background-position: 0 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
