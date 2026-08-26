@@ -6,13 +6,11 @@
     <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
     <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:;">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="permissions-policy" content="geolocation=(), microphone=(), camera=()">
 
     <link rel="preload" href="./fonts/space-grotesk-variable.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preconnect" href="https://github.com">
-    <link rel="preconnect" href="https://www.linkedin.com">
     <style>
 @font-face {
     font-family: 'Space Grotesk';
@@ -29,8 +27,6 @@
     --text-muted: #525252;
     --text-subtle: #737373;
     --border: #e5e5e5;
-    --link: #171717;
-    --link-hover: #525252;
     --accent: #2563eb;
     --field-dim-color: #d4d4d4;
     /* ASCII glyph field tile (12x6 cells of 24px, 49 glyphs at 68 percent density).
@@ -46,8 +42,6 @@
         --text-muted: #a3a3a3;
         --text-subtle: #737373;
         --border: #262626;
-        --link: #fafafa;
-        --link-hover: #a3a3a3;
         --accent: #60a5fa;
         --field-dim-color: #404040;
     }
@@ -293,18 +287,18 @@ h2 {
 }
 
 .info-block a {
-    color: var(--link);
+    color: var(--text);
     text-decoration: underline;
     text-underline-offset: 2px;
     transition: color 0.2s ease;
 }
 
 .info-block a:hover {
-    color: var(--link-hover);
+    color: var(--text-muted);
 }
 
 .info-block a:focus-visible {
-    color: var(--link-hover);
+    color: var(--text-muted);
     outline: 2px solid var(--accent);
     outline-offset: 2px;
 }
@@ -398,11 +392,7 @@ h2 {
     <meta property="og:description" content="Senior Software Engineer who cares about craft — not just that it works, but how it feels. React, TypeScript, LLM integrations, design systems.">
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://skurid.in/">
-    <meta name="twitter:title" content="Evgeniy Skuridin — Senior Software Engineer">
-    <meta name="twitter:description" content="Senior Software Engineer who cares about craft — not just that it works, but how it feels. React, TypeScript, LLM integrations, design systems.">
     <meta property="og:image" content="https://skurid.in/og-image.svg">
-    <meta property="twitter:image" content="https://skurid.in/og-image.svg">
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -430,8 +420,8 @@ h2 {
             <nav>
                 <span class="logo">ES</span>
                 <div class="nav-links">
-                    <a href="https://github.com/skuridin" rel="noopener noreferrer" aria-label="GitHub (opens in new tab)">GitHub</a>
-                    <a href="https://www.linkedin.com/in/redfield1990/" rel="noopener noreferrer" aria-label="LinkedIn (opens in new tab)">LinkedIn <span aria-hidden="true">→</span></a>
+                    <a href="https://github.com/skuridin">GitHub</a>
+                    <a href="https://www.linkedin.com/in/redfield1990/">LinkedIn <span aria-hidden="true">→</span></a>
                 </div>
             </nav>
         </header>
@@ -481,7 +471,7 @@ h2 {
                 <div class="info-block">
                     <span class="number">04</span>
                     <h2>Currently</h2>
-                    <p>Building AI tools at <a href="https://www.ourmind.ai/" rel="noopener noreferrer">OurMind</a> — an assistant that handles clinical documentation for doctors, so they can focus on patients instead of paperwork.</p>
+                    <p>Building AI tools at <a href="https://www.ourmind.ai/">OurMind</a> — an assistant that handles clinical documentation for doctors, so they can focus on patients instead of paperwork.</p>
                 </div>
             </section>
         </main>
