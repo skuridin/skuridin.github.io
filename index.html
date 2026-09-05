@@ -299,14 +299,6 @@ h1 .cursor {
     gap: 0.5rem;
 }
 
-.dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--accent-glow);
-    animation: pulse 2.4s ease-in-out infinite;
-}
-
 .hero > * {
     position: relative;
     z-index: 1;
@@ -487,11 +479,6 @@ footer {
     50.01%, 100%   { opacity: 0; }
 }
 
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50%      { opacity: 0.35; }
-}
-
 @media (prefers-reduced-motion: reduce) {
     .hero .label-group,
     .hero h1,
@@ -503,8 +490,7 @@ footer {
     }
 
     .hero::before,
-    h1 .cursor,
-    .dot {
+    h1 .cursor {
         animation: none !important;
     }
 }
@@ -631,10 +617,6 @@ footer {
                 <p class="tagline">Code with taste. Products with craft.</p>
 
                 <div class="readout" role="list">
-                    <div class="readout-row" role="listitem">
-                        <span class="readout-label">Status</span>
-                        <span class="readout-value"><span class="dot" aria-hidden="true"></span>Open to work</span>
-                    </div>
                     <div class="readout-row" role="listitem">
                         <span class="readout-label">Time</span>
                         <span class="readout-value">Europe/Amsterdam</span>
