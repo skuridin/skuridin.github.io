@@ -31,7 +31,6 @@
 
 :root {
     --bg: #fafaf7;
-    --bg-alt: #f4f3ee;
     --text: #1b1a17;
     --text-muted: #55534b;
     --text-subtle: #76736a;
@@ -47,7 +46,6 @@
 @media (prefers-color-scheme: dark) {
     :root {
         --bg: #131210;
-        --bg-alt: #1b1a17;
         --text: #ece9e2;
         --text-muted: #a8a49a;
         --text-subtle: #8a867c;
@@ -269,6 +267,7 @@ h1 .cursor {
     flex-direction: column;
     gap: 0.75rem;
     min-width: 16rem;
+    list-style: none;
 }
 
 .readout-row {
@@ -294,9 +293,6 @@ h1 .cursor {
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--text-muted);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
 }
 
 .hero > * {
@@ -334,7 +330,6 @@ h1 .cursor {
     padding: 2.5rem 2rem;
     border-right: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
-    position: relative;
 }
 
 .info-block:nth-child(2n) {
@@ -366,8 +361,7 @@ h2 {
     margin-top: 1rem;
 }
 
-.info-block p a,
-.connect-list a {
+.info-block p a {
     color: var(--text);
     text-decoration: underline;
     text-underline-offset: 2px;
@@ -408,6 +402,7 @@ h2 {
 }
 
 .connect-list a {
+    color: var(--text);
     text-decoration: none;
     font-size: 1rem;
     font-weight: 400;
@@ -415,6 +410,7 @@ h2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: color 0.2s ease;
 }
 
 .connect-list li:first-child a {
@@ -616,16 +612,16 @@ footer {
                 <h1>evgeniy<br>skuridin<span class="cursor" aria-hidden="true"></span></h1>
                 <p class="tagline">Code with taste. Products with craft.</p>
 
-                <div class="readout" role="list">
-                    <div class="readout-row" role="listitem">
+                <ul class="readout">
+                    <li class="readout-row">
                         <span class="readout-label">Time</span>
                         <span class="readout-value">Central European</span>
-                    </div>
-                    <div class="readout-row" role="listitem">
+                    </li>
+                    <li class="readout-row">
                         <span class="readout-label">Base</span>
                         <span class="readout-value">Netherlands</span>
-                    </div>
-                </div>
+                    </li>
+                </ul>
             </section>
 
             <section class="info-grid">
@@ -672,7 +668,5 @@ footer {
             <span>Static HTML — no trackers</span>
         </footer>
     </div>
-
-
 </body>
 </html>
