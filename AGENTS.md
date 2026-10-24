@@ -1,17 +1,17 @@
 # AGENTS.md for skuridin.github.io
 
 ## Build Commands
-- No build process; static HTML/CSS site.
+- No build process; static HTML/CSS/JS site.
 - To serve locally: `python -m http.server 8000` or `npx serve .`
 
 ## Lint Commands
 - HTML: `npx htmlhint index.html`
+- JS: `node --check type-scramble.js`
 - No existing lint setup or configuration files.
 
 ## Test Commands
-- No tests present.
+- No test suite; keep the vanilla script dependency-free.
 - For single test: N/A
-- Suggest adding unit tests with Jest if expanding to JS.
 
 ## Code Style Guidelines
 - Use semantic HTML5 elements (main, header, section, footer).
@@ -19,11 +19,11 @@
 - Naming: Kebab-case for classes/IDs (e.g., header-info, prompt, terminal-section).
 - Formatting: 4-space indentation for HTML and CSS properties; selectors unindented in CSS.
 - Consistent line breaks and spacing.
-- No JS yet; if added, use ES6+, strict mode.
+- Progressive-enhancement JS: ES6+, strict mode, IIFE, no dependencies.
 - Error handling: N/A for static site.
 - Imports: N/A; avoid external dependencies unless necessary.
 - Types: N/A.
-- Follow accessibility best practices (alt attributes for images, semantic structure; ARIA not yet needed).
+- Follow accessibility best practices (alt attributes for images, semantic structure, ARIA where needed).
 
 ## Git Guidelines
 - Use conventional commits for commit messages.
