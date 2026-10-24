@@ -7,10 +7,10 @@
   </style>
   <rect width="1200" height="630" fill="#131210"/>
   <rect x="60" y="60" width="1080" height="510" fill="none" stroke="#2b2924" stroke-width="1"/>
-  <text x="100" y="140" class="mono" font-size="18" letter-spacing="2.2" fill="#8a867c">SENIOR SOFTWARE ENGINEER</text>
+  <text x="100" y="140" class="mono" font-size="18" letter-spacing="2.2" fill="#8a867c">PRODUCT ENGINEER</text>
   <text x="100" y="270" class="mono" font-size="88" font-weight="350" fill="#ece9e2">evgeniy</text>
   <text x="100" y="380" class="mono" font-size="88" font-weight="350" fill="#ece9e2">skuridin</text>
   <rect x="601" y="324" width="34" height="63" fill="#ffb240"/>
-  <text x="100" y="480" class="sans" font-size="30" fill="#a8a49a">Code with taste. Products with craft.</text>
+  <text x="100" y="480" class="sans" font-size="30" fill="#a8a49a">Taste and judgment. Agents do the typing.</text>
   <text x="100" y="525" class="mono" font-size="18" letter-spacing="1" fill="#8a867c">skurid.in · Netherlands</text>
 </svg>
