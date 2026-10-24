@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#fafaf7" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#f4f1e9" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)">
     <!-- Security Headers -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:;">
@@ -32,10 +32,10 @@
 :root {
     --font-mono: 'Martian Mono', monospace;
     --font-sans: 'Space Grotesk', -apple-system, sans-serif;
-    --bg: #fafaf7;
+    --bg: #f4f1e9;
     --text: #1b1a17;
     --text-muted: #55534b;
-    --text-subtle: #76736a;
+    --text-subtle: #6f6c63;
     --border: #e5e3da;
     --accent: #c2410c;
     --accent-glow: #e8590c;
@@ -588,7 +588,7 @@ footer {
                 <div class="label-group">
                     <span class="label">Senior Software Engineer</span>
                 </div>
-                <h1>evgeniy<br>skuridin<span class="cursor" aria-hidden="true"></span></h1>
+                <h1 aria-label="evgeniy skuridin"><span class="name-line">evgeniy</span><br><span class="name-line">skuridin</span><span class="cursor" aria-hidden="true"></span></h1>
                 <p class="tagline">Code with taste. Products with craft.</p>
 
                 <ul class="readout">
@@ -644,8 +644,9 @@ footer {
 
         <footer>
             <span>© 2026 Evgeniy Skuridin</span>
-            <span>Static HTML — no trackers</span>
+            <span>No trackers</span>
         </footer>
     </div>
+    <script src="./type-scramble.js" defer></script>
 </body>
 </html>
