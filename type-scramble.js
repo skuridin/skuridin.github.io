@@ -1,39 +1,39 @@
 'use strict';
 
 (() => {
-    const lines = document.querySelectorAll('.name-line');
+    const lines = Array.from(document.querySelectorAll('h1 .name-line'));
     if (!lines.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         return;
     }
 
     const glyphs = [',', '-', '·', '+', ':', '.', "'", '*', '~'];
-    const original = Array.from(lines, (line) => line.textContent);
-    const startAt = performance.now() + 1300;
-    // 1300ms lets the h1's 0.35s-delayed, 0.9s reveal finish first.
+    const characters = lines.map((line) => Array.from(line.textContent));
+    const starts = characters.map((_, line) => line * 120);
     // Jitter stays below one character slot, so letters resolve left to right.
-    const deadlines = original.map((value, line) => Array.from(value, (_, index) =>
-        startAt + line * 120 + (index / value.length) * 850 + Math.random() * 70
+    const deadlines = characters.map((chars, line) => chars.map((_, index) =>
+        starts[line] + (index / chars.length) * 850 + Math.random() * 70
     ));
+    const endAt = Math.max(...deadlines.flat());
+    let startAt;
 
     const step = (now) => {
-        let active = false;
-        original.forEach((value, line) => {
-            if (now < startAt + line * 120) {
-                active = true;
+        // Anchor to the first painted frame; 1300ms clears the 0.35s + 0.9s reveal.
+        if (startAt === undefined) {
+            startAt = now + 1300;
+        }
+        characters.forEach((chars, line) => {
+            if (now < startAt + starts[line]) {
                 return;
             }
             let output = '';
-            for (let index = 0; index < value.length; index += 1) {
-                if (now >= deadlines[line][index]) {
-                    output += value[index];
-                } else {
-                    output += glyphs[Math.floor(now / 50 + index * 3) % glyphs.length];
-                    active = true;
-                }
-            }
+            chars.forEach((char, index) => {
+                output += now >= startAt + deadlines[line][index]
+                    ? char
+                    : glyphs[Math.floor(now / 50 + index * 3) % glyphs.length];
+            });
             lines[line].textContent = output;
         });
-        if (active) {
+        if (now < startAt + endAt) {
             requestAnimationFrame(step);
         }
     };
