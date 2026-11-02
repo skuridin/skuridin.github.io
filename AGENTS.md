@@ -6,7 +6,7 @@
 
 ## Lint Commands
 - HTML: `npx htmlhint index.html`
-- JS: `node --check type-scramble.js`
+- JS: `node --check motion.js`
 - No existing lint setup or configuration files.
 
 ## Test Commands

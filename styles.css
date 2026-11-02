@@ -1,0 +1,633 @@
+@font-face {
+    font-family: 'Instrument Serif';
+    src: url('./fonts/instrument-serif.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Instrument Serif';
+    src: url('./fonts/instrument-serif-italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Space Grotesk';
+    src: url('./fonts/space-grotesk-variable.woff2') format('woff2');
+    font-weight: 300 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Palette sampled from glass-and-stone mosaic: petrol, vermilion, tessera white, gold */
+:root {
+    --ink: #061614;
+    --petrol: #05394c;
+    --petrol-mid: #165567;
+    --vermilion: #be4a15;
+    --vermilion-text: #a83f10;
+    --vermilion-lit: #e0561f;
+    --paper: #efe9dd;
+    --gold: #c6a740;
+    --serif: 'Instrument Serif', 'Times New Roman', serif;
+    --sans: 'Space Grotesk', -apple-system, sans-serif;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --gutter: clamp(1.5rem, 5vw, 5rem);
+    --accent: var(--vermilion);
+    --accent-text: var(--vermilion-text);
+    --muted: #4d6a72;
+    --rule: rgb(5 57 76 / 0.14);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    background: var(--ink);
+}
+
+body {
+    font-family: var(--sans);
+    font-weight: 300;
+    background: var(--paper);
+    color: var(--petrol);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+}
+
+::selection {
+    background: var(--vermilion);
+    color: var(--paper);
+}
+
+a {
+    color: inherit;
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+}
+
+.on-dark {
+    --accent: var(--vermilion-lit);
+    --accent-text: var(--gold);
+    --muted: #9fb4b5;
+    --rule: rgb(239 233 221 / 0.14);
+    background: var(--ink);
+    color: var(--paper);
+}
+
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    padding: 0.75rem 1.5rem;
+    background: var(--paper);
+    color: var(--petrol);
+    font-size: 0.875rem;
+    text-decoration: none;
+}
+
+.skip-link:focus {
+    top: 1rem;
+}
+
+/* Header floats over the hero */
+.site-header {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 10;
+    padding: 1.75rem var(--gutter);
+    color: var(--paper);
+    --accent: var(--vermilion-lit);
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: fade-in 1.2s ease 1s both;
+}
+
+.logo {
+    font-family: var(--serif);
+    font-size: 1.75rem;
+    line-height: 1;
+    text-decoration: none;
+}
+
+.logo em,
+.hero-name em,
+.statement em {
+    color: var(--accent);
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a,
+.connect-list a {
+    position: relative;
+    text-decoration: none;
+}
+
+/* Underline that sweeps in from the left on hover */
+.nav-links a::after,
+.connect-list a::after,
+.email-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -0.2em;
+    width: 100%;
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.6s var(--ease-out);
+}
+
+.nav-links a:hover::after,
+.connect-list a:hover::after,
+.email-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.nav-links a {
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+/* Hero */
+.hero {
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: 1fr auto auto auto;
+    grid-template-areas:
+        ". ."
+        "eyebrow eyebrow"
+        "name name"
+        "tagline readout";
+    padding: 8rem var(--gutter) 3rem;
+}
+
+/* Without JS the hero keeps a lit petrol field */
+.hero-art {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(circle at 72% 42%, var(--petrol-mid), var(--petrol) 30%, var(--ink) 75%);
+}
+
+/* Oversized, because motion.js tilts it back like a floor */
+.mosaic {
+    position: absolute;
+    top: -45%;
+    left: -30%;
+    width: 160%;
+    height: 170%;
+}
+
+/* Keeps the name readable over the tesserae */
+.shade {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(to bottom, rgb(4 10 10 / 0.75), transparent 9rem),
+        linear-gradient(to right, rgb(4 10 10 / 0.88), rgb(4 10 10 / 0.45) 50%, transparent 72%),
+        linear-gradient(to top, rgb(4 10 10 / 0.7), transparent 45%);
+}
+
+.grain {
+    position: absolute;
+    inset: -50%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.12;
+    mix-blend-mode: overlay;
+    animation: grain 0.9s steps(5) infinite;
+}
+
+.eyebrow {
+    grid-area: eyebrow;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    animation: fade-up 1.2s var(--ease-out) 0.2s both;
+}
+
+.eyebrow::before {
+    content: '';
+    width: 3rem;
+    height: 1px;
+    background: var(--gold);
+    transform-origin: left;
+    animation: grow 1.4s var(--ease-out) 0.4s both;
+}
+
+.hero-name {
+    grid-area: name;
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(4.5rem, 18vw, 15rem);
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+}
+
+/* Each line is a mask; the word rises into view */
+.hero-name .line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.14em;
+    margin-bottom: -0.14em;
+}
+
+.hero-name .line > span {
+    display: block;
+    animation: rise 1.6s var(--ease-out) 0.3s both;
+}
+
+.hero-name .line + .line {
+    padding-left: 0.6em;
+}
+
+.hero-name .line + .line > span {
+    animation-delay: 0.45s;
+}
+
+.tagline {
+    grid-area: tagline;
+    align-self: end;
+    margin-top: 2.5rem;
+    max-width: 22rem;
+    font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+    line-height: 1.45;
+    color: var(--muted);
+    animation: fade-up 1.2s var(--ease-out) 0.9s both;
+}
+
+.readout {
+    grid-area: readout;
+    align-self: end;
+    list-style: none;
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    text-align: right;
+    animation: fade-up 1.2s var(--ease-out) 1.05s both;
+}
+
+.readout-label {
+    display: inline-block;
+    min-width: 3rem;
+    margin-right: 1rem;
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+/* Marquee band */
+.marquee {
+    overflow: hidden;
+    padding: 1.25rem 0;
+    background: var(--vermilion);
+    color: var(--paper);
+    border-block: 3px solid var(--ink);
+}
+
+.marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 40s linear infinite;
+}
+
+.marquee p {
+    padding-right: 2.5rem;
+    font-family: var(--serif);
+    font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+    font-style: italic;
+    white-space: nowrap;
+}
+
+.marquee span {
+    margin: 0 1.75rem;
+    font-size: 0.5em;
+    vertical-align: middle;
+    color: var(--ink);
+}
+
+/* Content sections */
+.section {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(10rem, 1fr) 3fr;
+    gap: 2rem var(--gutter);
+    padding: clamp(5rem, 11vw, 9rem) var(--gutter);
+}
+
+.section + .section {
+    border-top: 1px solid var(--rule);
+}
+
+.section-label {
+    align-self: start;
+    padding-top: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.section-label span {
+    margin-right: 0.75rem;
+    color: var(--accent-text);
+}
+
+.statement {
+    max-width: 30ch;
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4.2vw, 3.75rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+}
+
+.statement a {
+    color: var(--accent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.12em;
+    transition: text-underline-offset 0.4s var(--ease-out);
+}
+
+.statement a:hover {
+    text-underline-offset: 0.22em;
+}
+
+.focus-list {
+    list-style: none;
+    counter-reset: focus;
+    border-top: 1px solid var(--rule);
+}
+
+.focus-list li {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    gap: 2rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--rule);
+    counter-increment: focus;
+    font-family: var(--serif);
+    font-size: clamp(1.75rem, 3.2vw, 2.75rem);
+    line-height: 1.1;
+}
+
+/* Hover motion lives on the span: the li carries the scroll-reveal transition */
+.focus-list li span {
+    transition: color 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+}
+
+.focus-list li::before {
+    content: counter(focus, decimal-leading-zero);
+    min-width: 2rem;
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--accent-text);
+}
+
+.focus-list li::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.7s var(--ease-out);
+}
+
+@media (hover: hover) {
+    .focus-list li:hover span {
+        color: var(--accent);
+        transform: translateX(1rem);
+    }
+
+    .focus-list li:hover::after {
+        transform: scaleX(1);
+    }
+}
+
+/* Connect + footer close the page on dark */
+.connect {
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.glow {
+    position: absolute;
+    z-index: -1;
+    width: 90vmax;
+    height: 90vmax;
+    right: -30vmax;
+    bottom: -60vmax;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgb(22 85 103 / 0.85), rgb(5 57 76 / 0.4) 40%, transparent 68%);
+    pointer-events: none;
+    animation: drift 24s ease-in-out infinite alternate;
+}
+
+.email-link {
+    position: relative;
+    display: inline-block;
+    font-family: var(--serif);
+    font-size: clamp(3rem, 10vw, 9rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+}
+
+.email-link span {
+    display: inline-block;
+    font-size: 0.5em;
+    vertical-align: top;
+    color: var(--accent);
+    transition: transform 0.6s var(--ease-out);
+}
+
+.email-link:hover span,
+.connect-list a:hover span {
+    transform: translate(0.15em, -0.15em);
+}
+
+.connect-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 3rem;
+    margin-top: 3.5rem;
+}
+
+.connect-list a {
+    font-size: 1.125rem;
+    font-weight: 400;
+}
+
+.connect-list span {
+    display: inline-block;
+    color: var(--accent);
+    transition: transform 0.6s var(--ease-out);
+}
+
+.site-footer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 2rem var(--gutter);
+    border-top: 1px solid var(--rule);
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+/* Scroll reveal; hidden only when motion.js is running */
+.js .reveal {
+    opacity: 0;
+    transform: translateY(2.5rem);
+    transition: opacity 1.2s var(--ease-out), transform 1.2s var(--ease-out);
+}
+
+.js .reveal.is-in {
+    opacity: 1;
+    transform: none;
+}
+
+/* Hero art recedes as it scrolls out */
+@supports (animation-timeline: view()) {
+    .hero-art {
+        animation: hero-exit linear both;
+        animation-timeline: view();
+        animation-range: exit 0% exit 100%;
+    }
+}
+
+@keyframes rise {
+    from { transform: translateY(105%); }
+}
+
+@keyframes fade-up {
+    from { opacity: 0; transform: translateY(1.5rem); }
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+}
+
+@keyframes grow {
+    from { transform: scaleX(0); }
+}
+
+@keyframes drift {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(-6vw, 8vh) scale(1.12); }
+    100% { transform: translate(4vw, -4vh) scale(0.94); }
+}
+
+@keyframes grain {
+    0%   { transform: translate(0, 0); }
+    20%  { transform: translate(-8%, 6%); }
+    40%  { transform: translate(6%, -10%); }
+    60%  { transform: translate(-12%, -4%); }
+    80%  { transform: translate(10%, 8%); }
+    100% { transform: translate(0, 0); }
+}
+
+@keyframes marquee {
+    to { transform: translateX(-50%); }
+}
+
+@keyframes hero-exit {
+    to { opacity: 0.3; transform: scale(1.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+@media (max-width: 800px) {
+    .hero {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "."
+            "eyebrow"
+            "name"
+            "tagline"
+            "readout";
+        grid-template-rows: 1fr auto auto auto auto;
+        padding-bottom: 2.5rem;
+    }
+
+    .shade {
+        background:
+            linear-gradient(to bottom, rgb(4 10 10 / 0.8), transparent 7rem),
+            linear-gradient(to top, rgb(4 10 10 / 0.92), rgb(4 10 10 / 0.6) 50%, transparent 85%);
+    }
+
+    .hero-name .line + .line {
+        padding-left: 0.3em;
+    }
+
+    .readout {
+        margin-top: 2rem;
+        text-align: left;
+    }
+
+    .section {
+        grid-template-columns: 1fr;
+    }
+
+    .section-label {
+        padding-top: 0;
+    }
+
+    .focus-list li {
+        gap: 1.25rem;
+    }
+}
