@@ -3,525 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#f4f1e9" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#061614">
     <!-- Security Headers -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:;">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="permissions-policy" content="geolocation=(), microphone=(), camera=()">
 
-    <link rel="preload" href="./fonts/martian-mono-variable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="./fonts/instrument-serif.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="./fonts/instrument-serif-italic.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="./fonts/space-grotesk-variable.woff2" as="font" type="font/woff2" crossorigin>
-    <style>
-@font-face {
-    font-family: 'Martian Mono';
-    src: url('./fonts/martian-mono-variable.woff2') format('woff2');
-    font-weight: 100 800;
-    font-style: normal;
-    font-display: swap;
-}
+    <link rel="stylesheet" href="./styles.css">
 
-@font-face {
-    font-family: 'Space Grotesk';
-    src: url('./fonts/space-grotesk-variable.woff2') format('woff2');
-    font-weight: 300 500;
-    font-style: normal;
-    font-display: swap;
-}
-
-:root {
-    --font-mono: 'Martian Mono', monospace;
-    --font-sans: 'Space Grotesk', -apple-system, sans-serif;
-    --bg: #f4f1e9;
-    --text: #1b1a17;
-    --text-muted: #55534b;
-    --text-subtle: #6f6c63;
-    --border: #e5e3da;
-    --accent: #c2410c;
-    --accent-glow: #e8590c;
-    --field-dim-color: #d8d5cb;
-    /* ASCII glyph field tile (12x6 cells of 24px, 49 glyphs at 68 percent density).
-       Black fill: used as a CSS mask, layers paint the color. */
-    --field-tile: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27288%27%20height=%27144%27%3E%3Cg%20font-family=%27Menlo,Consolas,monospace%27%20font-size=%2710%27%20fill=%27%23000%27%3E%3Ctext%20x=%2712%27%20y=%2714.0%27%3E,%3C/text%3E%3Ctext%20x=%2736%27%20y=%2716.0%27%3E-%3C/text%3E%3Ctext%20x=%2760%27%20y=%2716.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%2784%27%20y=%2716.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27108%27%20y=%2714.0%27%3E,%3C/text%3E%3Ctext%20x=%27132%27%20y=%2715.0%27%3E.%3C/text%3E%3Ctext%20x=%27156%27%20y=%2715.5%27%3E+%3C/text%3E%3Ctext%20x=%27180%27%20y=%2716.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27228%27%20y=%2714.0%27%3E%27%3C/text%3E%3Ctext%20x=%27276%27%20y=%2714.0%27%3E%27%3C/text%3E%3Ctext%20x=%2712%27%20y=%2741.0%27%3E*%3C/text%3E%3Ctext%20x=%2736%27%20y=%2738.0%27%3E,%3C/text%3E%3Ctext%20x=%2760%27%20y=%2739.5%27%3E+%3C/text%3E%3Ctext%20x=%2784%27%20y=%2740.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27156%27%20y=%2739.0%27%3E.%3C/text%3E%3Ctext%20x=%27180%27%20y=%2740.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27204%27%20y=%2739.0%27%3E.%3C/text%3E%3Ctext%20x=%27228%27%20y=%2740.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27276%27%20y=%2738.0%27%3E%27%3C/text%3E%3Ctext%20x=%2736%27%20y=%2765.0%27%3E*%3C/text%3E%3Ctext%20x=%2784%27%20y=%2764.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27156%27%20y=%2762.0%27%3E%27%3C/text%3E%3Ctext%20x=%27204%27%20y=%2764.0%27%3E-%3C/text%3E%3Ctext%20x=%27252%27%20y=%2762.0%27%3E,%3C/text%3E%3Ctext%20x=%27276%27%20y=%2762.0%27%3E%27%3C/text%3E%3Ctext%20x=%2712%27%20y=%2786.5%27%3E:%3C/text%3E%3Ctext%20x=%2784%27%20y=%2786.5%27%3E:%3C/text%3E%3Ctext%20x=%27132%27%20y=%2788.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27180%27%20y=%2788.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27228%27%20y=%2786.0%27%3E,%3C/text%3E%3Ctext%20x=%27252%27%20y=%2788.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27276%27%20y=%2788.0%27%3E=%3C/text%3E%3Ctext%20x=%2760%27%20y=%27110.0%27%3E,%3C/text%3E%3Ctext%20x=%2784%27%20y=%27112.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27108%27%20y=%27112.0%27%3E~%3C/text%3E%3Ctext%20x=%27132%27%20y=%27112.0%27%3E-%3C/text%3E%3Ctext%20x=%27156%27%20y=%27110.5%27%3E:%3C/text%3E%3Ctext%20x=%27204%27%20y=%27111.0%27%3E.%3C/text%3E%3Ctext%20x=%27228%27%20y=%27112.0%27%3E-%3C/text%3E%3Ctext%20x=%27252%27%20y=%27111.5%27%3E+%3C/text%3E%3Ctext%20x=%27276%27%20y=%27112.0%27%3E-%3C/text%3E%3Ctext%20x=%2712%27%20y=%27136.0%27%3E-%3C/text%3E%3Ctext%20x=%2736%27%20y=%27136.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%2784%27%20y=%27134.0%27%3E,%3C/text%3E%3Ctext%20x=%27108%27%20y=%27134.0%27%3E,%3C/text%3E%3Ctext%20x=%27132%27%20y=%27134.5%27%3E:%3C/text%3E%3Ctext%20x=%27156%27%20y=%27136.0%27%3E%C2%B7%3C/text%3E%3Ctext%20x=%27252%27%20y=%27135.5%27%3E+%3C/text%3E%3Ctext%20x=%27276%27%20y=%27134.0%27%3E,%3C/text%3E%3C/g%3E%3C/svg%3E");
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg: #131210;
-        --text: #ece9e2;
-        --text-muted: #a8a49a;
-        --text-subtle: #8a867c;
-        --border: #2b2924;
-        --accent: #ffa94d;
-        --accent-glow: #ffb240;
-        --field-dim-color: #3a3831;
-    }
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-.skip-link {
-    position: absolute;
-    top: -100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--bg);
-    color: var(--text);
-    padding: 0.75rem 1.5rem;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    text-decoration: none;
-    font-size: 0.875rem;
-    z-index: 1000;
-    transition: top 0.2s ease;
-}
-
-.skip-link:focus {
-    top: 1rem;
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-}
-
-body {
-    font-family: var(--font-sans);
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-}
-
-.frame {
-    /* 100vh minus top+bottom margin (1.5rem × 2 = 3rem) to prevent scroll on large screens */
-    min-height: calc(100vh - 3rem);
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--border);
-    margin: 1.5rem;
-}
-
-header {
-    padding: 1.25rem 2rem;
-    border-bottom: 1px solid var(--border);
-}
-
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.logo {
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-}
-
-.nav-links {
-    display: flex;
-    gap: 1.75rem;
-}
-
-.nav-links a {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 400;
-    color: var(--text-subtle);
-    text-decoration: none;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    transition: color 0.2s ease;
-}
-
-.nav-links a:hover {
-    color: var(--text);
-}
-
-.nav-links a:focus-visible {
-    color: var(--text);
-    outline: 2px solid var(--accent);
-    outline-offset: 4px;
-}
-
-.nav-links a:last-child {
-    color: var(--accent);
-}
-
-main {
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-}
-
-.hero {
-    padding: 3.5rem 2rem 3rem;
-    border-bottom: 1px solid var(--border);
-    position: relative;
-    overflow: hidden;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-areas:
-        "head    readout"
-        "name    readout"
-        "tagline readout";
-    column-gap: 3rem;
-    row-gap: 0;
-}
-
-/* One layer: dim glyphs from background-color, accent scan band from the
-   gradient image — both revealed through the shared glyph-tile mask */
-.hero::before {
-    content: '';
-    position: absolute;
-    top: -25%;
-    left: -25%;
-    width: 150%;
-    height: 150%;
-    background-color: var(--field-dim-color);
-    background-image: linear-gradient(75deg, transparent 0 44%, var(--accent-glow) 49% 50%, transparent 50.5% 100%);
-    background-size: 250% 100%;
-    background-repeat: no-repeat;
-    background-position: 100% 0;
-    -webkit-mask-image: var(--field-tile);
-    -webkit-mask-size: 288px 144px;
-    mask-image: var(--field-tile);
-    mask-size: 288px 144px;
-    pointer-events: none;
-    animation: fieldDrift 160s linear infinite,
-               scanSweep 12s linear 1.6s infinite;
-}
-
-@supports not ((mask-image: linear-gradient(#000, #000)) or (-webkit-mask-image: linear-gradient(#000, #000))) {
-    .hero::before {
-        display: none;
-    }
-}
-
-.label-group {
-    grid-area: head;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.label {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 400;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-subtle);
-}
-
-h1 {
-    grid-area: name;
-    font-family: var(--font-mono);
-    font-size: clamp(1.89rem, 6.72vw, 5.67rem);
-    font-weight: 350;
-    line-height: 1.25;
-    letter-spacing: 0;
-    align-self: start;
-}
-
-/* Terminal block cursor, blinking after the name */
-h1 .cursor {
-    display: inline-block;
-    width: 0.55ch;
-    height: 0.72em;
-    margin-left: 0.15ch;
-    background: var(--accent-glow);
-    vertical-align: baseline;
-    transform: translateY(0.08em);
-    animation: blink 1.2s step-end infinite;
-}
-
-.tagline {
-    grid-area: tagline;
-    align-self: end;
-    margin-top: 2.25rem;
-    font-size: 1.1875rem;
-    font-weight: 400;
-    color: var(--text-muted);
-    letter-spacing: 0.01em;
-}
-
-.readout {
-    grid-area: readout;
-    align-self: end;
-    justify-self: end;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    min-width: 16rem;
-    list-style: none;
-}
-
-.readout-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 1.5rem;
-}
-
-.readout-label {
-    font-family: var(--font-mono);
-    font-size: 0.625rem;
-    font-weight: 400;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-subtle);
-}
-
-.readout-value {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-}
-
-.hero > * {
-    position: relative;
-    z-index: 1;
-}
-
-.hero .label-group {
-    opacity: 0;
-    animation: reveal 0.8s ease-out 0.2s forwards;
-}
-
-.hero h1 {
-    opacity: 0;
-    animation: reveal 0.9s ease-out 0.35s forwards;
-}
-
-.hero .tagline {
-    opacity: 0;
-    animation: reveal 0.8s ease-out 0.55s forwards;
-}
-
-.hero .readout {
-    opacity: 0;
-    animation: reveal 0.8s ease-out 0.7s forwards;
-}
-
-.info-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1px;
-    background: var(--border);
-    flex: 1;
-}
-
-.info-block {
-    padding: 2.5rem 2rem;
-    background: var(--bg);
-}
-
-h2 {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 1.5rem;
-}
-
-.info-block p {
-    font-size: 0.9375rem;
-    line-height: 1.7;
-    color: var(--text-muted);
-    font-weight: 300;
-}
-
-.info-block p + p {
-    margin-top: 1rem;
-}
-
-.info-block p a {
-    color: var(--text);
-    text-decoration: underline;
-    text-underline-offset: 2px;
-    transition: color 0.2s ease;
-}
-
-.info-block p a:hover,
-.connect-list a:hover {
-    color: var(--accent);
-}
-
-.info-block p a:focus-visible,
-.connect-list a:focus-visible {
-    color: var(--accent);
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-}
-
-.info-block .stack {
-    list-style: none;
-    columns: 2;
-    column-gap: 2rem;
-}
-
-.info-block .stack li {
-    font-size: 0.9375rem;
-    line-height: 2;
-    color: var(--text-muted);
-    font-weight: 300;
-}
-
-.connect-list {
-    list-style: none;
-}
-
-.connect-list li + li {
-    border-top: 1px solid var(--border);
-}
-
-.connect-list a {
-    color: var(--text);
-    text-decoration: none;
-    font-size: 1rem;
-    font-weight: 400;
-    padding: 0.875rem 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: color 0.2s ease;
-}
-
-.connect-list li:first-child a {
-    padding-top: 0;
-}
-
-.connect-list li:last-child a {
-    padding-bottom: 0;
-}
-
-.connect-list .arrow {
-    font-family: var(--font-mono);
-    font-size: 0.875rem;
-    color: var(--text-subtle);
-    transition: transform 0.2s ease, color 0.2s ease;
-}
-
-.connect-list a:hover .arrow {
-    color: var(--accent);
-    transform: translate(2px, -2px);
-}
-
-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    padding: 1.125rem 2rem;
-    border-top: 1px solid var(--border);
-    font-family: var(--font-mono);
-    font-size: 0.625rem;
-    font-weight: 400;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-subtle);
-}
-
-@keyframes reveal {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fieldDrift {
-    from { -webkit-mask-position: 0 0; mask-position: 0 0; }
-    to   { -webkit-mask-position: 288px 144px; mask-position: 288px 144px; }
-}
-
-@keyframes scanSweep {
-    0%, 100% { background-position: 100% 0; }
-    35%      { background-position: 0 0; }
-}
-
-@keyframes blink {
-    0%, 50%        { opacity: 1; }
-    50.01%, 100%   { opacity: 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .hero > * {
-        animation: none !important;
-        opacity: 1 !important;
-    }
-
-    .hero::before,
-    h1 .cursor {
-        animation: none !important;
-    }
-}
-
-@media (max-width: 800px) {
-    .frame {
-        margin: 1rem;
-        min-height: calc(100vh - 2rem);
-    }
-
-    header {
-        padding: 1.125rem 1.5rem;
-    }
-
-    .hero {
-        grid-template-columns: 1fr;
-        grid-template-areas:
-            "head"
-            "name"
-            "tagline"
-            "readout";
-        padding: 2.75rem 1.5rem 2.5rem;
-    }
-
-    .label-group {
-        gap: 0.375rem 1.5rem;
-    }
-
-    .readout {
-        justify-self: start;
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 1rem 2rem;
-        margin-top: 2.25rem;
-        min-width: 0;
-    }
-
-    .info-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .info-block {
-        padding: 2rem 1.5rem;
-    }
-
-    footer {
-        padding: 1.125rem 1.5rem;
-    }
-}
-    </style>
     <title>Evgeniy Skuridin — Product Engineer | Product, Design, AI Agents | Netherlands</title>
     <meta
         name="description"
@@ -568,84 +60,88 @@ footer {
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <script src="./motion.js" defer></script>
 </head>
 <body>
     <a href="#main" class="skip-link">Skip to main content</a>
-    <div class="frame">
-        <header>
-            <nav>
-                <span class="logo">ES</span>
-                <div class="nav-links">
-                    <a href="https://github.com/skuridin">GitHub</a>
-                    <a href="https://www.linkedin.com/in/redfield1990/">LinkedIn <span aria-hidden="true">→</span></a>
-                </div>
-            </nav>
-        </header>
 
-        <main id="main" tabindex="-1">
-            <section class="hero">
+    <header class="site-header">
+        <nav class="nav">
+            <a class="logo" href="/" aria-label="Evgeniy Skuridin, home">E<em>S</em></a>
+            <div class="nav-links">
+                <a href="https://github.com/skuridin">GitHub</a>
+                <a href="https://www.linkedin.com/in/redfield1990/">LinkedIn <span aria-hidden="true">↗</span></a>
+            </div>
+        </nav>
+    </header>
 
-                <div class="label-group">
-                    <span class="label">Product Engineer</span>
-                </div>
-                <h1 aria-label="evgeniy skuridin"><span class="name-line" aria-hidden="true">evgeniy</span><br><span class="name-line" aria-hidden="true">skuridin</span><span class="cursor" aria-hidden="true"></span></h1>
-                <p class="tagline">Taste and judgment. Agents do the typing.</p>
+    <main id="main" tabindex="-1">
+        <section class="hero on-dark">
+            <div class="hero-art" aria-hidden="true">
+                <canvas class="mosaic"></canvas>
+                <div class="shade"></div>
+                <div class="grain"></div>
+            </div>
 
-                <ul class="readout">
-                    <li class="readout-row">
-                        <span class="readout-label">Time</span>
-                        <span class="readout-value">Central European</span>
-                    </li>
-                    <li class="readout-row">
-                        <span class="readout-label">Base</span>
-                        <span class="readout-value">Netherlands</span>
-                    </li>
+            <p class="eyebrow">Product Engineer</p>
+            <h1 class="hero-name" aria-label="Evgeniy Skuridin">
+                <span class="line" aria-hidden="true"><span>Evgeniy</span></span>
+                <span class="line" aria-hidden="true"><span><em>Skuridin</em></span></span>
+            </h1>
+            <p class="tagline">Taste and judgment. Agents do the typing.</p>
+
+            <ul class="readout">
+                <li><span class="readout-label">Time</span> Central European</li>
+                <li><span class="readout-label">Base</span> Netherlands</li>
+            </ul>
+        </section>
+
+        <div class="marquee" aria-hidden="true">
+            <div class="marquee-track">
+                <p>Product Thinking <span>✦</span> Interaction Design <span>✦</span> UX Writing <span>✦</span> Design Systems <span>✦</span> Agentic Workflows <span>✦</span> AI Product Design <span>✦</span> Voice &amp; Audio UX <span>✦</span></p>
+                <p>Product Thinking <span>✦</span> Interaction Design <span>✦</span> UX Writing <span>✦</span> Design Systems <span>✦</span> Agentic Workflows <span>✦</span> AI Product Design <span>✦</span> Voice &amp; Audio UX <span>✦</span></p>
+            </div>
+        </div>
+
+        <section class="section" aria-labelledby="about-title">
+            <h2 class="section-label" id="about-title"><span>01</span> About</h2>
+            <p class="statement reveal">I care about what I ship — not just that it works, but <em>how it feels</em>. 15+ years shipping products people rely on. Today I don't write code by hand: I direct AI agents and spend my time on the product, the design and the experience. Most recently an AI scribe giving precious time back to doctors.</p>
+        </section>
+
+        <section class="section" aria-labelledby="focus-title">
+            <h2 class="section-label" id="focus-title"><span>02</span> Focus</h2>
+            <ol class="focus-list">
+                <li class="reveal"><span>Product Thinking</span></li>
+                <li class="reveal"><span>Interaction Design</span></li>
+                <li class="reveal"><span>UX Writing</span></li>
+                <li class="reveal"><span>Design Systems</span></li>
+                <li class="reveal"><span>Agentic Workflows</span></li>
+                <li class="reveal"><span>AI Product Design</span></li>
+                <li class="reveal"><span>Voice &amp; Audio UX</span></li>
+            </ol>
+        </section>
+
+        <section class="section" aria-labelledby="currently-title">
+            <h2 class="section-label" id="currently-title"><span>03</span> Currently</h2>
+            <p class="statement reveal">Building AI tools at <a href="https://www.ourmind.ai/">OurMind</a> — an assistant that handles clinical documentation for doctors, so they can focus on patients instead of paperwork.</p>
+        </section>
+
+        <section class="section connect on-dark" aria-labelledby="connect-title">
+            <div class="glow" aria-hidden="true"></div>
+            <h2 class="section-label" id="connect-title"><span>04</span> Connect</h2>
+            <div class="connect-body">
+                <a class="email-link reveal" href="mailto:i@skurid.in">i@skurid.in <span aria-hidden="true">↗</span></a>
+                <ul class="connect-list">
+                    <li class="reveal"><a href="https://github.com/skuridin">GitHub <span aria-hidden="true">↗</span></a></li>
+                    <li class="reveal"><a href="https://www.linkedin.com/in/redfield1990/">LinkedIn <span aria-hidden="true">↗</span></a></li>
                 </ul>
-            </section>
+            </div>
+        </section>
+    </main>
 
-            <section class="info-grid">
-                <div class="info-block">
-                    <h2>About</h2>
-                    <p>I care about what I ship — not just that it works, but how it feels. 15+ years shipping products people rely on. Today I don't write code by hand: I direct AI agents and spend my time on the product, the design and the experience. Most recently an AI scribe giving precious time back to doctors.</p>
-                </div>
-                <div class="info-block">
-                    <h2>Focus</h2>
-                    <ul class="stack">
-                        <li>Product Thinking</li>
-                        <li>Interaction Design</li>
-                        <li>UX Writing</li>
-                        <li>Design Systems</li>
-                        <li>Agentic Workflows</li>
-                        <li>AI Product Design</li>
-                        <li>Voice &amp; Audio UX</li>
-                    </ul>
-                </div>
-                <div class="info-block">
-                    <h2>Currently</h2>
-                    <p>Building AI tools at <a href="https://www.ourmind.ai/">OurMind</a> — an assistant that handles clinical documentation for doctors, so they can focus on patients instead of paperwork.</p>
-                </div>
-                <div class="info-block">
-                    <h2>Connect</h2>
-                    <ul class="connect-list">
-                        <li>
-                            <a href="mailto:i@skurid.in">i@skurid.in <span class="arrow" aria-hidden="true">↗</span></a>
-                        </li>
-                        <li>
-                            <a href="https://github.com/skuridin">GitHub <span class="arrow" aria-hidden="true">↗</span></a>
-                        </li>
-                        <li>
-                            <a href="https://www.linkedin.com/in/redfield1990/">LinkedIn <span class="arrow" aria-hidden="true">↗</span></a>
-                        </li>
-                    </ul>
-                </div>
-            </section>
-        </main>
-
-        <footer>
-            <span>© 2026 Evgeniy Skuridin</span>
-            <span>No trackers</span>
-        </footer>
-    </div>
-    <script src="./type-scramble.js" defer></script>
+    <footer class="site-footer on-dark">
+        <span>© 2026 Evgeniy Skuridin</span>
+        <span>No trackers</span>
+    </footer>
 </body>
 </html>
