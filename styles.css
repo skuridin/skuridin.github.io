@@ -115,6 +115,8 @@ a {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
     animation: fade-in 1.2s ease 1s both;
 }
 
@@ -142,6 +144,14 @@ a {
     text-decoration: none;
 }
 
+/* Grows the hit area of small links to about 44px without moving them */
+.nav-links a::before,
+.connect-list a::before {
+    content: '';
+    position: absolute;
+    inset: -0.875rem -0.5rem;
+}
+
 /* Underline that sweeps in from the left on hover */
 .nav-links a::after,
 .connect-list a::after,
@@ -166,10 +176,20 @@ a {
 }
 
 .nav-links a {
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     font-weight: 400;
     letter-spacing: 0.14em;
     text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.nav-links .nav-cta {
+    color: var(--accent);
+}
+
+/* The call to action keeps its underline, so it does not depend on colour alone */
+.nav-links .nav-cta::after {
+    transform: scaleX(1);
 }
 
 /* Hero */
@@ -199,13 +219,18 @@ a {
     background: radial-gradient(circle at 72% 42%, var(--petrol-mid), var(--petrol) 30%, var(--ink) 75%);
 }
 
-/* Oversized, because motion.js tilts it back like a floor */
+/* mosaic.js renders the floor in WebGL and fades it in over the fallback */
 .mosaic {
     position: absolute;
-    top: -45%;
-    left: -30%;
-    width: 160%;
-    height: 170%;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1.2s var(--ease-out);
+}
+
+.mosaic.is-ready {
+    opacity: 1;
 }
 
 /* Keeps the name readable over the tesserae */
@@ -218,22 +243,13 @@ a {
         linear-gradient(to top, rgb(4 10 10 / 0.7), transparent 45%);
 }
 
-.grain {
-    position: absolute;
-    inset: -50%;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    opacity: 0.12;
-    mix-blend-mode: overlay;
-    animation: grain 0.9s steps(5) infinite;
-}
-
 .eyebrow {
     grid-area: eyebrow;
     display: flex;
     align-items: center;
     gap: 1rem;
     margin-bottom: 1.5rem;
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     font-weight: 400;
     letter-spacing: 0.22em;
     text-transform: uppercase;
@@ -306,41 +322,11 @@ a {
     display: inline-block;
     min-width: 3rem;
     margin-right: 1rem;
-    font-size: 0.6875rem;
+    font-size: 0.8125rem;
     font-weight: 400;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--muted);
-}
-
-/* Marquee band */
-.marquee {
-    overflow: hidden;
-    padding: 1.25rem 0;
-    background: var(--vermilion);
-    color: var(--paper);
-    border-block: 3px solid var(--ink);
-}
-
-.marquee-track {
-    display: flex;
-    width: max-content;
-    animation: marquee 40s linear infinite;
-}
-
-.marquee p {
-    padding-right: 2.5rem;
-    font-family: var(--serif);
-    font-size: clamp(1.75rem, 3.5vw, 2.75rem);
-    font-style: italic;
-    white-space: nowrap;
-}
-
-.marquee span {
-    margin: 0 1.75rem;
-    font-size: 0.5em;
-    vertical-align: middle;
-    color: var(--ink);
 }
 
 /* Content sections */
@@ -359,7 +345,7 @@ a {
 .section-label {
     align-self: start;
     padding-top: 0.75rem;
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     font-weight: 400;
     letter-spacing: 0.22em;
     text-transform: uppercase;
@@ -390,61 +376,38 @@ a {
     text-underline-offset: 0.22em;
 }
 
-.focus-list {
+/* Skills under the About statement. Each skill carries its separator in a lead-in; the list starts
+   one lead-in early and clips that strip, so separators show only between skills on the same line. */
+.skills-list {
+    --lead: 2.5rem;
     list-style: none;
-    counter-reset: focus;
-    border-top: 1px solid var(--rule);
-}
-
-.focus-list li {
-    position: relative;
     display: flex;
-    align-items: baseline;
-    gap: 2rem;
-    padding: 1.25rem 0;
-    border-bottom: 1px solid var(--rule);
-    counter-increment: focus;
-    font-family: var(--serif);
-    font-size: clamp(1.75rem, 3.2vw, 2.75rem);
-    line-height: 1.1;
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+    max-width: 48rem;
+    margin-top: clamp(2rem, 4vw, 3rem);
+    margin-left: calc(-1 * var(--lead));
+    clip-path: inset(0 0 0 var(--lead));
+    font-size: 0.8125rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
 }
 
-/* Hover motion lives on the span: the li carries the scroll-reveal transition */
-.focus-list li span {
-    transition: color 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+.skills-list li {
+    position: relative;
+    padding-left: var(--lead);
 }
 
-.focus-list li::before {
-    content: counter(focus, decimal-leading-zero);
-    min-width: 2rem;
-    font-family: var(--sans);
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    color: var(--accent-text);
-}
-
-.focus-list li::after {
-    content: '';
+/* The empty alternative text keeps screen readers from announcing the separator */
+.skills-list li::before {
+    content: '·';
+    content: '·' / '';
     position: absolute;
-    left: 0;
-    bottom: -1px;
-    width: 100%;
-    height: 1px;
-    background: var(--accent);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.7s var(--ease-out);
-}
-
-@media (hover: hover) {
-    .focus-list li:hover span {
-        color: var(--accent);
-        transform: translateX(1rem);
-    }
-
-    .focus-list li:hover::after {
-        transform: scaleX(1);
-    }
+    inset: 0 auto 0 0;
+    width: var(--lead);
+    text-align: center;
+    color: var(--accent-text);
 }
 
 /* Connect + footer close the page on dark */
@@ -515,7 +478,7 @@ a {
     gap: 1rem;
     padding: 2rem var(--gutter);
     border-top: 1px solid var(--rule);
-    font-size: 0.6875rem;
+    font-size: 0.8125rem;
     font-weight: 400;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -565,21 +528,15 @@ a {
     100% { transform: translate(4vw, -4vh) scale(0.94); }
 }
 
-@keyframes grain {
-    0%   { transform: translate(0, 0); }
-    20%  { transform: translate(-8%, 6%); }
-    40%  { transform: translate(6%, -10%); }
-    60%  { transform: translate(-12%, -4%); }
-    80%  { transform: translate(10%, 8%); }
-    100% { transform: translate(0, 0); }
-}
-
-@keyframes marquee {
-    to { transform: translateX(-50%); }
-}
-
 @keyframes hero-exit {
     to { opacity: 0.3; transform: scale(1.08); }
+}
+
+@media print {
+    .js .reveal {
+        opacity: 1;
+        transform: none;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -588,6 +545,20 @@ a {
     *::after {
         animation: none !important;
         transition: none !important;
+    }
+}
+
+@media (max-width: 400px) {
+    .nav-links {
+        gap: 1.25rem;
+    }
+
+    .nav-links a {
+        letter-spacing: 0.08em;
+    }
+
+    .nav-links span {
+        display: none;
     }
 }
 
@@ -626,8 +597,11 @@ a {
     .section-label {
         padding-top: 0;
     }
+}
 
-    .focus-list li {
-        gap: 1.25rem;
+/* Two skills plus a separator do not fit on a phone, so give each skill its own line */
+@media (max-width: 480px) {
+    .skills-list {
+        flex-direction: column;
     }
 }
