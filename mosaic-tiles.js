@@ -1,19 +1,5 @@
 import { Color, InstancedBufferAttribute, InstancedMesh, Object3D, SRGBColorSpace } from './vendor/three.min.js';
 import { LENS } from './mosaic-shaders.js';
-import { seeded } from './mosaic-pattern.js';
-
-const SHAPE_SEED = 5;
-
-// Hand-cut jitter for one tessera: the four corners of its near half, then the four of its
-// far half, each an xz offset the vertex shader blends across the tile, then the seed for
-// its surface noise. Seeded, so a laid out floor keeps the same cuts until it is relaid.
-export const assignTileShapes = (tiles) => {
-    const random = seeded(SHAPE_SEED);
-    for (const tile of tiles) {
-        tile.cuts = Array.from({ length: 8 }, random);
-        tile.seed = random();
-    }
-};
 
 // Chooses the tiles that stay outside the focus band for every camera pose, so they can use
 // simpler geometry. `views` are the camera views between the resting pose and the pointer
@@ -62,8 +48,8 @@ export const createTileMeshes = ({ tiles, materials, detailedGeometry, blurredGe
     return meshes;
 };
 
-// One batch of tesserae. Each tile carries its own `cuts` and `seed`, as assignTileShapes
-// gives them, so a tile keeps its shape whichever batch it lands in.
+// One batch of tesserae. Each tile carries its own `cuts` and `seed` from the pattern, so a
+// tile keeps its shape whichever batch it lands in.
 export const createTileMesh = (tiles, geometry, material, shadowMaterial) => {
     // Instances are ordered by the time their tile starts, so the tiles that have begun to
     // appear are always a prefix of the mesh.
@@ -85,13 +71,10 @@ export const createTileMesh = (tiles, geometry, material, shadowMaterial) => {
         mesh.setColorAt(index, color.setRGB(...tile.color.map((value) => value / 255), SRGBColorSpace));
         at[index] = tile.at;
         gloss[index] = tile.gloss;
-        // The vertex shader blends aCut0 and aCut1 across the tile, so the two vec4
-        // attributes hold the near corners and the far corners in the order tile.cuts lists.
-        for (let corner = 0; corner < 4; corner++) {
-            nearCuts[index * 4 + corner] = tile.cuts[corner] - 0.5;
-            farCuts[index * 4 + corner] = tile.cuts[4 + corner] - 0.5;
-        }
-        seed[index] = tile.seed * 64;
+        // aCut0 holds the near corners and aCut1 the far ones, in the order tile.cuts lists them.
+        nearCuts.set(tile.cuts.slice(0, 4), index * 4);
+        farCuts.set(tile.cuts.slice(4), index * 4);
+        seed[index] = tile.seed;
     });
     mesh.geometry.setAttribute('aAt', new InstancedBufferAttribute(at, 1));
     mesh.geometry.setAttribute('aGloss', new InstancedBufferAttribute(gloss, 1));

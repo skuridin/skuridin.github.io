@@ -14,15 +14,11 @@ export const LENS = {
 
 export const TILE_SETTLE_MS = 450;
 
-// A unit tessera standing on y = 0: a flat top with clipped corners and a softened,
-// smooth-shaded edge, so the raking light draws a thin bright rim on every tile. A tile
-// without a bevel keeps its vertices apart instead, which keeps its faces flat.
-export const tesseraGeometry = (bevelSegments = 2) => {
-    const beveled = bevelSegments > 0;
-    const half = beveled ? 0.42 : 0.5;
-    // Match the widest outline of the beveled tile when using a flat prism.
-    const corner = beveled ? 0.05 : 0.05 + 0.08 * (2 - Math.SQRT2);
-    const bevelThickness = beveled ? 0.06 : 0;
+const BEVEL_SIZE = 0.08;
+const BEVEL_THICKNESS = 0.06;
+
+// An octagon of the given half width with clipped corners, extruded up the y axis from y = 0.
+const extrudeOutline = (half, corner, options) => {
     const shape = new Shape()
         .moveTo(-half + corner, -half)
         .lineTo(half - corner, -half)
@@ -32,45 +28,63 @@ export const tesseraGeometry = (bevelSegments = 2) => {
         .lineTo(-half + corner, half)
         .lineTo(-half, half - corner)
         .lineTo(-half, -half + corner);
-    let geometry = new ExtrudeGeometry(shape, {
-        depth: beveled ? 0.88 : 1,
-        bevelEnabled: beveled,
-        bevelThickness,
-        bevelSize: 0.08,
-        bevelSegments,
-    });
+    const geometry = new ExtrudeGeometry(shape, options);
     geometry.rotateX(-Math.PI / 2);
-    geometry.translate(0, bevelThickness, 0);
     geometry.deleteAttribute('normal');
     geometry.deleteAttribute('uv');
-    if (beveled) {
-        // Sharing vertices lets each one carry the average of the faces around it, which is
-        // what turns the bevel into one continuous softened edge.
-        geometry = mergeVertices(geometry);
-        geometry.computeVertexNormals();
-        dropBuriedFaces(geometry, bevelThickness);
-    } else {
-        // Nothing is shared here, so these normals are the face normals: flat sides.
-        geometry.computeVertexNormals();
-    }
     return geometry;
 };
 
-// Drops the band of bevel faces that mortar covers once a tile settles. The band it removes
-// leaves the shell open below `bandTop`, which is safe because the mortar plane stands above
-// it. The bottom cap stays, because shadows need a solid tile while tiles rise. Normals are
-// left as they were computed, so the faces that stay shade exactly as before.
-const dropBuriedFaces = (geometry, bandTop) => {
+// A unit tessera: a flat top with clipped corners and a softened, smooth-shaded edge, so the
+// raking light draws a thin bright rim on every tile.
+export const tesseraGeometry = () => {
+    const extruded = extrudeOutline(0.5 - BEVEL_SIZE, 0.05, {
+        depth: 1 - 2 * BEVEL_THICKNESS,
+        bevelEnabled: true,
+        bevelThickness: BEVEL_THICKNESS,
+        bevelSize: BEVEL_SIZE,
+        bevelSegments: 2,
+    }).translate(0, BEVEL_THICKNESS, 0);
+    // Sharing vertices lets each one carry the average of the faces around it, which is what
+    // turns the bevel into one continuous softened edge.
+    const geometry = mergeVertices(extruded);
+    geometry.computeVertexNormals();
+    capBuriedBand(geometry, BEVEL_THICKNESS);
+    return geometry;
+};
+
+// The same tessera as a plain prism, for tiles too blurred to show the bevel. Its outline
+// matches the widest one of the beveled tile, and nothing is shared between faces, so the
+// computed normals are the face normals: flat sides.
+export const flatTesseraGeometry = () => {
+    const geometry = extrudeOutline(0.5, 0.05 + BEVEL_SIZE * (2 - Math.SQRT2), { depth: 1, bevelEnabled: false });
+    geometry.computeVertexNormals();
+    return geometry;
+};
+
+// Mortar always covers the bottom bevel band of a settled tile, so it is replaced, with the
+// cap under it, by one cap across the foot of the side wall. The tile stays a closed solid,
+// which the back-face shadow pass and the camera both need while it rises above the mortar.
+// Normals are left as they were computed, so the faces that stay shade exactly as before.
+const capBuriedBand = (geometry, bandTop) => {
     const positions = geometry.getAttribute('position');
-    const exposed = [];
+    const faces = [];
     for (let face = 0; face < geometry.index.count; face += 3) {
         const corners = [face, face + 1, face + 2].map((corner) => geometry.index.getX(corner));
-        const top = Math.max(...corners.map((corner) => positions.getY(corner)));
-        if (top < 1e-6 || top > bandTop + 1e-6) {
-            exposed.push(...corners);
+        if (Math.max(...corners.map((corner) => positions.getY(corner))) > bandTop + 1e-6) {
+            faces.push(...corners);
         }
     }
-    geometry.setIndex(exposed);
+    // The outline is convex, so a fan around the foot ring closes it. Ordered by angle in the
+    // xz plane, the fan faces down.
+    const angle = (vertex) => Math.atan2(positions.getZ(vertex), positions.getX(vertex));
+    const ring = Array.from({ length: positions.count }, (_, vertex) => vertex)
+        .filter((vertex) => Math.abs(positions.getY(vertex) - bandTop) < 1e-6)
+        .sort((a, b) => angle(a) - angle(b));
+    for (let index = 1; index < ring.length - 1; index += 1) {
+        faces.push(ring[0], ring[index], ring[index + 1]);
+    }
+    geometry.setIndex(faces);
 };
 
 // Value noise for the hand-made surface detail of tiles and mortar.

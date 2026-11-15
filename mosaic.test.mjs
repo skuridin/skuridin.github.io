@@ -36,7 +36,9 @@ const setup = async ({ width = 1000, height = 700, reduceMotion = true, floatSup
             this.sceneRenders = 0;
             this.totalRenders = 0;
             this.shadowRenders = 0;
+            this.contextLost = false;
         }
+        getContext() { return { isContextLost: () => this.contextLost }; }
         dispose() { this.disposed = true; }
         setClearColor() {}
         setPixelRatio(value) { this.pixelRatio = value; }
@@ -45,6 +47,10 @@ const setup = async ({ width = 1000, height = 700, reduceMotion = true, floatSup
         compileAsync() { return compile(hero, this); }
         setAnimationLoop(callback) { this.frame = callback; }
         render(scene, camera) {
+            // Like three.js, a lost context draws nothing.
+            if (this.contextLost) {
+                return;
+            }
             this.totalRenders += 1;
             if (scene.isScene) {
                 this.scene = scene;
@@ -95,6 +101,10 @@ const setup = async ({ width = 1000, height = 700, reduceMotion = true, floatSup
         renderer, time, settleMs: TILE_SETTLE_MS, hero, listeners, canvasListeners, classes, errors, document,
         window: context.window,
         intersect: (isIntersecting) => intersection([{ isIntersecting }]),
+        setContextLost: (lost) => {
+            renderer.contextLost = lost;
+            canvasListeners[lost ? 'webglcontextlost' : 'webglcontextrestored']();
+        },
     };
 };
 
@@ -204,24 +214,19 @@ test('assembly draws exactly the tiles that have started, in the order they star
     assertComplete(page);
 });
 
-test('tile geometry keeps its caps, and opens only where mortar covers it', () => {
-    // The beveled tile loses the bevel band that mortar buries; the flat one keeps every face.
-    for (const [segments, bandTop] of [[2, 0.06], [0, 0]]) {
-        const geometry = shaders.tesseraGeometry(segments);
+test('tile geometry is a closed solid with its top at 1 and its foot under the mortar', () => {
+    // The beveled tile swaps the bevel band that mortar buries for a cap at its foot.
+    for (const [geometry, foot] of [[shaders.tesseraGeometry(), 0.06], [shaders.flatTesseraGeometry(), 0]]) {
         const material = new three.MeshStandardMaterial();
         const mesh = new three.Mesh(geometry, material);
         mesh.updateMatrixWorld();
         const fromAbove = new three.Raycaster(new three.Vector3(0, 2, 0), new three.Vector3(0, -1, 0));
         const fromBelow = new three.Raycaster(new three.Vector3(0, -1, 0), new three.Vector3(0, 1, 0));
         assert.ok(Math.abs(fromAbove.intersectObject(mesh)[0]?.point.y - 1) < 1e-6);
-        assert.ok(Math.abs(fromBelow.intersectObject(mesh)[0]?.point.y) < 1e-6);
-        // The shadow pass draws the back faces, so the shell must stay closed apart from the
-        // band the mortar plane stands above.
-        const openings = openEdgeHeights(geometry);
-        for (const height of openings) {
-            assert.ok(height <= bandTop + 1e-6, `Opening at height ${height} is above the buried band`);
-        }
-        assert.equal(openings.length > 0, segments > 0, 'Only the beveled tile should open at all');
+        assert.ok(Math.abs(fromBelow.intersectObject(mesh)[0]?.point.y - foot) < 1e-6);
+        // The shadow pass draws the back faces, and tiles rise above the mortar while they
+        // assemble, so the shell must have no opening anywhere.
+        assert.deepEqual(openEdgeHeights(geometry), []);
         geometry.dispose();
         material.dispose();
     }
@@ -230,16 +235,15 @@ test('tile geometry keeps its caps, and opens only where mortar covers it', () =
 test('a tile carries its shape into whichever batch it lands in', () => {
     const tiles = pattern.build({ radius: 100, pitch: 10, reach: 150, reveal: 300, visible: () => true })
         .slice(0, 4);
-    tileData.assignTileShapes(tiles);
     const geometry = shaders.tesseraGeometry();
     const material = new three.MeshStandardMaterial();
     const all = tileData.createTileMesh(tiles, geometry, material, null);
     const sorted = [...tiles].sort((a, b) => a.at - b.at);
     sorted.forEach((tile, index) => {
         assert.deepEqual(rowOf(all, 'aAt', index), stored([tile.at]));
-        assert.deepEqual(rowOf(all, 'aCut0', index), stored(tile.cuts.slice(0, 4).map((value) => value - 0.5)));
-        assert.deepEqual(rowOf(all, 'aCut1', index), stored(tile.cuts.slice(4).map((value) => value - 0.5)));
-        assert.deepEqual(rowOf(all, 'aSeed', index), stored([tile.seed * 64]));
+        assert.deepEqual(rowOf(all, 'aCut0', index), stored(tile.cuts.slice(0, 4)));
+        assert.deepEqual(rowOf(all, 'aCut1', index), stored(tile.cuts.slice(4)));
+        assert.deepEqual(rowOf(all, 'aSeed', index), stored([tile.seed]));
     });
     const alone = tileData.createTileMesh([tiles[2]], geometry, material, null);
     for (const name of ['aCut0', 'aCut1', 'aSeed', 'aAt', 'aGloss']) {
@@ -254,26 +258,24 @@ test('a tile carries its shape into whichever batch it lands in', () => {
 });
 
 test('tile shapes repeat for the same floor and differ between tiles', () => {
-    const built = () => Array.from({ length: 5 }, (_, index) => ({ index }));
+    const built = () => pattern.build({ radius: 100, pitch: 10, reach: 150, reveal: 300, visible: () => true });
     const first = built();
     const second = built();
-    tileData.assignTileShapes(first);
-    tileData.assignTileShapes(second);
     const shape = (tile) => [...tile.cuts, tile.seed];
     first.forEach((tile, index) => assert.deepEqual(shape(tile), shape(second[index]),
         'The same floor gets the same shapes'));
     assert.equal(new Set(first.map((tile) => shape(tile).join())).size, first.length, 'Tiles must differ');
     assert.ok(first.every((tile) => tile.cuts.length === 8
-        && [...tile.cuts, tile.seed].every((value) => value >= 0 && value < 1)));
+        && tile.cuts.every((value) => value >= -0.5 && value < 0.5)
+        && tile.seed >= 0 && tile.seed < 64));
 });
 
 test('tiles split into one detailed and one blurred mesh per kind', () => {
     const tiles = pattern.build({ radius: 400, pitch: 20, reach: 900, reveal: 300, visible: () => true })
         .filter((tile) => tile.kind === 'smalti');
-    tileData.assignTileShapes(tiles);
     const far = (tile) => Math.hypot(tile.x, tile.z) > 200;
     const detailedGeometry = shaders.tesseraGeometry();
-    const blurredGeometry = shaders.tesseraGeometry(0);
+    const blurredGeometry = shaders.flatTesseraGeometry();
     const material = new three.MeshStandardMaterial();
     const meshes = tileData.createTileMeshes({
         tiles,
@@ -301,7 +303,7 @@ test('simpler geometry stays outside the focus band throughout assembly and came
     const page = await setup();
     const triangles = (geometry) => (geometry.index ? geometry.index.count : geometry.attributes.position.count) / 3;
     const detailedGeometry = shaders.tesseraGeometry();
-    const blurredGeometry = shaders.tesseraGeometry(0);
+    const blurredGeometry = shaders.flatTesseraGeometry();
     const { focus, aperture, maxBlur, minBlur } = shaders.LENS;
     const coarse = tileMeshes(page).filter((mesh) => triangles(mesh.geometry) === triangles(blurredGeometry));
     const fine = tileMeshes(page).filter((mesh) => triangles(mesh.geometry) === triangles(detailedGeometry));
@@ -561,27 +563,26 @@ test('context restoration redraws a resting floor', async () => {
     frame(page, 10016);
     assert.equal(page.renderer.frame, null);
     const renders = page.renderer.sceneRenders;
-    page.canvasListeners.webglcontextlost();
+    page.setContextLost(true);
     assert.equal(page.classes.has('is-ready'), false);
-    page.canvasListeners.webglcontextrestored();
+    page.setContextLost(false);
     assert.ok(page.renderer.sceneRenders > renders);
     assert.ok(page.classes.has('is-ready'));
     frame(page, 10032);
     assert.equal(page.renderer.frame, null);
 });
 
-test('a resize during context loss relays the floor when the context returns', async () => {
+test('a resize during context loss shows the new floor when the context returns', async () => {
     const page = await setup({ width: 390, height: 844, reduceMotion: false });
     frame(page, 0);
-    page.canvasListeners.webglcontextlost();
+    page.setContextLost(true);
     page.hero.clientWidth = 1440;
     page.hero.clientHeight = 900;
     await resize(page);
     page.window.scrollY = 100;
     page.listeners.scroll();
     assert.equal(page.renderer.frame, null);
-    assert.equal(page.renderer.sceneTarget.width, 390);
-    page.canvasListeners.webglcontextrestored();
+    page.setContextLost(false);
     frame(page, 10000);
     assertComplete(page);
     assert.equal(page.renderer.sceneTarget.width, 1440);

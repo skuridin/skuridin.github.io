@@ -22,8 +22,8 @@ import {
     WebGLRenderer,
 } from './vendor/three.min.js';
 import { build } from './mosaic-pattern.js';
-import { assignTileShapes, blurClassifier, createTileMeshes, revealTiles } from './mosaic-tiles.js';
-import { BOKEH_FRAGMENT, COMPOSITE_FRAGMENT, FULLSCREEN_VERTEX, LENS, TILE_SETTLE_MS, mortarMaterial, tesseraGeometry, tesseraMaterial, time } from './mosaic-shaders.js';
+import { blurClassifier, createTileMeshes, revealTiles } from './mosaic-tiles.js';
+import { BOKEH_FRAGMENT, COMPOSITE_FRAGMENT, FULLSCREEN_VERTEX, LENS, TILE_SETTLE_MS, flatTesseraGeometry, mortarMaterial, tesseraGeometry, tesseraMaterial, time } from './mosaic-shaders.js';
 
 const canvas = document.querySelector('.mosaic');
 const hero = canvas && canvas.closest('.hero');
@@ -59,7 +59,6 @@ const start = async () => {
         return;
     }
     let shaderFailed = false;
-    let contextLost = false;
     renderer.debug.onShaderError = (gl, program) => {
         shaderFailed = true;
         canvas.classList.remove('is-ready');
@@ -73,7 +72,7 @@ const start = async () => {
     renderer.shadowMap.autoUpdate = false;
 
     const tessera = tesseraGeometry();
-    const coarseTessera = tesseraGeometry(0);
+    const flatTessera = flatTesseraGeometry();
     const materials = {
         stone: tesseraMaterial(new MeshStandardMaterial({ roughness: 0.75 })),
         smalti: tesseraMaterial(new MeshStandardMaterial({ roughness: 0.55 })),
@@ -154,9 +153,8 @@ const start = async () => {
     let view;
     let meshes = [];
     // Overscroll above the top must not tip the floor the other way.
-    const onScroll = () => {
+    const measureScroll = () => {
         scrolled = Math.min(Math.max(window.scrollY, 0) / (view.height / 2), 1);
-        wake();
     };
 
     // Orbits the camera around the emblem: `x` tips the floor back, `y` turns it sideways.
@@ -233,7 +231,6 @@ const start = async () => {
                 return Math.abs(probe.x) < 1.15 && Math.abs(probe.y) < 1.15;
             }),
         });
-        assignTileShapes(tiles);
 
         meshes.forEach((mesh) => {
             scene.remove(mesh);
@@ -244,7 +241,7 @@ const start = async () => {
             tiles,
             materials,
             detailedGeometry: tessera,
-            blurredGeometry: coarseTessera,
+            blurredGeometry: flatTessera,
             shadowMaterial,
             isBlurred: blurClassifier(poses.map(({ view }) => view), BLUR_SLACK),
         });
@@ -264,7 +261,7 @@ const start = async () => {
         key.target.updateMatrixWorld();
         const finishAt = Math.ceil(tiles.reduce((end, tile) => Math.max(end, tile.at + TILE_SETTLE_MS), 0));
         view = { width, height, pixelRatio, rest, lean: { ...rest }, finishAt, dirty: true };
-        onScroll();
+        measureScroll();
     };
 
     // Renders the scene only when something in it moved.
@@ -282,30 +279,24 @@ const start = async () => {
         }
         // Keep rendering until one frame shows the settled floor, however slow the frames are.
         const settling = !view.settled;
-
-        // The grain holds still when the floor stops, so the GPU can idle.
-        const grain = settling || leaning
-            ? Math.floor(now / 42) % 1000
-            : composite.uniforms.uGrain.value;
-        if (!view.dirty && !settling && !leaning && grain === composite.uniforms.uGrain.value) {
+        if (!view.dirty && !settling && !leaning) {
             return false;
         }
-        composite.uniforms.uGrain.value = grain;
 
-        if (view.dirty || settling || leaning) {
-            for (const mesh of meshes) {
-                revealTiles(mesh, time.value);
-            }
-            aim(lean);
-            renderer.shadowMap.needsUpdate = view.dirty || settling;
-            view.dirty = false;
-            view.settled = time.value >= view.finishAt;
-            renderer.setRenderTarget(sceneTarget);
-            renderer.render(scene, camera);
-            screen.material = bokeh;
-            renderer.setRenderTarget(bokehTarget);
-            renderer.render(screen, camera);
+        // The grain moves with the frames, and holds still once the loop stops.
+        composite.uniforms.uGrain.value = Math.floor(now / 42) % 1000;
+        for (const mesh of meshes) {
+            revealTiles(mesh, time.value);
         }
+        aim(lean);
+        renderer.shadowMap.needsUpdate = view.dirty || settling;
+        view.dirty = false;
+        view.settled = time.value >= view.finishAt;
+        renderer.setRenderTarget(sceneTarget);
+        renderer.render(scene, camera);
+        screen.material = bokeh;
+        renderer.setRenderTarget(bokehTarget);
+        renderer.render(screen, camera);
         screen.material = composite;
         renderer.setRenderTarget(null);
         renderer.render(screen, camera);
@@ -322,6 +313,7 @@ const start = async () => {
         }
     };
 
+    // Only the intersection observer sets this, and it runs only when motion is allowed.
     let visible = false;
     const frame = (now) => {
         if (startAt === undefined) {
@@ -334,17 +326,15 @@ const start = async () => {
             renderer.setAnimationLoop(null);
         }
     };
-    const wake = () => {
-        if (!reduceMotion && visible && !document.hidden && !contextLost) {
-            renderer.setAnimationLoop(frame);
-        }
+    // Runs frames while the hero can be seen and drawn. A frame stops the loop itself once the
+    // floor is still, and anything that can move it calls this again.
+    const syncLoop = () => {
+        const drawable = visible && !document.hidden && !renderer.getContext().isContextLost();
+        renderer.setAnimationLoop(drawable ? frame : null);
     };
 
     // Lays the floor out again only when the hero size or the screen density changed.
     const relayout = () => {
-        if (contextLost) {
-            return;
-        }
         const [width, height] = size();
         if (width === view.width && height === view.height && pixelRatioFor(width, height) === view.pixelRatio) {
             return;
@@ -357,7 +347,7 @@ const start = async () => {
             // A floor that was already shown appears complete instead of assembling again.
             startAt = Math.min(startAt, performance.now() - view.finishAt);
         }
-        wake();
+        syncLoop();
     };
 
     try {
@@ -394,17 +384,14 @@ const start = async () => {
 
     // If the GPU drops the context, the CSS fallback shows until three.js restores it.
     canvas.addEventListener('webglcontextlost', () => {
-        contextLost = true;
-        renderer.setAnimationLoop(null);
+        syncLoop();
         canvas.classList.remove('is-ready');
     });
     canvas.addEventListener('webglcontextrestored', () => {
-        contextLost = false;
-        relayout();
         view.dirty = true;
         view.settled = false;
         render(performance.now());
-        wake();
+        syncLoop();
         if (shown && !shaderFailed) {
             canvas.classList.add('is-ready');
         }
@@ -436,23 +423,15 @@ const start = async () => {
 
     new IntersectionObserver(([entry]) => {
         visible = entry.isIntersecting;
-        if (visible) {
-            wake();
-        } else {
-            renderer.setAnimationLoop(null);
-        }
+        syncLoop();
     }).observe(canvas);
-
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-            renderer.setAnimationLoop(null);
-        } else {
-            wake();
-        }
-    });
+    document.addEventListener('visibilitychange', syncLoop);
 
     // Touch screens have no hover, so the floor follows the scroll while the pointer is away.
-    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('scroll', () => {
+        measureScroll();
+        syncLoop();
+    }, { passive: true });
 
     if (window.matchMedia('(pointer: fine)').matches) {
         hero.addEventListener('pointermove', (event) => {
@@ -460,11 +439,11 @@ const start = async () => {
             pointer.x = event.clientX - rect.left;
             pointer.y = event.clientY - rect.top;
             pointer.active = true;
-            wake();
+            syncLoop();
         });
         hero.addEventListener('pointerleave', () => {
             pointer.active = false;
-            wake();
+            syncLoop();
         });
     }
 };
