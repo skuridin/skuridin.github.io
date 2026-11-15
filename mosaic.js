@@ -22,20 +22,25 @@ import {
     WebGLRenderer,
 } from './vendor/three.min.js';
 import { build } from './mosaic-pattern.js';
-import { createTileMesh, revealTiles, sampleTileShapes, tileIsBlurred } from './mosaic-tiles.js';
-import { BOKEH_FRAGMENT, COMPOSITE_FRAGMENT, FULLSCREEN_VERTEX, TILE_SETTLE_MS, mortarMaterial, tesseraGeometry, tesseraMaterial, time } from './mosaic-shaders.js';
+import { assignTileShapes, blurClassifier, createTileMeshes, revealTiles } from './mosaic-tiles.js';
+import { BOKEH_FRAGMENT, COMPOSITE_FRAGMENT, FULLSCREEN_VERTEX, LENS, TILE_SETTLE_MS, mortarMaterial, tesseraGeometry, tesseraMaterial, time } from './mosaic-shaders.js';
 
 const canvas = document.querySelector('.mosaic');
 const hero = canvas && canvas.closest('.hero');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const INK = '#061614';
-const DISTANCE = 1100;
-const APERTURE = 1.4;
-const MAX_BLUR = 24;
+// The camera orbits the emblem at the focus distance, so the emblem is the sharp part.
+const DISTANCE = LENS.focus;
 const LEAN = { x: 3, y: 4 };
 const DEGREE = Math.PI / 180;
 const LIGHT_FROM = new Vector3(0.85, 0.5, -0.2).normalize();
+// How far a tile can move in view depth around the sampled camera poses: the camera leans
+// this far, and a tile's shadow stretches this far across the mortar.
+const BLUR_SLACK = {
+    lean: Math.hypot(LEAN.x, LEAN.y) * DEGREE,
+    shadowRatio: Math.hypot(LIGHT_FROM.x, LIGHT_FROM.z) / LIGHT_FROM.y,
+};
 
 // At most about 3.2 million pixels per pass, so large high-DPI screens do not multiply the GPU work.
 const pixelRatioFor = (width, height) => Math.min(window.devicePixelRatio || 1, 1.5, Math.sqrt(3.2e6 / (width * height)));
@@ -74,11 +79,6 @@ const start = async () => {
         smalti: tesseraMaterial(new MeshStandardMaterial({ roughness: 0.55 })),
         gold: tesseraMaterial(new MeshStandardMaterial({ metalness: 0.35, roughness: 0.4, emissive: '#2a1a04' })),
     };
-    const coarseMaterials = Object.fromEntries(Object.entries(materials).map(([kind, material]) => {
-        const coarse = material.clone();
-        coarse.flatShading = true;
-        return [kind, tesseraMaterial(coarse)];
-    }));
     // The shadow pass draws back faces; setting that up front lets the program compile before the first frame.
     const shadowMaterial = tesseraMaterial(new MeshDepthMaterial({ side: BackSide }));
 
@@ -109,7 +109,7 @@ const start = async () => {
         uNear: { value: camera.near },
         uFar: { value: camera.far },
         uFocus: { value: DISTANCE },
-        uAperture: { value: APERTURE },
+        uAperture: { value: LENS.aperture },
         uColor: { value: sceneTarget.texture },
         uMaxBlur: { value: 1 },
     };
@@ -153,7 +153,6 @@ const start = async () => {
     let scrolled = 0;
     let view;
     let meshes = [];
-    let tileShapes = new Float32Array();
     // Overscroll above the top must not tip the floor the other way.
     const onScroll = () => {
         scrolled = Math.min(Math.max(window.scrollY, 0) / (view.height / 2), 1);
@@ -191,9 +190,9 @@ const start = async () => {
         bokehTarget.setSize(Math.ceil(pixels[0] / 2), Math.ceil(pixels[1] / 2));
         bokeh.uniforms.uTexel.value.set(2 / pixels[0], 2 / pixels[1]);
         composite.uniforms.uBokehTexel.value.set(2 / pixels[0], 2 / pixels[1]);
-        // The largest blur is about 24 CSS pixels; the bokeh pass counts in half-resolution pixels.
-        bokeh.uniforms.uMaxBlur.value = (MAX_BLUR * pixelRatio) / 2;
-        composite.uniforms.uMaxBlur.value = MAX_BLUR * pixelRatio;
+        // The bokeh pass counts in half-resolution pixels of the blur the lens asks for.
+        bokeh.uniforms.uMaxBlur.value = (LENS.maxBlur * pixelRatio) / 2;
+        composite.uniforms.uMaxBlur.value = LENS.maxBlur * pixelRatio;
 
         // A low macro view: the floor tips far back and the emblem fills the frame.
         const rest = { x: wide ? 62 : 56, y: 0 };
@@ -206,19 +205,21 @@ const start = async () => {
 
         const radius = wide ? width * 0.72 : width * 1.6;
         const pitch = radius / 50;
-        const corners = [];
-        const views = [];
-        const projections = [[0, 0], [-LEAN.x, -LEAN.y], [-LEAN.x, LEAN.y], [LEAN.x, -LEAN.y], [LEAN.x, LEAN.y]]
+        // Where the camera can be: the resting pose and the four extremes of the pointer lean.
+        const poses = [[0, 0], [-LEAN.x, -LEAN.y], [-LEAN.x, LEAN.y], [LEAN.x, -LEAN.y], [LEAN.x, LEAN.y]]
             .map(([x, y]) => {
                 aim({ x: rest.x + x, y: rest.y + y });
-                views.push(camera.matrixWorldInverse.clone());
-                corners.push(...[[-1, -1], [1, -1], [-1, 1], [1, 1]]
-                    .map(([nx, ny]) => groundAt(nx, ny, new Vector3())));
-                return camera.projectionMatrix.clone().multiply(camera.matrixWorldInverse);
+                return {
+                    view: camera.matrixWorldInverse.clone(),
+                    projection: camera.projectionMatrix.clone().multiply(camera.matrixWorldInverse),
+                    // Where this pose frames the floor.
+                    ground: [[-1, -1], [1, -1], [-1, 1], [1, 1]].map(([nx, ny]) => groundAt(nx, ny, new Vector3())),
+                };
             });
         aim(rest);
         const far = radius * 2.4;
-        const reach = Math.min(far, Math.max(...corners.map((corner) => (corner ? corner.length() : far)))) * 1.1;
+        const reach = Math.min(far, Math.max(...poses.flatMap(({ ground }) => ground)
+            .map((corner) => (corner ? corner.length() : far)))) * 1.1;
 
         // Keep the tiles visible from rest or any pointer extreme, with room for their edges.
         const probe = new Vector3();
@@ -227,46 +228,27 @@ const start = async () => {
             reach,
             pitch,
             reveal: Math.hypot(width, height),
-            visible: (x, z) => projections.some((projection) => {
+            visible: (x, z) => poses.some(({ projection }) => {
                 probe.set(x, 0, z).applyMatrix4(projection);
                 return Math.abs(probe.x) < 1.15 && Math.abs(probe.y) < 1.15;
             }),
         });
+        assignTileShapes(tiles);
 
         meshes.forEach((mesh) => {
             scene.remove(mesh);
             mesh.geometry.dispose();
             mesh.dispose();
         });
-        const groups = Object.entries(materials).map(([kind, material]) => ({
-            material,
-            coarseMaterial: coarseMaterials[kind],
-            tiles: tiles.filter((tile) => tile.kind === kind).map((tile, id) => ({ ...tile, id })),
-        }));
-        const shapeCount = Math.max(...groups.map((group) => group.tiles.length));
-        if (tileShapes.length < shapeCount * 9) {
-            tileShapes = sampleTileShapes(renderer, camera, shapeCount);
-        }
-        const focusBand = {
-            focus: DISTANCE,
-            aperture: APERTURE,
-            maxBlur: MAX_BLUR,
-            minBlur: 6,
-            lean: Math.hypot(LEAN.x, LEAN.y) * DEGREE,
-            shadowRatio: Math.hypot(LIGHT_FROM.x, LIGHT_FROM.z) / LIGHT_FROM.y,
-        };
-        meshes = groups.flatMap(({ tiles: own, material, coarseMaterial }) => {
-            const batches = [[], []];
-            own.forEach((tile) => batches[Number(tileIsBlurred(tile, views, focusBand))].push(tile));
-            return batches.flatMap((batch, index) => {
-                if (!batch.length) {
-                    return [];
-                }
-                const mesh = createTileMesh(batch, index ? coarseTessera : tessera, index ? coarseMaterial : material, shadowMaterial, tileShapes);
-                scene.add(mesh);
-                return [mesh];
-            });
+        meshes = createTileMeshes({
+            tiles,
+            materials,
+            detailedGeometry: tessera,
+            blurredGeometry: coarseTessera,
+            shadowMaterial,
+            isBlurred: blurClassifier(poses.map(({ view }) => view), BLUR_SLACK),
         });
+        meshes.forEach((mesh) => scene.add(mesh));
 
         floor.scale.set(reach * 3, 1, reach * 3);
         floor.position.y = pitch * 0.12;

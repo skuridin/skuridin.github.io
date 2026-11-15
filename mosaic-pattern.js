@@ -25,8 +25,9 @@ const GOLD_CHIPS = 0.015;
 const ASSEMBLE_MS = 2400;
 const DEGREE = Math.PI / 180;
 
-// Seeded so the pattern stays the same between visits and resizes.
-const seeded = (seed) => () => {
+// Seeded so the pattern stays the same between visits and resizes. Shared with the tile
+// shapes, which need the same kind of repeatable randomness.
+export const seeded = (seed) => () => {
     seed = (seed + 0x6d2b79f5) | 0;
     let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
     t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;

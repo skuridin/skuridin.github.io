@@ -66,10 +66,6 @@ const setup = async ({ width = 1000, height = 700, reduceMotion = true, floatSup
         ...pattern,
         ...shaders,
         ...tileData,
-        sampleTileShapes: (renderer, _camera, count) => {
-            renderer.shapeSamples = (renderer.shapeSamples || 0) + 1;
-            return Float32Array.from({ length: count * 9 }, (_, index) => index % 9 / 9);
-        },
         WebGLRenderer: Renderer,
         document,
         window: {
@@ -104,6 +100,40 @@ const setup = async ({ width = 1000, height = 700, reduceMotion = true, floatSup
 
 const frame = (page, now) => page.renderer.frame?.(now);
 
+// The height of each vertex of an edge used by only one triangle, which is an opening in the
+// shell. Vertices are keyed by position, because a flat tile repeats them so each face keeps
+// its own normal.
+const openEdgeHeights = (geometry) => {
+    const positions = geometry.getAttribute('position');
+    const index = geometry.index;
+    const faces = index ? index.count : positions.count;
+    const cornerOf = (i) => {
+        const vertex = index ? index.getX(i) : i;
+        return [positions.getX(vertex), positions.getY(vertex), positions.getZ(vertex)]
+            .map((value) => value.toFixed(4))
+            .join(',');
+    };
+    const uses = new Map();
+    for (let face = 0; face < faces; face += 3) {
+        const corners = [face, face + 1, face + 2].map(cornerOf);
+        for (const [u, v] of [[0, 1], [1, 2], [2, 0]]) {
+            const key = corners[u] < corners[v] ? `${corners[u]}|${corners[v]}` : `${corners[v]}|${corners[u]}`;
+            uses.set(key, (uses.get(key) ?? 0) + 1);
+        }
+    }
+    return [...uses]
+        .filter(([, times]) => times === 1)
+        .map(([key]) => Number(key.split('|')[0].split(',')[1]));
+};
+
+const rowOf = (mesh, name, index) => {
+    const attribute = mesh.geometry.getAttribute(name);
+    return Array.from(attribute.array.slice(attribute.itemSize * index, attribute.itemSize * (index + 1)));
+};
+
+// Attributes store 32-bit values, so compare what the tile will really be given.
+const stored = (values) => Array.from(new Float32Array(values));
+
 const resize = async (page) => {
     page.listeners.resize();
     await new Promise((resolve) => setTimeout(resolve, 175));
@@ -126,12 +156,10 @@ const assertComplete = (page) => {
 test('reduced motion shows all tiles, including after a mobile-to-desktop resize', async () => {
     const page = await setup({ width: 390, height: 844 });
     assertComplete(page);
-    assert.equal(page.renderer.shapeSamples, 1);
     page.hero.clientWidth = 1440;
     page.hero.clientHeight = 900;
     await resize(page);
     assertComplete(page);
-    assert.equal(page.renderer.shapeSamples, 2);
     assert.ok(page.classes.has('is-ready'));
 });
 
@@ -158,27 +186,27 @@ test('4K pointer lean retains tiles that start outside the resting view', async 
     assert.equal(tileAt(-7083.290787380882, -1380.234941933337), true);
 });
 
-test('assembly draws all started tiles without drawing the unused instance tail', async () => {
+test('assembly draws exactly the tiles that have started, in the order they start', async () => {
     const page = await setup({ reduceMotion: false });
     const tiles = tileMeshes(page);
     frame(page, 0);
     assert.ok(tiles.every((mesh) => mesh.count === 0));
-    let outOfOrder = false;
     for (const now of [300, 900, 1600, 3400, 10000]) {
         frame(page, now);
         for (const mesh of tiles) {
             const at = mesh.geometry.getAttribute('aAt').array;
-            outOfOrder ||= at.some((value, index) => index > 0 && value < at[index - 1]);
-            const lastStarted = at.findLastIndex((start) => start <= page.time.value);
-            assert.equal(mesh.count, lastStarted + 1);
+            assert.ok(at.every((value, index) => index === 0 || value >= at[index - 1]),
+                'Instances must be ordered by the time their tile starts');
+            const started = at.filter((start) => start <= page.time.value).length;
+            assert.equal(mesh.count, started, 'Draw every tile that has started and no other');
         }
     }
-    assert.ok(outOfOrder, 'Cover tiles that start before an earlier instance');
     assertComplete(page);
 });
 
-test('tile geometry retains top and bottom caps for solid shadows during assembly', () => {
-    for (const segments of [2, 0]) {
+test('tile geometry keeps its caps, and opens only where mortar covers it', () => {
+    // The beveled tile loses the bevel band that mortar buries; the flat one keeps every face.
+    for (const [segments, bandTop] of [[2, 0.06], [0, 0]]) {
         const geometry = shaders.tesseraGeometry(segments);
         const material = new three.MeshStandardMaterial();
         const mesh = new three.Mesh(geometry, material);
@@ -187,90 +215,108 @@ test('tile geometry retains top and bottom caps for solid shadows during assembl
         const fromBelow = new three.Raycaster(new three.Vector3(0, -1, 0), new three.Vector3(0, 1, 0));
         assert.ok(Math.abs(fromAbove.intersectObject(mesh)[0]?.point.y - 1) < 1e-6);
         assert.ok(Math.abs(fromBelow.intersectObject(mesh)[0]?.point.y) < 1e-6);
+        // The shadow pass draws the back faces, so the shell must stay closed apart from the
+        // band the mortar plane stands above.
+        const openings = openEdgeHeights(geometry);
+        for (const height of openings) {
+            assert.ok(height <= bandTop + 1e-6, `Opening at height ${height} is above the buried band`);
+        }
+        assert.equal(openings.length > 0, segments > 0, 'Only the beveled tile should open at all');
         geometry.dispose();
         material.dispose();
     }
 });
 
-test('tile shapes stay the same when tiles move into a different batch', () => {
+test('a tile carries its shape into whichever batch it lands in', () => {
     const tiles = pattern.build({ radius: 100, pitch: 10, reach: 150, reveal: 300, visible: () => true })
-        .slice(0, 4).map((tile, id) => ({ ...tile, id }));
-    const shapes = Float32Array.from({ length: 36 }, (_, index) => (index + 1) / 37);
+        .slice(0, 4);
+    tileData.assignTileShapes(tiles);
     const geometry = shaders.tesseraGeometry();
     const material = new three.MeshStandardMaterial();
-    const all = tileData.createTileMesh(tiles, geometry, material, null, shapes);
-    const split = tileData.createTileMesh([tiles[3]], geometry, material, null, shapes);
+    const all = tileData.createTileMesh(tiles, geometry, material, null);
+    const sorted = [...tiles].sort((a, b) => a.at - b.at);
+    sorted.forEach((tile, index) => {
+        assert.deepEqual(rowOf(all, 'aAt', index), stored([tile.at]));
+        assert.deepEqual(rowOf(all, 'aCut0', index), stored(tile.cuts.slice(0, 4).map((value) => value - 0.5)));
+        assert.deepEqual(rowOf(all, 'aCut1', index), stored(tile.cuts.slice(4).map((value) => value - 0.5)));
+        assert.deepEqual(rowOf(all, 'aSeed', index), stored([tile.seed * 64]));
+    });
+    const alone = tileData.createTileMesh([tiles[2]], geometry, material, null);
     for (const name of ['aCut0', 'aCut1', 'aSeed', 'aAt', 'aGloss']) {
-        const original = all.geometry.getAttribute(name);
-        assert.deepEqual(split.geometry.getAttribute(name).array, original.array.slice(original.itemSize * 3, original.itemSize * 4));
+        assert.deepEqual(rowOf(alone, name, 0), rowOf(all, name, sorted.indexOf(tiles[2])));
     }
     geometry.dispose();
     all.geometry.dispose();
-    split.geometry.dispose();
+    alone.geometry.dispose();
     all.dispose();
-    split.dispose();
+    alone.dispose();
     material.dispose();
 });
 
-test('shape sampling restores renderer state and disposes resources if rendering fails', () => {
-    const previous = {};
-    const disposed = [];
-    let target = previous;
-    let dithering = true;
-    const gl = { DITHER: 1, isEnabled: () => dithering, disable: () => { dithering = false; }, enable: () => { dithering = true; } };
-    const renderer = {
-        getRenderTarget: () => target,
-        getContext: () => gl,
-        setRenderTarget: (next) => {
-            target = next;
-            if (next !== previous) next.addEventListener('dispose', () => disposed.push('target'));
-        },
-        render: (mesh) => {
-            mesh.geometry.addEventListener('dispose', () => disposed.push('geometry'));
-            mesh.material.addEventListener('dispose', () => disposed.push('material'));
-            throw new Error('sampling failed');
-        },
-    };
-    assert.throws(() => tileData.sampleTileShapes(renderer, {}, 1), /sampling failed/);
-    assert.equal(target, previous);
-    assert.equal(dithering, true);
-    assert.deepEqual(disposed, ['target', 'geometry', 'material']);
+test('tile shapes repeat for the same floor and differ between tiles', () => {
+    const built = () => Array.from({ length: 5 }, (_, index) => ({ index }));
+    const first = built();
+    const second = built();
+    tileData.assignTileShapes(first);
+    tileData.assignTileShapes(second);
+    const shape = (tile) => [...tile.cuts, tile.seed];
+    first.forEach((tile, index) => assert.deepEqual(shape(tile), shape(second[index]),
+        'The same floor gets the same shapes'));
+    assert.equal(new Set(first.map((tile) => shape(tile).join())).size, first.length, 'Tiles must differ');
+    assert.ok(first.every((tile) => tile.cuts.length === 8
+        && [...tile.cuts, tile.seed].every((value) => value >= 0 && value < 1)));
 });
 
-test('shape sampling decodes float bytes and rejects data from a lost context', () => {
-    const expected = Float32Array.from([0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 0.1, 0.2]);
-    let lost = false;
-    let target = null;
-    const renderer = {
-        getRenderTarget: () => target,
-        setRenderTarget: (next) => { target = next; },
-        getContext: () => ({ DITHER: 1, isEnabled: () => false, disable() {}, isContextLost: () => lost }),
-        render() {},
-        readRenderTargetPixels: (_target, _x, _y, _width, _height, bytes) => {
-            const view = new DataView(bytes.buffer);
-            expected.forEach((value, index) => view.setFloat32(index * 4, value, true));
-        },
-    };
-    assert.deepEqual(tileData.sampleTileShapes(renderer, {}, 1), expected);
-    assert.equal(target, null);
-    lost = true;
-    assert.throws(() => tileData.sampleTileShapes(renderer, {}, 1), /context lost/);
-    assert.equal(target, null);
+test('tiles split into one detailed and one blurred mesh per kind', () => {
+    const tiles = pattern.build({ radius: 400, pitch: 20, reach: 900, reveal: 300, visible: () => true })
+        .filter((tile) => tile.kind === 'smalti');
+    tileData.assignTileShapes(tiles);
+    const far = (tile) => Math.hypot(tile.x, tile.z) > 200;
+    const detailedGeometry = shaders.tesseraGeometry();
+    const blurredGeometry = shaders.tesseraGeometry(0);
+    const material = new three.MeshStandardMaterial();
+    const meshes = tileData.createTileMeshes({
+        tiles,
+        materials: { smalti: material },
+        detailedGeometry,
+        blurredGeometry,
+        shadowMaterial: null,
+        isBlurred: far,
+    });
+    const triangles = (geometry) => (geometry.index ? geometry.index.count : geometry.attributes.position.count) / 3;
+    const detailed = meshes.find((mesh) => triangles(mesh.geometry) === triangles(detailedGeometry));
+    const blurred = meshes.find((mesh) => triangles(mesh.geometry) === triangles(blurredGeometry));
+    assert.equal(meshes.length, 2, 'One mesh per detail level');
+    assert.equal(detailed.instanceMatrix.count + blurred.instanceMatrix.count, tiles.length,
+        'Every tile lands in exactly one batch');
+    assert.equal(blurred.instanceMatrix.count, tiles.filter(far).length);
+    detailedGeometry.dispose();
+    blurredGeometry.dispose();
+    meshes.forEach((mesh) => mesh.dispose());
+    meshes.forEach(({ geometry }) => geometry.dispose());
+    material.dispose();
 });
 
 test('simpler geometry stays outside the focus band throughout assembly and camera lean', async () => {
     const page = await setup();
-    const coarse = tileMeshes(page).filter((mesh) => mesh.geometry.index.count / 3 < 60);
-    const fine = tileMeshes(page).filter((mesh) => mesh.geometry.index.count / 3 === 60);
+    const triangles = (geometry) => (geometry.index ? geometry.index.count : geometry.attributes.position.count) / 3;
+    const detailedGeometry = shaders.tesseraGeometry();
+    const blurredGeometry = shaders.tesseraGeometry(0);
+    const { focus, aperture, maxBlur, minBlur } = shaders.LENS;
+    const coarse = tileMeshes(page).filter((mesh) => triangles(mesh.geometry) === triangles(blurredGeometry));
+    const fine = tileMeshes(page).filter((mesh) => triangles(mesh.geometry) === triangles(detailedGeometry));
     assert.ok(coarse.length > 0 && fine.length > 0);
     const camera = new three.PerspectiveCamera();
     const degree = Math.PI / 180;
     const views = [];
+    // Denser than the poses the layout samples, and higher than a tile ever stands, so this
+    // checks the choice instead of repeating the estimate that made it.
     for (const x of [-3, -1.5, 0, 1.5, 3]) {
         for (const y of [-4, -2, 0, 2, 4]) {
+            // The resting tilt of a wide screen at this size, as layout() sets it.
             const tilt = (62 + x) * degree;
             const up = new three.Vector3(0, Math.sin(tilt), -Math.cos(tilt));
-            camera.position.set(0, Math.cos(tilt), Math.sin(tilt)).applyAxisAngle(up, y * degree).multiplyScalar(1100);
+            camera.position.set(0, Math.cos(tilt), Math.sin(tilt)).applyAxisAngle(up, y * degree).multiplyScalar(focus);
             camera.up.copy(up);
             camera.lookAt(0, 0, 0);
             camera.updateMatrixWorld();
@@ -287,12 +333,14 @@ test('simpler geometry stays outside the focus band throughout assembly and came
             for (const view of views) {
                 for (const y of [0, height * 4]) {
                     const point = new three.Vector3(x, y, z).applyMatrix4(view);
-                    const blur = Math.min(Math.abs(1 - 1100 / -point.z) * 1.4, 1) * 24;
-                    assert.ok(blur >= 6, `Simplified tile entered focus: ${blur}`);
+                    const blur = Math.min(Math.abs(1 - focus / -point.z) * aperture, 1) * maxBlur;
+                    assert.ok(blur >= minBlur, `Simplified tile entered focus: ${blur}`);
                 }
             }
         }
     }
+    detailedGeometry.dispose();
+    blurredGeometry.dispose();
 });
 
 test('animation renders a complete final frame, then stops scene updates', async () => {
@@ -367,7 +415,6 @@ test('a density change with the same CSS size renders at the new pixel ratio', a
     page.listeners['(resolution: 1dppx)']();
     await new Promise((resolve) => setTimeout(resolve, 175));
     assert.equal(page.renderer.pixelRatio, 1.5);
-    assert.equal(page.renderer.shapeSamples, 1);
 });
 
 test('a resize updates the shadow projection to the new light distance', async () => {
@@ -523,7 +570,7 @@ test('context restoration redraws a resting floor', async () => {
     assert.equal(page.renderer.frame, null);
 });
 
-test('a resize during context loss waits to sample tile data until restoration', async () => {
+test('a resize during context loss relays the floor when the context returns', async () => {
     const page = await setup({ width: 390, height: 844, reduceMotion: false });
     frame(page, 0);
     page.canvasListeners.webglcontextlost();
@@ -533,12 +580,10 @@ test('a resize during context loss waits to sample tile data until restoration',
     page.window.scrollY = 100;
     page.listeners.scroll();
     assert.equal(page.renderer.frame, null);
-    assert.equal(page.renderer.shapeSamples, 1);
     assert.equal(page.renderer.sceneTarget.width, 390);
     page.canvasListeners.webglcontextrestored();
     frame(page, 10000);
     assertComplete(page);
-    assert.equal(page.renderer.shapeSamples, 2);
     assert.equal(page.renderer.sceneTarget.width, 1440);
     assert.ok(page.classes.has('is-ready'));
 });

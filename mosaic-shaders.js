@@ -1,9 +1,22 @@
 import { ExtrudeGeometry, MeshStandardMaterial, Shape, mergeVertices } from './vendor/three.min.js';
 
+// The virtual lens, shared by the bokeh pass and by the estimate that picks which tiles can
+// use simpler geometry, so a tile's real blur and the predicted one always agree.
+export const LENS = {
+    // The camera orbits the emblem at this distance, so the emblem is the sharp part.
+    focus: 1100,
+    aperture: 1.4,
+    // The largest blur, in CSS pixels. The bokeh pass works at half resolution.
+    maxBlur: 24,
+    // Below this many CSS pixels of blur a tile no longer resolves, so simpler edges hide.
+    minBlur: 6,
+};
+
 export const TILE_SETTLE_MS = 450;
 
 // A unit tessera standing on y = 0: a flat top with clipped corners and a softened,
-// smooth-shaded edge, so the raking light draws a thin bright rim on every tile.
+// smooth-shaded edge, so the raking light draws a thin bright rim on every tile. A tile
+// without a bevel keeps its vertices apart instead, which keeps its faces flat.
 export const tesseraGeometry = (bevelSegments = 2) => {
     const beveled = bevelSegments > 0;
     const half = beveled ? 0.42 : 0.5;
@@ -30,25 +43,34 @@ export const tesseraGeometry = (bevelSegments = 2) => {
     geometry.translate(0, bevelThickness, 0);
     geometry.deleteAttribute('normal');
     geometry.deleteAttribute('uv');
-    geometry = mergeVertices(geometry);
-    geometry.computeVertexNormals();
-    // Mortar hides the lower bevel after settling. Keep the bottom cap for shadows while tiles rise.
-    // Keep the original normals so removing buried faces does not change the tile tops.
+    if (beveled) {
+        // Sharing vertices lets each one carry the average of the faces around it, which is
+        // what turns the bevel into one continuous softened edge.
+        geometry = mergeVertices(geometry);
+        geometry.computeVertexNormals();
+        dropBuriedFaces(geometry, bevelThickness);
+    } else {
+        // Nothing is shared here, so these normals are the face normals: flat sides.
+        geometry.computeVertexNormals();
+    }
+    return geometry;
+};
+
+// Drops the band of bevel faces that mortar covers once a tile settles. The band it removes
+// leaves the shell open below `bandTop`, which is safe because the mortar plane stands above
+// it. The bottom cap stays, because shadows need a solid tile while tiles rise. Normals are
+// left as they were computed, so the faces that stay shade exactly as before.
+const dropBuriedFaces = (geometry, bandTop) => {
     const positions = geometry.getAttribute('position');
-    const indices = geometry.index.array;
     const exposed = [];
-    for (let index = 0; index < indices.length; index += 3) {
-        const top = Math.max(
-            positions.getY(indices[index]),
-            positions.getY(indices[index + 1]),
-            positions.getY(indices[index + 2]),
-        );
-        if (top < 1e-6 || top > bevelThickness + 1e-6) {
-            exposed.push(indices[index], indices[index + 1], indices[index + 2]);
+    for (let face = 0; face < geometry.index.count; face += 3) {
+        const corners = [face, face + 1, face + 2].map((corner) => geometry.index.getX(corner));
+        const top = Math.max(...corners.map((corner) => positions.getY(corner)));
+        if (top < 1e-6 || top > bandTop + 1e-6) {
+            exposed.push(...corners);
         }
     }
     geometry.setIndex(exposed);
-    return geometry;
 };
 
 // Value noise for the hand-made surface detail of tiles and mortar.
@@ -85,27 +107,27 @@ const TESSERA_FRAGMENT = {
         // How much of a tile one pixel covers; distant tiles lose fine detail instead of sparkling.
         float footprint = length(fwidth(vLocal.xz));
         float detail = 1.0 - smoothstep(0.08, 0.35, footprint);
-        // Stone and smalti are mottled and flecked with darker grains,
-        // and the sides darken where they go down into the mortar.
-        diffuseColor.rgb *= 0.82 + 0.36 * noise3(vLocal * 2.5 + vSeed);
-        if (detail > 0.0) {
-            diffuseColor.rgb *= 1.0 - 0.3 * smoothstep(0.7, 0.85, noise3(vLocal * 9.0 + vSeed)) * detail;
-        }
-        diffuseColor.rgb *= mix(0.35, 1.0, smoothstep(0.15, 0.8, vLocal.y));`,
-    '#include <roughnessmap_fragment>': `#include <roughnessmap_fragment>
+        // One gate covers every fine sample below, and the three terms keep their neutral
+        // values when it is closed, so a distant tile costs the same as an untextured one.
+        float mottle = 1.0;
         float textureRoughness = 0.0;
-        if (detail > 0.0) {
-            textureRoughness = (noise3(vLocal * 6.0 + vSeed) - 0.5) * 0.25 * detail;
-        }
-        roughnessFactor = clamp(roughnessFactor * mix(1.3, 0.7, vGloss) + textureRoughness, 0.05, 1.0);
-        roughnessFactor = max(roughnessFactor, footprint * 1.2);`,
-    '#include <normal_fragment_maps>': `#include <normal_fragment_maps>
-        // A granular, pitted top that the raking light picks out.
         vec3 bump = vec3(0.0);
         if (detail > 0.0) {
+            mottle = 1.0 - 0.3 * smoothstep(0.7, 0.85, noise3(vLocal * 9.0 + vSeed)) * detail;
+            textureRoughness = (noise3(vLocal * 6.0 + vSeed) - 0.5) * 0.25 * detail;
+            // A granular, pitted top that the raking light picks out.
             vec3 grain = vLocal * vec3(4.0, 2.0, 4.0) + vSeed;
             bump = (vec3(noise3(grain), noise3(grain + 19.1), noise3(grain + 37.7)) - 0.5) * detail;
         }
+        // Stone and smalti are mottled and flecked with darker grains,
+        // and the sides darken where they go down into the mortar.
+        diffuseColor.rgb *= 0.82 + 0.36 * noise3(vLocal * 2.5 + vSeed);
+        diffuseColor.rgb *= mottle;
+        diffuseColor.rgb *= mix(0.35, 1.0, smoothstep(0.15, 0.8, vLocal.y));`,
+    '#include <roughnessmap_fragment>': `#include <roughnessmap_fragment>
+        roughnessFactor = clamp(roughnessFactor * mix(1.3, 0.7, vGloss) + textureRoughness, 0.05, 1.0);
+        roughnessFactor = max(roughnessFactor, footprint * 1.2);`,
+    '#include <normal_fragment_maps>': `#include <normal_fragment_maps>
         normal = normalize(normal + bump * 0.35);`,
 };
 
@@ -161,7 +183,7 @@ export const FULLSCREEN_VERTEX = `
     }`;
 
 // Thin-lens circle of confusion from the depth buffer, as a share of the largest blur.
-const LENS = `
+const DEPTH_OF_FIELD = `
     #include <packing>
     uniform sampler2D uDepth;
     uniform float uNear;
@@ -178,7 +200,7 @@ const LENS = `
 // Disc bokeh, gathered at half resolution along a golden-angle spiral.
 // HDR highlights spread into bright discs, as they do through a real lens.
 export const BOKEH_FRAGMENT = `
-    ${LENS}
+    ${DEPTH_OF_FIELD}
     uniform sampler2D uColor;
     uniform vec2 uTexel;
     uniform float uMaxBlur;
@@ -208,7 +230,7 @@ export const BOKEH_FRAGMENT = `
 
 // Sharp pixels where the lens is in focus, bokeh elsewhere, then a lens vignette, the tone curve and film grain.
 export const COMPOSITE_FRAGMENT = `
-    ${LENS}
+    ${DEPTH_OF_FIELD}
     uniform sampler2D uColor;
     uniform sampler2D uBokeh;
     uniform vec2 uBokehTexel;
