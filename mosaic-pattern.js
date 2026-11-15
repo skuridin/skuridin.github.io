@@ -24,6 +24,7 @@ const KIND = { paper: 'stone', gold: 'gold' };
 const GOLD_CHIPS = 0.015;
 const ASSEMBLE_MS = 2400;
 const DEGREE = Math.PI / 180;
+const SHAPE_SEED = 5;
 
 // Seeded so the pattern stays the same between visits and resizes.
 const seeded = (seed) => () => {
@@ -51,6 +52,8 @@ const tint = (name, random) => {
 // Lays the emblem around the origin, ring by ring, out to `reach`. Units are CSS pixels on the floor.
 export const build = ({ radius, pitch, reveal, reach, visible }) => {
     const random = seeded(11);
+    // A stream of its own, so the hand-cut shapes do not move the pattern.
+    const cut = seeded(SHAPE_SEED);
     const grout = pitch * 0.45;
     const tiles = [];
 
@@ -83,6 +86,11 @@ export const build = ({ radius, pitch, reveal, reach, visible }) => {
                 kind: KIND[name] || 'smalti',
                 at: (r / reveal) * ASSEMBLE_MS + random() * 300,
                 gloss: random(),
+                // Hand-cut jitter: an xz offset for each corner of the near half, then of the far
+                // half, which the vertex shader blends across the tile.
+                cuts: Array.from({ length: 8 }, () => cut() - 0.5),
+                // Offsets the surface noise, so no two tiles share a grain.
+                seed: cut() * 64,
             });
         }
     };

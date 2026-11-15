@@ -6,7 +6,7 @@
 
 ## Lint Commands
 - HTML: `npx htmlhint index.html`
-- JS: `node --check motion.js && node --check mosaic.js && node --check mosaic-pattern.js && node --check mosaic-shaders.js`
+- JS: `node --check motion.js && node --check mosaic.js && node --check mosaic-pattern.js && node --check mosaic-shaders.js && node --check mosaic-tiles.js`
 - No existing lint setup or configuration files.
 
 ## Test Commands

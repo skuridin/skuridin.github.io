@@ -4,18 +4,15 @@ import {
     DepthTexture,
     HalfFloatType,
     HemisphereLight,
-    InstancedBufferAttribute,
     InstancedMesh,
     Mesh,
     MeshDepthMaterial,
     MeshStandardMaterial,
     NeutralToneMapping,
-    Object3D,
     PCFShadowMap,
     PerspectiveCamera,
     PlaneGeometry,
     Raycaster,
-    SRGBColorSpace,
     Scene,
     ShaderMaterial,
     SpotLight,
@@ -25,17 +22,25 @@ import {
     WebGLRenderer,
 } from './vendor/three.min.js';
 import { build } from './mosaic-pattern.js';
-import { BOKEH_FRAGMENT, COMPOSITE_FRAGMENT, FULLSCREEN_VERTEX, TILE_SETTLE_MS, mortarMaterial, tesseraGeometry, tesseraMaterial, time } from './mosaic-shaders.js';
+import { blurClassifier, createTileMeshes, revealTiles } from './mosaic-tiles.js';
+import { BOKEH_FRAGMENT, COMPOSITE_FRAGMENT, FULLSCREEN_VERTEX, LENS, TILE_SETTLE_MS, flatTesseraGeometry, mortarMaterial, tesseraGeometry, tesseraMaterial, time } from './mosaic-shaders.js';
 
 const canvas = document.querySelector('.mosaic');
 const hero = canvas && canvas.closest('.hero');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const INK = '#061614';
-const DISTANCE = 1100;
+// The camera orbits the emblem at the focus distance, so the emblem is the sharp part.
+const DISTANCE = LENS.focus;
 const LEAN = { x: 3, y: 4 };
 const DEGREE = Math.PI / 180;
 const LIGHT_FROM = new Vector3(0.85, 0.5, -0.2).normalize();
+// How far a tile can move in view depth around the sampled camera poses: the camera leans
+// this far, and a tile's shadow stretches this far across the mortar.
+const BLUR_SLACK = {
+    lean: Math.hypot(LEAN.x, LEAN.y) * DEGREE,
+    shadowRatio: Math.hypot(LIGHT_FROM.x, LIGHT_FROM.z) / LIGHT_FROM.y,
+};
 
 // At most about 3.2 million pixels per pass, so large high-DPI screens do not multiply the GPU work.
 const pixelRatioFor = (width, height) => Math.min(window.devicePixelRatio || 1, 1.5, Math.sqrt(3.2e6 / (width * height)));
@@ -67,6 +72,7 @@ const start = async () => {
     renderer.shadowMap.autoUpdate = false;
 
     const tessera = tesseraGeometry();
+    const flatTessera = flatTesseraGeometry();
     const materials = {
         stone: tesseraMaterial(new MeshStandardMaterial({ roughness: 0.75 })),
         smalti: tesseraMaterial(new MeshStandardMaterial({ roughness: 0.55 })),
@@ -102,7 +108,7 @@ const start = async () => {
         uNear: { value: camera.near },
         uFar: { value: camera.far },
         uFocus: { value: DISTANCE },
-        uAperture: { value: 1.4 },
+        uAperture: { value: LENS.aperture },
         uColor: { value: sceneTarget.texture },
         uMaxBlur: { value: 1 },
     };
@@ -147,7 +153,7 @@ const start = async () => {
     let view;
     let meshes = [];
     // Overscroll above the top must not tip the floor the other way.
-    const onScroll = () => {
+    const measureScroll = () => {
         scrolled = Math.min(Math.max(window.scrollY, 0) / (view.height / 2), 1);
     };
 
@@ -182,9 +188,9 @@ const start = async () => {
         bokehTarget.setSize(Math.ceil(pixels[0] / 2), Math.ceil(pixels[1] / 2));
         bokeh.uniforms.uTexel.value.set(2 / pixels[0], 2 / pixels[1]);
         composite.uniforms.uBokehTexel.value.set(2 / pixels[0], 2 / pixels[1]);
-        // The largest blur is about 24 CSS pixels; the bokeh pass counts in half-resolution pixels.
-        bokeh.uniforms.uMaxBlur.value = (24 * pixelRatio) / 2;
-        composite.uniforms.uMaxBlur.value = 24 * pixelRatio;
+        // The bokeh pass counts in half-resolution pixels of the blur the lens asks for.
+        bokeh.uniforms.uMaxBlur.value = (LENS.maxBlur * pixelRatio) / 2;
+        composite.uniforms.uMaxBlur.value = LENS.maxBlur * pixelRatio;
 
         // A low macro view: the floor tips far back and the emblem fills the frame.
         const rest = { x: wide ? 62 : 56, y: 0 };
@@ -197,17 +203,21 @@ const start = async () => {
 
         const radius = wide ? width * 0.72 : width * 1.6;
         const pitch = radius / 50;
-        const corners = [];
-        const projections = [[0, 0], [-LEAN.x, -LEAN.y], [-LEAN.x, LEAN.y], [LEAN.x, -LEAN.y], [LEAN.x, LEAN.y]]
+        // Where the camera can be: the resting pose and the four extremes of the pointer lean.
+        const poses = [[0, 0], [-LEAN.x, -LEAN.y], [-LEAN.x, LEAN.y], [LEAN.x, -LEAN.y], [LEAN.x, LEAN.y]]
             .map(([x, y]) => {
                 aim({ x: rest.x + x, y: rest.y + y });
-                corners.push(...[[-1, -1], [1, -1], [-1, 1], [1, 1]]
-                    .map(([nx, ny]) => groundAt(nx, ny, new Vector3())));
-                return camera.projectionMatrix.clone().multiply(camera.matrixWorldInverse);
+                return {
+                    view: camera.matrixWorldInverse.clone(),
+                    projection: camera.projectionMatrix.clone().multiply(camera.matrixWorldInverse),
+                    // Where this pose frames the floor.
+                    ground: [[-1, -1], [1, -1], [-1, 1], [1, 1]].map(([nx, ny]) => groundAt(nx, ny, new Vector3())),
+                };
             });
         aim(rest);
         const far = radius * 2.4;
-        const reach = Math.min(far, Math.max(...corners.map((corner) => (corner ? corner.length() : far)))) * 1.1;
+        const reach = Math.min(far, Math.max(...poses.flatMap(({ ground }) => ground)
+            .map((corner) => (corner ? corner.length() : far)))) * 1.1;
 
         // Keep the tiles visible from rest or any pointer extreme, with room for their edges.
         const probe = new Vector3();
@@ -216,7 +226,7 @@ const start = async () => {
             reach,
             pitch,
             reveal: Math.hypot(width, height),
-            visible: (x, z) => projections.some((projection) => {
+            visible: (x, z) => poses.some(({ projection }) => {
                 probe.set(x, 0, z).applyMatrix4(projection);
                 return Math.abs(probe.x) < 1.15 && Math.abs(probe.y) < 1.15;
             }),
@@ -227,29 +237,15 @@ const start = async () => {
             mesh.geometry.dispose();
             mesh.dispose();
         });
-        const dummy = new Object3D();
-        const color = new Color();
-        meshes = Object.entries(materials).map(([kind, material]) => {
-            const own = tiles.filter((tile) => tile.kind === kind);
-            const mesh = new InstancedMesh(tessera.clone(), material, own.length);
-            own.forEach((tile, index) => {
-                dummy.position.set(tile.x, 0, tile.z);
-                dummy.rotation.set(tile.tipX, -tile.angle, tile.tipZ);
-                dummy.scale.set(tile.depth, tile.height, tile.length);
-                dummy.updateMatrix();
-                mesh.setMatrixAt(index, dummy.matrix);
-                mesh.setColorAt(index, color.setRGB(...tile.color.map((value) => value / 255), SRGBColorSpace));
-            });
-            mesh.geometry.setAttribute('aAt', new InstancedBufferAttribute(Float32Array.from(own, (tile) => tile.at), 1));
-            mesh.geometry.setAttribute('aGloss', new InstancedBufferAttribute(Float32Array.from(own, (tile) => tile.gloss), 1));
-            mesh.customDepthMaterial = shadowMaterial;
-            mesh.castShadow = true;
-            mesh.receiveShadow = true;
-            // Tiles grow from zero scale, so the bounds of the finished floor are the ones that count.
-            mesh.frustumCulled = false;
-            scene.add(mesh);
-            return mesh;
+        meshes = createTileMeshes({
+            tiles,
+            materials,
+            detailedGeometry: tessera,
+            blurredGeometry: flatTessera,
+            shadowMaterial,
+            isBlurred: blurClassifier(poses.map(({ view }) => view), BLUR_SLACK),
         });
+        meshes.forEach((mesh) => scene.add(mesh));
 
         floor.scale.set(reach * 3, 1, reach * 3);
         floor.position.y = pitch * 0.12;
@@ -265,7 +261,7 @@ const start = async () => {
         key.target.updateMatrixWorld();
         const finishAt = Math.ceil(tiles.reduce((end, tile) => Math.max(end, tile.at + TILE_SETTLE_MS), 0));
         view = { width, height, pixelRatio, rest, lean: { ...rest }, finishAt, dirty: true };
-        onScroll();
+        measureScroll();
     };
 
     // Renders the scene only when something in it moved.
@@ -283,30 +279,28 @@ const start = async () => {
         }
         // Keep rendering until one frame shows the settled floor, however slow the frames are.
         const settling = !view.settled;
-
-        // The grain holds still when the floor stops, so the GPU can idle.
-        const grain = settling || leaning
-            ? Math.floor(now / 42) % 1000
-            : composite.uniforms.uGrain.value;
-        if (!view.dirty && !settling && !leaning && grain === composite.uniforms.uGrain.value) {
-            return;
+        if (!view.dirty && !settling && !leaning) {
+            return false;
         }
-        composite.uniforms.uGrain.value = grain;
 
-        if (view.dirty || settling || leaning) {
-            aim(lean);
-            renderer.shadowMap.needsUpdate = view.dirty || settling;
-            view.dirty = false;
-            view.settled = time.value >= view.finishAt;
-            renderer.setRenderTarget(sceneTarget);
-            renderer.render(scene, camera);
-            screen.material = bokeh;
-            renderer.setRenderTarget(bokehTarget);
-            renderer.render(screen, camera);
+        // The grain moves with the frames, and holds still once the loop stops.
+        composite.uniforms.uGrain.value = Math.floor(now / 42) % 1000;
+        for (const mesh of meshes) {
+            revealTiles(mesh, time.value);
         }
+        aim(lean);
+        renderer.shadowMap.needsUpdate = view.dirty || settling;
+        view.dirty = false;
+        view.settled = time.value >= view.finishAt;
+        renderer.setRenderTarget(sceneTarget);
+        renderer.render(scene, camera);
+        screen.material = bokeh;
+        renderer.setRenderTarget(bokehTarget);
+        renderer.render(screen, camera);
         screen.material = composite;
         renderer.setRenderTarget(null);
         renderer.render(screen, camera);
+        return settling || leaning;
     };
 
     const size = () => [hero.clientWidth, hero.clientHeight];
@@ -317,6 +311,26 @@ const start = async () => {
         if (!shaderFailed) {
             canvas.classList.add('is-ready');
         }
+    };
+
+    // Only the intersection observer sets this, and it runs only when motion is allowed.
+    let visible = false;
+    const frame = (now) => {
+        if (startAt === undefined) {
+            startAt = now;
+            show();
+        }
+        time.value = now - startAt;
+        // Stop callbacks as well as drawing when the floor is still.
+        if (!render(now)) {
+            renderer.setAnimationLoop(null);
+        }
+    };
+    // Runs frames while the hero can be seen and drawn. A frame stops the loop itself once the
+    // floor is still, and anything that can move it calls this again.
+    const syncLoop = () => {
+        const drawable = visible && !document.hidden && !renderer.getContext().isContextLost();
+        renderer.setAnimationLoop(drawable ? frame : null);
     };
 
     // Lays the floor out again only when the hero size or the screen density changed.
@@ -333,6 +347,7 @@ const start = async () => {
             // A floor that was already shown appears complete instead of assembling again.
             startAt = Math.min(startAt, performance.now() - view.finishAt);
         }
+        syncLoop();
     };
 
     try {
@@ -368,11 +383,15 @@ const start = async () => {
     }
 
     // If the GPU drops the context, the CSS fallback shows until three.js restores it.
-    canvas.addEventListener('webglcontextlost', () => canvas.classList.remove('is-ready'));
+    canvas.addEventListener('webglcontextlost', () => {
+        syncLoop();
+        canvas.classList.remove('is-ready');
+    });
     canvas.addEventListener('webglcontextrestored', () => {
         view.dirty = true;
         view.settled = false;
         render(performance.now());
+        syncLoop();
         if (shown && !shaderFailed) {
             canvas.classList.add('is-ready');
         }
@@ -402,21 +421,17 @@ const start = async () => {
         return;
     }
 
-    const frame = (now) => {
-        if (startAt === undefined) {
-            startAt = now;
-            show();
-        }
-        time.value = now - startAt;
-        render(now);
-    };
-
     new IntersectionObserver(([entry]) => {
-        renderer.setAnimationLoop(entry.isIntersecting ? frame : null);
+        visible = entry.isIntersecting;
+        syncLoop();
     }).observe(canvas);
+    document.addEventListener('visibilitychange', syncLoop);
 
     // Touch screens have no hover, so the floor follows the scroll while the pointer is away.
-    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('scroll', () => {
+        measureScroll();
+        syncLoop();
+    }, { passive: true });
 
     if (window.matchMedia('(pointer: fine)').matches) {
         hero.addEventListener('pointermove', (event) => {
@@ -424,9 +439,11 @@ const start = async () => {
             pointer.x = event.clientX - rect.left;
             pointer.y = event.clientY - rect.top;
             pointer.active = true;
+            syncLoop();
         });
         hero.addEventListener('pointerleave', () => {
             pointer.active = false;
+            syncLoop();
         });
     }
 };
