@@ -4,9 +4,12 @@ export const TILE_SETTLE_MS = 450;
 
 // A unit tessera standing on y = 0: a flat top with clipped corners and a softened,
 // smooth-shaded edge, so the raking light draws a thin bright rim on every tile.
-export const tesseraGeometry = () => {
-    const half = 0.42;
-    const corner = 0.05;
+export const tesseraGeometry = (bevelSegments = 2) => {
+    const beveled = bevelSegments > 0;
+    const half = beveled ? 0.42 : 0.5;
+    // Match the widest outline of the beveled tile when using a flat prism.
+    const corner = beveled ? 0.05 : 0.05 + 0.08 * (2 - Math.SQRT2);
+    const bevelThickness = beveled ? 0.06 : 0;
     const shape = new Shape()
         .moveTo(-half + corner, -half)
         .lineTo(half - corner, -half)
@@ -17,18 +20,34 @@ export const tesseraGeometry = () => {
         .lineTo(-half, half - corner)
         .lineTo(-half, -half + corner);
     let geometry = new ExtrudeGeometry(shape, {
-        depth: 0.88,
-        bevelEnabled: true,
-        bevelThickness: 0.06,
+        depth: beveled ? 0.88 : 1,
+        bevelEnabled: beveled,
+        bevelThickness,
         bevelSize: 0.08,
-        bevelSegments: 2,
+        bevelSegments,
     });
     geometry.rotateX(-Math.PI / 2);
-    geometry.translate(0, 0.06, 0);
+    geometry.translate(0, bevelThickness, 0);
     geometry.deleteAttribute('normal');
     geometry.deleteAttribute('uv');
     geometry = mergeVertices(geometry);
     geometry.computeVertexNormals();
+    // Mortar hides the lower bevel after settling. Keep the bottom cap for shadows while tiles rise.
+    // Keep the original normals so removing buried faces does not change the tile tops.
+    const positions = geometry.getAttribute('position');
+    const indices = geometry.index.array;
+    const exposed = [];
+    for (let index = 0; index < indices.length; index += 3) {
+        const top = Math.max(
+            positions.getY(indices[index]),
+            positions.getY(indices[index + 1]),
+            positions.getY(indices[index + 2]),
+        );
+        if (top < 1e-6 || top > bevelThickness + 1e-6) {
+            exposed.push(indices[index], indices[index + 1], indices[index + 2]);
+        }
+    }
+    geometry.setIndex(exposed);
     return geometry;
 };
 
@@ -51,15 +70,10 @@ const NOISE = `
 
 const TESSERA_VERTEX = `#include <begin_vertex>
     // Hand-cut: every corner moves a little, so no two tesserae share a shape.
-    float id = float(gl_InstanceID);
     vec2 cut = transformed.xz + 0.5;
-    vec2 near0 = vec2(tileHash(id + 0.11), tileHash(id + 0.23)) - 0.5;
-    vec2 near1 = vec2(tileHash(id + 0.37), tileHash(id + 0.41)) - 0.5;
-    vec2 far0 = vec2(tileHash(id + 0.53), tileHash(id + 0.67)) - 0.5;
-    vec2 far1 = vec2(tileHash(id + 0.71), tileHash(id + 0.89)) - 0.5;
-    transformed.xz += mix(mix(near0, near1, cut.x), mix(far0, far1, cut.x), cut.y) * 0.22;
+    transformed.xz += mix(mix(aCut0.xy, aCut0.zw, cut.x), mix(aCut1.xy, aCut1.zw, cut.x), cut.y) * 0.22;
     vLocal = transformed;
-    vSeed = tileHash(id + 0.97) * 64.0;
+    vSeed = aSeed;
     vGloss = aGloss;
     // Tiles grow out of the mortar and settle at their \`at\` time.
     float settle = 1.0 - pow(1.0 - clamp((uTime - aAt) / ${TILE_SETTLE_MS.toFixed(1)}, 0.0, 1.0), 3.0);
@@ -74,15 +88,24 @@ const TESSERA_FRAGMENT = {
         // Stone and smalti are mottled and flecked with darker grains,
         // and the sides darken where they go down into the mortar.
         diffuseColor.rgb *= 0.82 + 0.36 * noise3(vLocal * 2.5 + vSeed);
-        diffuseColor.rgb *= 1.0 - 0.3 * smoothstep(0.7, 0.85, noise3(vLocal * 9.0 + vSeed)) * detail;
+        if (detail > 0.0) {
+            diffuseColor.rgb *= 1.0 - 0.3 * smoothstep(0.7, 0.85, noise3(vLocal * 9.0 + vSeed)) * detail;
+        }
         diffuseColor.rgb *= mix(0.35, 1.0, smoothstep(0.15, 0.8, vLocal.y));`,
     '#include <roughnessmap_fragment>': `#include <roughnessmap_fragment>
-        roughnessFactor = clamp(roughnessFactor * mix(1.3, 0.7, vGloss) + (noise3(vLocal * 6.0 + vSeed) - 0.5) * 0.25 * detail, 0.05, 1.0);
+        float textureRoughness = 0.0;
+        if (detail > 0.0) {
+            textureRoughness = (noise3(vLocal * 6.0 + vSeed) - 0.5) * 0.25 * detail;
+        }
+        roughnessFactor = clamp(roughnessFactor * mix(1.3, 0.7, vGloss) + textureRoughness, 0.05, 1.0);
         roughnessFactor = max(roughnessFactor, footprint * 1.2);`,
     '#include <normal_fragment_maps>': `#include <normal_fragment_maps>
         // A granular, pitted top that the raking light picks out.
-        vec3 grain = vLocal * vec3(4.0, 2.0, 4.0) + vSeed;
-        vec3 bump = (vec3(noise3(grain), noise3(grain + 19.1), noise3(grain + 37.7)) - 0.5) * detail;
+        vec3 bump = vec3(0.0);
+        if (detail > 0.0) {
+            vec3 grain = vLocal * vec3(4.0, 2.0, 4.0) + vSeed;
+            bump = (vec3(noise3(grain), noise3(grain + 19.1), noise3(grain + 37.7)) - 0.5) * detail;
+        }
         normal = normalize(normal + bump * 0.35);`,
 };
 
@@ -95,11 +118,13 @@ export const tesseraMaterial = (material) => {
             .replace('#include <common>', `#include <common>
                 attribute float aAt;
                 attribute float aGloss;
+                attribute vec4 aCut0;
+                attribute vec4 aCut1;
+                attribute float aSeed;
                 uniform float uTime;
                 varying vec3 vLocal;
                 varying float vSeed;
-                varying float vGloss;
-                float tileHash(float n) { return fract(sin(n) * 43758.5453); }`)
+                varying float vGloss;`)
             .replace('#include <begin_vertex>', TESSERA_VERTEX);
         shader.fragmentShader = Object.entries(TESSERA_FRAGMENT).reduce(
             (source, [chunk, patch]) => source.replace(chunk, patch),
