@@ -126,7 +126,6 @@ const start = async () => {
             uBokeh: { value: bokehTarget.texture },
             uBokehTexel: { value: new Vector2() },
             uVignette: { value: new Vector2(0.7, 0.55) },
-            uGrain: { value: 0 },
         },
         vertexShader: FULLSCREEN_VERTEX,
         fragmentShader: COMPOSITE_FRAGMENT,
@@ -265,7 +264,7 @@ const start = async () => {
     };
 
     // Renders the scene only when something in it moved.
-    const render = (now) => {
+    const render = () => {
         const { width, height, rest, lean } = view;
 
         // The pointer leans the floor a little; without one, scrolling does. The light stays where it is.
@@ -283,8 +282,6 @@ const start = async () => {
             return false;
         }
 
-        // The grain moves with the frames, and holds still once the loop stops.
-        composite.uniforms.uGrain.value = Math.floor(now / 42) % 1000;
         for (const mesh of meshes) {
             revealTiles(mesh, time.value);
         }
@@ -322,7 +319,7 @@ const start = async () => {
         }
         time.value = now - startAt;
         // Stop callbacks as well as drawing when the floor is still.
-        if (!render(now)) {
+        if (!render()) {
             renderer.setAnimationLoop(null);
         }
     };
@@ -342,7 +339,7 @@ const start = async () => {
         layout(width, height);
         if (reduceMotion) {
             time.value = view.finishAt;
-            render(0);
+            render();
         } else if (startAt !== undefined) {
             // A floor that was already shown appears complete instead of assembling again.
             startAt = Math.min(startAt, performance.now() - view.finishAt);
@@ -370,7 +367,7 @@ const start = async () => {
         // The hero can change size while the shaders compile.
         relayout();
         // One hidden frame uploads the buffers, so the first visible frame does not stall.
-        render(0);
+        render();
         if (shaderFailed) {
             renderer.dispose();
             return;
@@ -390,7 +387,7 @@ const start = async () => {
     canvas.addEventListener('webglcontextrestored', () => {
         view.dirty = true;
         view.settled = false;
-        render(performance.now());
+        render();
         syncLoop();
         if (shown && !shaderFailed) {
             canvas.classList.add('is-ready');
@@ -416,7 +413,7 @@ const start = async () => {
     if (reduceMotion) {
         time.value = view.finishAt;
         view.dirty = true;
-        render(0);
+        render();
         show();
         return;
     }
