@@ -242,15 +242,43 @@ export const BOKEH_FRAGMENT = `
         gl_FragColor = vec4(color / total, 1.0);
     }`;
 
-// Sharp pixels where the lens is in focus, bokeh elsewhere, then a lens vignette, the tone curve and film grain.
+// Ordered dithering of the final image. Each channel is reduced to `levels` steps, and the 8x8 Bayer matrix
+// decides which pixels take the step up, so a tone between two steps becomes a regular weave instead of a band.
+// A cell is `cell` canvas pixels wide, because one pixel is too fine to read as a pattern. Its size on screen
+// follows the canvas pixel ratio that `pixelRatioFor` in mosaic.js picks.
+const DITHER = { levels: 16, cell: 3 };
+
+const ORDERED_DITHER = `
+    // 0, 2, 3, 1 for 00, 10, 01, 11: twice x xor y, plus y.
+    float bayerCell(vec2 bits) {
+        return 2.0 * (bits.x + bits.y - 2.0 * bits.x * bits.y) + bits.y;
+    }
+    // The threshold of the 8x8 Bayer matrix for a cell, from 0 to 1. The matrix is [[0, 2], [3, 1]] stacked three
+    // deep: the lowest bit pair of the cell's coordinates picks the largest digit of its index.
+    float bayer(highp vec2 cell) {
+        vec2 low = mod(cell, 2.0);
+        vec2 middle = mod(floor(cell * 0.5), 2.0);
+        vec2 high = mod(floor(cell * 0.25), 2.0);
+        return (16.0 * bayerCell(low) + 4.0 * bayerCell(middle) + bayerCell(high)) / 64.0;
+    }
+    // Where the threshold of a cell reaches a channel's distance to the tone above, the pixel takes that tone,
+    // so a tone in between becomes a weave that keeps its brightness.
+    vec3 dither(vec3 color, highp vec2 pixel) {
+        float levels = ${DITHER.levels.toFixed(1)};
+        float threshold = bayer(floor(pixel / ${DITHER.cell.toFixed(1)}));
+        return floor(color * levels + threshold) / levels;
+    }`;
+
+// Sharp pixels where the lens is in focus, bokeh elsewhere, then a lens vignette, the tone curve and ordered
+// dithering.
 export const COMPOSITE_FRAGMENT = `
     ${DEPTH_OF_FIELD}
+    ${ORDERED_DITHER}
     uniform sampler2D uColor;
     uniform sampler2D uBokeh;
     uniform vec2 uBokehTexel;
     uniform float uMaxBlur;
     uniform vec2 uVignette;
-    uniform float uGrain;
     varying vec2 vUv;
     void main() {
         float blur = confusion(sceneDepth(vUv)) * uMaxBlur;
@@ -266,9 +294,5 @@ export const COMPOSITE_FRAGMENT = `
         gl_FragColor = vec4(color, 1.0);
         #include <tonemapping_fragment>
         #include <colorspace_fragment>
-        // Film grain shows most in the shadows and mid-tones, least in the highlights.
-        highp vec2 cell = gl_FragCoord.xy + uGrain * vec2(37.0, 17.0);
-        float grain = fract(sin(dot(cell, vec2(12.9898, 78.233))) * 43758.5453) - 0.5;
-        float luma = dot(gl_FragColor.rgb, vec3(0.299, 0.587, 0.114));
-        gl_FragColor.rgb += grain * 0.07 * (1.0 - luma * 0.7);
+        gl_FragColor.rgb = dither(gl_FragColor.rgb, gl_FragCoord.xy);
     }`;
