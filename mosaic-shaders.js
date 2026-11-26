@@ -244,10 +244,11 @@ export const BOKEH_FRAGMENT = `
 
 // Ordered dithering of the final image. Each channel is reduced to `levels` steps, and the 8x8 Bayer matrix
 // decides which pixels take the step up, so a tone between two steps becomes a regular weave instead of a band.
-// A cell is `cell` device pixels wide, because one pixel is too fine to read as a pattern.
+// A cell is `cell` canvas pixels wide, because one pixel is too fine to read as a pattern. Its size on screen
+// follows the canvas pixel ratio that `pixelRatioFor` in mosaic.js picks.
 const DITHER = { levels: 16, cell: 3 };
 
-// The threshold of the 8x8 Bayer matrix for a device pixel, from 0 to 1. The matrix is [[0, 2], [3, 1]]
+// The threshold of the 8x8 Bayer matrix for a canvas pixel, from 0 to 1. The matrix is [[0, 2], [3, 1]]
 // stacked three deep: the lowest bit pair of the cell's coordinates picks the largest digit of its index.
 const BAYER = `
     // 0, 2, 3, 1 for 00, 10, 01, 11: twice x xor y, plus y.
