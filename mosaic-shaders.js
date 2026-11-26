@@ -248,26 +248,32 @@ export const BOKEH_FRAGMENT = `
 // follows the canvas pixel ratio that `pixelRatioFor` in mosaic.js picks.
 const DITHER = { levels: 16, cell: 3 };
 
-// The threshold of the 8x8 Bayer matrix for a canvas pixel, from 0 to 1. The matrix is [[0, 2], [3, 1]]
-// stacked three deep: the lowest bit pair of the cell's coordinates picks the largest digit of its index.
-const BAYER = `
+const ORDERED_DITHER = `
     // 0, 2, 3, 1 for 00, 10, 01, 11: twice x xor y, plus y.
     float bayerCell(vec2 bits) {
         return 2.0 * (bits.x + bits.y - 2.0 * bits.x * bits.y) + bits.y;
     }
-    float bayer(highp vec2 pixel) {
-        pixel = floor(pixel / ${DITHER.cell.toFixed(1)});
-        vec2 low = mod(pixel, 2.0);
-        vec2 middle = mod(floor(pixel * 0.5), 2.0);
-        vec2 high = mod(floor(pixel * 0.25), 2.0);
+    // The threshold of the 8x8 Bayer matrix for a cell, from 0 to 1. The matrix is [[0, 2], [3, 1]] stacked three
+    // deep: the lowest bit pair of the cell's coordinates picks the largest digit of its index.
+    float bayer(highp vec2 cell) {
+        vec2 low = mod(cell, 2.0);
+        vec2 middle = mod(floor(cell * 0.5), 2.0);
+        vec2 high = mod(floor(cell * 0.25), 2.0);
         return (16.0 * bayerCell(low) + 4.0 * bayerCell(middle) + bayerCell(high)) / 64.0;
+    }
+    // Where the threshold of a cell reaches a channel's distance to the tone above, the pixel takes that tone,
+    // so a tone in between becomes a weave that keeps its brightness.
+    vec3 dither(vec3 color, highp vec2 pixel) {
+        float levels = ${DITHER.levels.toFixed(1)};
+        float threshold = bayer(floor(pixel / ${DITHER.cell.toFixed(1)}));
+        return floor(color * levels + threshold) / levels;
     }`;
 
 // Sharp pixels where the lens is in focus, bokeh elsewhere, then a lens vignette, the tone curve and ordered
 // dithering.
 export const COMPOSITE_FRAGMENT = `
     ${DEPTH_OF_FIELD}
-    ${BAYER}
+    ${ORDERED_DITHER}
     uniform sampler2D uColor;
     uniform sampler2D uBokeh;
     uniform vec2 uBokehTexel;
@@ -288,8 +294,5 @@ export const COMPOSITE_FRAGMENT = `
         gl_FragColor = vec4(color, 1.0);
         #include <tonemapping_fragment>
         #include <colorspace_fragment>
-        // Ordered dithering of the display values: where the threshold of a cell reaches a channel's distance to
-        // the tone above, the pixel takes that tone, so a tone in between becomes a weave that keeps its brightness.
-        float threshold = bayer(gl_FragCoord.xy);
-        gl_FragColor.rgb = floor(gl_FragColor.rgb * ${DITHER.levels.toFixed(1)} + threshold) / ${DITHER.levels.toFixed(1)};
+        gl_FragColor.rgb = dither(gl_FragColor.rgb, gl_FragCoord.xy);
     }`;
