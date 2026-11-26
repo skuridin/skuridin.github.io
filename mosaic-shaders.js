@@ -288,7 +288,7 @@ export const COMPOSITE_FRAGMENT = `
         gl_FragColor = vec4(color, 1.0);
         #include <tonemapping_fragment>
         #include <colorspace_fragment>
-        // Ordered dithering of the display values: where the threshold of a cell is below a channel's distance to
+        // Ordered dithering of the display values: where the threshold of a cell reaches a channel's distance to
         // the tone above, the pixel takes that tone, so a tone in between becomes a weave that keeps its brightness.
         float threshold = bayer(gl_FragCoord.xy);
         gl_FragColor.rgb = floor(gl_FragColor.rgb * ${DITHER.levels.toFixed(1)} + threshold) / ${DITHER.levels.toFixed(1)};
